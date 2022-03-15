@@ -1,0 +1,11 @@
+module l3vpn {
+    yang-version 1.1;
+    namespace "wjl:l3vpn";
+    prefix l3vpn;
+
+    import network {
+        prefix net;
+    }
+
+    include l3vpn-bgp;
+}
