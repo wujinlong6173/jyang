@@ -29,6 +29,14 @@ public class YangModule {
         this.version = version;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
     public void addError(YangStmt pos, String msg) {
         errors.add(new YangError(pos, msg));
     }

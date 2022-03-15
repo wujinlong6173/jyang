@@ -22,7 +22,7 @@ public class YangParser {
                 if (stack.isEmpty()) {
                     return null;
                 } else {
-                    throw makeException("require right brace.");
+                    throw makeException("require right brace");
                 }
             }
 
@@ -32,7 +32,7 @@ public class YangParser {
                 curr.setLine(lex.getLine());
             } else if (token == YangToken.RIGHT_BRACE) {
                 if (stack.isEmpty()) {
-                    throw makeException("not matched right brace.");
+                    throw makeException("not matched right brace");
                 }
                 curr = stack.pop();
                 if (stack.isEmpty()) {
@@ -43,7 +43,7 @@ public class YangParser {
                 parent.addSubStatement(curr);
                 continue;
             } else {
-                throw makeException("require wjl.yang keyword.");
+                throw makeException("require wjl.yang keyword");
             }
 
             // read value
@@ -56,7 +56,7 @@ public class YangParser {
                 curr.setValueToken(token);
                 curr.setValue(lex.getString());
             } else {
-                throw makeException("require wjl.yang value.");
+                throw makeException("require wjl.yang value");
             }
 
             // read semicolon or left brace
@@ -76,7 +76,7 @@ public class YangParser {
             } else if (token == YangToken.LEFT_BRACE) {
                 stack.push(curr);
             } else {
-                throw makeException("require semicolon or left brace.");
+                throw makeException("require semicolon or left brace");
             }
         }
     }
@@ -115,7 +115,7 @@ public class YangParser {
     void checkEndOfFile() throws IOException, YangParseException {
         int token = lex.yylex();
         if (token != -1) {
-            throw makeException("expect end of file.");
+            throw makeException("expect end of file");
         }
     }
 
