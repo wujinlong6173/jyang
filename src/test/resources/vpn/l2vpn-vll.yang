@@ -4,4 +4,5 @@ submodule l2vpn-vll {
         prefix l2vpn;
     }
 
+    include l2vpn-bfd;
 }

@@ -2,6 +2,7 @@ package wjl.yang.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -15,8 +16,22 @@ public class YangContext {
         mainModules.put(key, module);
     }
 
-    public YangMainModule getMainModule(ModuleNameVersion key) {
-        return mainModules.get(key);
+    /**
+     * 根据名称和版本号找一个匹配的模块
+     *
+     * @param name 模块名
+     * @param version 如果没有指定版本号则随便找一个版本
+     * @return 找到的模块或空
+     */
+    public YangMainModule matchMainModule(String name, String version) {
+        for (YangMainModule module : mainModules.values()) {
+            if (Objects.equals(name, module.getName())) {
+                if (version == null || Objects.equals(version, module.getVersion())) {
+                    return module;
+                }
+            }
+        }
+        return null;
     }
 
     public void addSubModule(YangSubModule subModule) {
@@ -24,7 +39,14 @@ public class YangContext {
         subModules.put(key, subModule);
     }
 
-    public YangSubModule getSubModule(ModuleNameVersion key) {
-        return subModules.get(key);
+    public YangSubModule matchSubModule(String name, String version) {
+        for (YangSubModule module : subModules.values()) {
+            if (Objects.equals(name, module.getName())) {
+                if (version == null || Objects.equals(version, module.getVersion())) {
+                    return module;
+                }
+            }
+        }
+        return null;
     }
 }

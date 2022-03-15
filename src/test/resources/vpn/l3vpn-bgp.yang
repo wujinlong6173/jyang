@@ -3,4 +3,8 @@ submodule l3vpn-bgp {
     belongs-to l3vpn {
         prefix l3vpn;
     }
+
+    import common {
+        prefix util;
+    }
 }

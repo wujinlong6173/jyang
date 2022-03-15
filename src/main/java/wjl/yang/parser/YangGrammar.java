@@ -156,7 +156,7 @@ class YangGrammar {
         imports.addSub(reference, 0, 1);
 
         // include
-        Stmt include = new Stmt("include", YangToken.IDENTITY);
+        Stmt include = new Stmt(YangKeyword.INCLUDE, YangToken.IDENTITY);
         include.addSub(revisionDate, 0, 1);
         include.addSub(description, 0, 1);
         include.addSub(reference, 0, 1);

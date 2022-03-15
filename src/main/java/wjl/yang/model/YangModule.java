@@ -13,8 +13,10 @@ public class YangModule {
     private final String prefix;
     private final String version;
 
-    private final Map<String, ModuleNameVersion> prefixMap = new HashMap<>();
+    private final Map<String, YangMainModule> prefixToModule = new HashMap<>();
+    private final List<YangSubModule> subModules = new ArrayList<>();
     private final List<YangError> errors = new ArrayList<>();
+    private YangStmt stmt;
 
     /**
      * 模块
@@ -33,19 +35,39 @@ public class YangModule {
         return name;
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
+
     public String getVersion() {
         return version;
+    }
+
+    public void setStmt(YangStmt stmt) {
+        this.stmt = stmt;
+    }
+
+    public YangStmt getStmt() {
+        return stmt;
     }
 
     public void addError(YangStmt pos, String msg) {
         errors.add(new YangError(pos, msg));
     }
 
-    public void addPrefix(String pre, ModuleNameVersion target) {
-        prefixMap.put(pre, target);
+    public void addPrefix(String pre, YangMainModule module) {
+        prefixToModule.put(pre, module);
     }
 
-    public ModuleNameVersion getPrefix(String pre) {
-        return prefixMap.get(pre);
+    public YangMainModule getPrefix(String pre) {
+        return prefixToModule.get(pre);
+    }
+
+    public void addSubModule(YangSubModule sub) {
+        subModules.add(sub);
+    }
+
+    public List<YangSubModule> getSubModules() {
+        return subModules;
     }
 }

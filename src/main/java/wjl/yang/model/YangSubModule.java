@@ -1,7 +1,15 @@
 package wjl.yang.model;
 
 public class YangSubModule extends YangModule {
+    /**
+     * 所属主模块的名称
+     */
     private final String belongTo;
+
+    /**
+     * 有没有被主模块包含
+     */
+    private boolean includedByMain;
 
     /**
      * 子模块
@@ -14,5 +22,17 @@ public class YangSubModule extends YangModule {
     public YangSubModule(String name, String prefix, String version, String belongTo) {
         super(name, prefix, version);
         this.belongTo = belongTo;
+    }
+
+    public String getBelongTo() {
+        return belongTo;
+    }
+
+    public void setIncludedByMain() {
+        includedByMain = true;
+    }
+
+    public boolean isIncludedByMain() {
+        return includedByMain;
     }
 }

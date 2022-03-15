@@ -12,7 +12,7 @@ public class YangModuleTest {
     private String dir = "src/test/resources/vpn/";
     private String[] files = new String[]{
             "l2vpn.yang", "l2vpn-bfd.yang", "l2vpn-oam.yang", "l2vpn-vll.yang",
-            "l3vpn.yang", "l3vpn-bgp.yang", "network.yang"};
+            "l3vpn.yang", "l3vpn-bgp.yang", "network.yang", "common.yang"};
 
     @Test
     public void test() {
