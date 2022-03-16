@@ -52,9 +52,7 @@ public class YangModuleCompiler {
             }
         }
 
-        imports(addModules);
-        includeInMain(addModules);
-        importAndIncludeInSub(addModules);
+        LinkageBuilder.build(context, addModules);
         setOriModule(addModules);
     }
 
@@ -63,8 +61,8 @@ public class YangModuleCompiler {
     }
 
     private YangMainModule mainModule(YangStmt stmt) {
-        String pre = prefix(stmt);
-        YangMainModule ret = new YangMainModule(stmt.getValue(), pre, version(stmt));
+        String pre = CompileUtil.prefix(stmt);
+        YangMainModule ret = new YangMainModule(stmt.getValue(), pre, CompileUtil.version(stmt));
         ret.addPrefix(pre, ret);
         ret.setStmt(stmt);
         return ret;
@@ -76,106 +74,15 @@ public class YangModuleCompiler {
         YangStmt belongsTo = stmt.searchOne(YangKeyword.BELONGS_TO);
         if (belongsTo != null) {
             parent = belongsTo.getValue();
-            pre = prefix(belongsTo);
+            pre = CompileUtil.prefix(belongsTo);
         }
 
-        YangSubModule ret = new YangSubModule(stmt.getValue(), pre, version(stmt), parent);
-        // TODO ret.addPrefix(pre, new ModuleNameVersion(stmt.getValue(), null));
+        YangSubModule ret = new YangSubModule(stmt.getValue(), pre, CompileUtil.version(stmt), parent);
         ret.setStmt(stmt);
         return ret;
     }
 
-    private String version(YangStmt stmt) {
-        YangStmt version = stmt.searchOne(YangKeyword.REVISION);
-        return version != null ? version.getValue() : null;
-    }
 
-    private String prefix(YangStmt stmt) {
-        YangStmt prefix = stmt.searchOne(YangKeyword.PREFIX);
-        return prefix != null ? prefix.getValue() : null;
-    }
-
-    private String revisionDate(YangStmt stmt) {
-        YangStmt ver = stmt.searchOne(YangKeyword.REVISION_DATE);
-        return ver != null ? ver.getValue() : null;
-    }
-
-    // 处理import子句
-    private void imports(List<? extends YangModule> modules) {
-        for (YangModule module : modules) {
-            YangStmt stmt = module.getStmt();
-
-            stmt.forEach(YangKeyword.IMPORT, (sub) -> {
-                String name = sub.getValue();
-                if (!Objects.equals(name, stmt.getValue())) {
-                    String pre = prefix(sub);
-                    if (module.getPrefix(pre) != null) {
-                        module.addError(sub, "prefix conflict.");
-                    } else {
-                        String ver = revisionDate(sub);
-                        YangMainModule target = context.matchMainModule(name, ver);
-                        if (target == null) {
-                            module.addError(sub, "no matched module.");
-                        } else {
-                            module.addPrefix(pre, target);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void includeInMain(List<YangMainModule> modules) {
-        for (YangMainModule module : modules) {
-            YangStmt stmt = module.getStmt();
-            Set<String> included = new HashSet<>();
-            stmt.forEach(YangKeyword.INCLUDE, (sub) -> {
-                String name = sub.getValue();
-                String ver = revisionDate(sub);
-                YangSubModule target = context.matchSubModule(name, ver);
-                if (target == null) {
-                    module.addError(sub, "no matched submodule.");
-                } else if (!Objects.equals(module.getName(), target.getBelongTo())) {
-                    module.addError(sub, "submodule not belongs to this module.");
-                } else if (included.contains(name)) {
-                    module.addError(sub, "can not include two submodule with same name.");
-                } else {
-                    included.add(name);
-                    target.setIncludedByMain();
-                    target.addPrefix(target.getPrefix(), module);
-                    module.addSubModule(target);
-                }
-            });
-        }
-    }
-
-    private void importAndIncludeInSub(List<YangMainModule> modules) {
-        for (YangMainModule main : modules) {
-            List<YangSubModule> subModules = main.getSubModules();
-            imports(subModules);
-            for (YangSubModule module : subModules) {
-                YangStmt stmt = module.getStmt();
-                Set<String> included = new HashSet<>();
-                stmt.forEach(YangKeyword.INCLUDE, (sub) -> {
-                    String name = sub.getValue();
-                    String ver = revisionDate(sub);
-                    YangSubModule target = context.matchSubModule(name, ver);
-                    if (target == null) {
-                        module.addError(sub, "no matched submodule.");
-                    } else if (!Objects.equals(module.getBelongTo(), target.getBelongTo())) {
-                        module.addError(sub, "submodule not belongs to same module.");
-                    } else if (included.contains(name)) {
-                        module.addError(sub, "can not include two submodule with same name.");
-                    } else if (!target.isIncludedByMain()) {
-                        module.addError(sub, "submodule should be included by main module.");
-                    } else {
-                        included.add(name);
-                        module.addSubModule(target);
-                    }
-                });
-            }
-        }
-    }
 
     private void setOriModule(List<YangMainModule> modules) {
         for (YangMainModule main : modules) {
