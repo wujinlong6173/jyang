@@ -1,4 +1,4 @@
-package wjl.yang.parser;
+package wjl.yang.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ public class YangStmt {
     private String value;
     private int valueToken; // 在YangToken中定义
     private List<YangStmt> subStatements;
+    private YangModule oriModule; // 该语句是在哪个模块定义的
 
     public int getLine() {
         return line;
@@ -77,6 +78,24 @@ public class YangStmt {
                consumer.accept(sub);
             }
         }
+    }
+
+    /**
+     * 遍历所有语句，执行输入的函数
+     *
+     * @param consumer 处理一条语句的函数
+     */
+    public void iterateAll(Consumer<YangStmt> consumer) {
+        consumer.accept(this);
+        if (subStatements != null) {
+            for (YangStmt sub : subStatements) {
+                sub.iterateAll(consumer);
+            }
+        }
+    }
+
+    public void setOriModule(YangModule oriModule) {
+        this.oriModule = oriModule;
     }
 
     @Override

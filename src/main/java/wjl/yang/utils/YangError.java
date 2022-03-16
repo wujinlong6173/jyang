@@ -1,6 +1,6 @@
 package wjl.yang.utils;
 
-import wjl.yang.parser.YangStmt;
+import wjl.yang.model.YangStmt;
 
 public class YangError {
     private final YangStmt pos;

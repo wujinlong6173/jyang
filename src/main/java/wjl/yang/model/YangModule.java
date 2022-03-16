@@ -1,6 +1,5 @@
 package wjl.yang.model;
 
-import wjl.yang.parser.YangStmt;
 import wjl.yang.utils.YangError;
 
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
 package wjl.yang.parser;
 
 
+import wjl.yang.model.YangToken;
+
 public class YangLex {
 	private final int YY_BUFFER_SIZE = 512;
 	private final int YY_F = -1;

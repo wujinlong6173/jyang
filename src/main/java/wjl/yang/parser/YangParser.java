@@ -1,5 +1,8 @@
 package wjl.yang.parser;
 
+import wjl.yang.model.YangStmt;
+import wjl.yang.model.YangToken;
+
 import java.io.IOException;
 import java.util.Stack;
 

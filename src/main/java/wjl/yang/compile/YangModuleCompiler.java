@@ -8,7 +8,7 @@ import wjl.yang.parser.YangGrammarChecker;
 import wjl.yang.parser.YangLex;
 import wjl.yang.parser.YangParseException;
 import wjl.yang.parser.YangParser;
-import wjl.yang.parser.YangStmt;
+import wjl.yang.model.YangStmt;
 import wjl.yang.utils.YangError;
 import wjl.yang.utils.YangKeyword;
 
@@ -55,6 +55,7 @@ public class YangModuleCompiler {
         imports(addModules);
         includeInMain(addModules);
         importAndIncludeInSub(addModules);
+        setOriModule(addModules);
     }
 
     public List<String> getErrors() {
@@ -171,6 +172,21 @@ public class YangModuleCompiler {
                         included.add(name);
                         module.addSubModule(target);
                     }
+                });
+            }
+        }
+    }
+
+    private void setOriModule(List<YangMainModule> modules) {
+        for (YangMainModule main : modules) {
+            main.getStmt().iterateAll((stmt) -> {
+                stmt.setOriModule(main);
+            });
+
+            List<YangSubModule> subModules = main.getSubModules();
+            for (YangSubModule sub : subModules) {
+                sub.getStmt().iterateAll((stmt) -> {
+                    stmt.setOriModule(sub);
                 });
             }
         }

@@ -1,5 +1,6 @@
 package wjl.yang.parser;
 
+import wjl.yang.model.YangStmt;
 import wjl.yang.utils.YangError;
 import wjl.yang.utils.YangKeyword;
 

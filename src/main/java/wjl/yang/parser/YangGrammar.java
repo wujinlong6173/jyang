@@ -1,5 +1,6 @@
 package wjl.yang.parser;
 
+import wjl.yang.model.YangToken;
 import wjl.yang.utils.YangKeyword;
 
 import java.util.*;

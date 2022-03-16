@@ -1,4 +1,4 @@
-package wjl.yang.parser;
+package wjl.yang.model;
 
 public interface YangToken {
     int IDENTITY = 1;
