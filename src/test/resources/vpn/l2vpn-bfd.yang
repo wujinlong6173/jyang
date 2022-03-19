@@ -4,4 +4,9 @@ submodule l2vpn-bfd {
         prefix l2vpn;
     }
 
+    include l2vpn-oam;
+
+    feature bfd {
+        if-feature "not oam and vll";
+    }
 }

@@ -53,7 +53,10 @@ public class YangModuleCompiler {
         }
 
         LinkageBuilder.build(context, addModules);
-        setOriModule(addModules);
+        List<YangModule> allModules = allUsedModules(addModules);
+        setOriModule(allModules);
+        FeatureCompiler.collectFeatures(allModules);
+        FeatureCompiler.checkIfFeatures(allModules);
     }
 
     public List<String> getErrors() {
@@ -82,20 +85,19 @@ public class YangModuleCompiler {
         return ret;
     }
 
+    private List<YangModule> allUsedModules(List<YangMainModule> modules) {
+        List<YangModule> ret = new ArrayList<>(modules);
+        for (YangMainModule module : modules) {
+            ret.addAll(module.getSubModules());
+        }
+        return ret;
+    }
 
-
-    private void setOriModule(List<YangMainModule> modules) {
-        for (YangMainModule main : modules) {
+    private void setOriModule(List<? extends YangModule> modules) {
+        for (YangModule main : modules) {
             main.getStmt().iterateAll((stmt) -> {
                 stmt.setOriModule(main);
             });
-
-            List<YangSubModule> subModules = main.getSubModules();
-            for (YangSubModule sub : subModules) {
-                sub.getStmt().iterateAll((stmt) -> {
-                    stmt.setOriModule(sub);
-                });
-            }
         }
     }
 }

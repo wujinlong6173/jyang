@@ -4,4 +4,5 @@ submodule l2vpn-oam {
         prefix l2vpn;
     }
 
+    feature oam;
 }

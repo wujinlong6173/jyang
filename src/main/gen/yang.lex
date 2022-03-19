@@ -1,5 +1,7 @@
 package wjl.yang.parser;
 
+import wjl.yang.model.YangToken;
+
 %%
 
 %public
@@ -19,6 +21,10 @@ package wjl.yang.parser;
     public int getLine() {
         return yyline + 1;
     }
+
+    public void if_feature_expr() {
+        yybegin(if_feature_expr);
+    }
 %}
 
 %eofval{
@@ -26,11 +32,13 @@ package wjl.yang.parser;
 %eofval}
 
 %state COMMENT
+%state if_feature_expr
 
 ALPHA = [A-Za-z]
-CRLF  = [\r]?\n
-WSP    = \x20|\x09|{CRLF}
-ID    = {ALPHA}[A-Za-z0-9-]*
+CRLF = [\r]?\n
+SP = \x20|\x09
+WSP = \x20|\x09|{CRLF}
+ID = {ALPHA}[A-Za-z0-9-]*
 
 %%
 
@@ -46,6 +54,15 @@ ID    = {ALPHA}[A-Za-z0-9-]*
 <YYINITIAL>    //.*                       {}
 <YYINITIAL>    "/*"                       { yybegin(COMMENT); }
 
+
 <COMMENT>     ([^*]|[*][^/]|{CRLF})*  {}
 <COMMENT>     "*/"                        { yybegin(YYINITIAL); }
 
+
+<if_feature_expr>   [()]                      { return getChar(); }
+<if_feature_expr>   "and"                     { return YangToken.AND; }
+<if_feature_expr>   "or"                      { return YangToken.OR; }
+<if_feature_expr>   "not"                     { return YangToken.NOT; }
+<if_feature_expr>   {ID}                      { return YangToken.PREFIX_ID; }
+<if_feature_expr>   ({ID}):({ID})             { return YangToken.PREFIX_ID; }
+<if_feature_expr>   {SP}                      {}

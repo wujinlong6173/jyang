@@ -17,6 +17,9 @@ public class YangModule {
     private final List<YangError> errors = new ArrayList<>();
     private YangStmt stmt;
 
+    // 本模块定义的和包含的特性。
+    private Map<String, YangFeature> features = new HashMap<>();
+
     /**
      * 模块
      *
@@ -68,5 +71,27 @@ public class YangModule {
 
     public List<YangSubModule> getSubModules() {
         return subModules;
+    }
+
+    public void setFeatures(Map<String, YangFeature> features) {
+        this.features = features;
+    }
+
+    public Map<String, YangFeature> getFeatures() {
+        return features;
+    }
+
+    public ModuleAndIdentify separate(String prefixId) {
+        int idx = prefixId.indexOf(':');
+        if (idx < 0) {
+            return new ModuleAndIdentify(this, prefixId);
+        }
+        String prefix = prefixId.substring(0, idx);
+        YangModule module = prefixToModule.get(prefix);
+        if (module == null) {
+            return null;
+        } else {
+            return new ModuleAndIdentify(module, prefixId.substring(idx + 1));
+        }
     }
 }

@@ -7,6 +7,9 @@ public interface YangToken {
     int DATE = 4;
     int DECIMAL = 5;
     int PREFIX_ID = 6;
+    int AND = 7;
+    int OR = 8;
+    int NOT = 9;
 
     int SEMI = 59; // ;
     int LEFT_BRACE = 123; // {

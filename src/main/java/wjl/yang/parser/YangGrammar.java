@@ -224,21 +224,21 @@ class YangGrammar {
         mandatory.setValidValues("true", "false");
 
         // config
-        Stmt config = new Stmt("config", YangToken.IDENTITY);
+        Stmt config = new Stmt("config", YangToken.IDENTITY, YangToken.IDENTITY);
         config.setValidValues("true", "false");
 
         // status
-        Stmt status = new Stmt("status", YangToken.STRING);
+        Stmt status = new Stmt("status", YangToken.STRING, YangToken.IDENTITY);
         status.setValidValues("current", "obsolete", "deprecated");
 
         // position
         Stmt position = new Stmt("position", YangToken.STRING);
 
         // if-feature
-        Stmt ifFeature = new Stmt("if-feature", YangToken.STRING);
+        Stmt ifFeature = new Stmt(YangKeyword.IF_FEATURE, YangToken.STRING);
 
         // feature
-        Stmt feature = new Stmt("feature", YangToken.STRING);
+        Stmt feature = new Stmt(YangKeyword.FEATURE, YangToken.STRING, YangToken.IDENTITY);
         feature.addSub(ifFeature, 0, -1);
         feature.addSub(status, 0, 1);
         feature.addSub(description, 0, 1);

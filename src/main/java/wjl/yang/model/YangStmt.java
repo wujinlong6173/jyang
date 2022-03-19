@@ -98,15 +98,27 @@ public class YangStmt {
         this.oriModule = oriModule;
     }
 
+    public YangModule getOriModule() {
+        return oriModule;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("line ").append(line)
                 .append(" : ").append(key);
         if (value != null) {
-            sb.append(" ").append(value);
+            if (valueToken == YangToken.STRING) {
+                sb.append(" \"").append(value).append("\"");
+            } else {
+                sb.append(" ").append(value);
+            }
         }
         sb.append(' ');
         return sb.toString();
+    }
+
+    public String getModuleName() {
+        return oriModule != null ? oriModule.getName() : "";
     }
 }
