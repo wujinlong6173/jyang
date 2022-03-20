@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YangModule {
+public abstract class YangModule {
     private final String name;
     private final String prefix;
     private final String version;
@@ -70,10 +70,10 @@ public class YangModule {
         return subModules;
     }
 
-    public ModuleAndIdentify separate(String prefixId) {
+    public ModuleAndIdentify separate(String prefixId, boolean setThis) {
         int idx = prefixId.indexOf(':');
         if (idx < 0) {
-            return new ModuleAndIdentify(this, prefixId);
+            return new ModuleAndIdentify(setThis ? this : null, prefixId);
         }
         String prefix = prefixId.substring(0, idx);
         YangModule module = prefixToModule.get(prefix);
@@ -87,4 +87,6 @@ public class YangModule {
     public List<YangError> getErrors() {
         return errors;
     }
+
+    public abstract boolean isMainModule();
 }

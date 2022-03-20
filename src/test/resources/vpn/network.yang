@@ -16,7 +16,16 @@ module network {
             type boolean;
         }
 
+        grouping impl {
+            leaf devId {type string;}
+            leaf outerId {type string;}
+            leaf inputs {type anydata;}
+            leaf provider {type string;}
+            leaf product {type string;}
+        }
+
         container impl {
+            uses impl;
         }
     }
 
@@ -62,6 +71,18 @@ module network {
         list ports {
             key id;
             uses port;
+        }
+
+        grouping impl {
+            leaf linkId {type string;}
+            leaf outerId {type string;}
+            leaf inputs {type anydata;}
+            leaf provider {type string;}
+            leaf product {type string;}
+        }
+
+        container impl {
+            uses impl;
         }
     }
 

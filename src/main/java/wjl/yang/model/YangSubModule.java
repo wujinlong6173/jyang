@@ -35,4 +35,9 @@ public class YangSubModule extends YangModule {
     public boolean isIncludedByMain() {
         return includedByMain;
     }
+
+    @Override
+    public boolean isMainModule() {
+        return false;
+    }
 }

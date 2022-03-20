@@ -71,7 +71,7 @@ class FeatureCompiler {
 
     private void checkFeatureDefined(YangStmt ifFea, String prefixId) {
         YangModule module = ifFea.getOriModule();
-        ModuleAndIdentify mi = module.separate(prefixId);
+        ModuleAndIdentify mi = module.separate(prefixId, true);
         if (mi == null) {
             module.addError(ifFea, prefixId + " invalid prefix.");
         } else {

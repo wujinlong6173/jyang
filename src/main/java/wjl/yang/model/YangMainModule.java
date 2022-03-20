@@ -18,6 +18,11 @@ public class YangMainModule extends YangModule {
         super(name, prefix, version);
     }
 
+    @Override
+    public boolean isMainModule() {
+        return true;
+    }
+
     public void setFeatures(Map<String, YangFeature> features) {
         this.features = features;
     }
