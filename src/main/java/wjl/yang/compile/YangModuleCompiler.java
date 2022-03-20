@@ -16,10 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 public class YangModuleCompiler {
     private final List<String> errors = new ArrayList<>();
@@ -55,9 +53,8 @@ public class YangModuleCompiler {
         LinkageBuilder.build(context, addModules);
         List<YangModule> allModules = allUsedModules(addModules);
         setOriModule(allModules);
-        FeatureCompiler.collectFeatures(allModules);
-        FeatureCompiler.checkIfFeatures(allModules);
-        GroupingCompiler.collectGroupings(allModules);
+        new FeatureCompiler().collectFeatures(allModules);
+        new GroupingCompiler().expandGrouping(allModules);
         return allModules;
     }
 
