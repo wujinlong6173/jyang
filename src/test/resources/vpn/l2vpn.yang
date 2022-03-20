@@ -10,4 +10,7 @@ module l2vpn {
     include l2vpn-bfd;
     include l2vpn-oam;
     include l2vpn-vll;
+
+    grouping oam;
+    feature oam;
 }

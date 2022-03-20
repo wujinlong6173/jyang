@@ -94,4 +94,8 @@ public class YangModule {
             return new ModuleAndIdentify(module, prefixId.substring(idx + 1));
         }
     }
+
+    public List<YangError> getErrors() {
+        return errors;
+    }
 }

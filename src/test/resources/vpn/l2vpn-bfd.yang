@@ -7,6 +7,6 @@ submodule l2vpn-bfd {
     include l2vpn-oam;
 
     feature bfd {
-        if-feature "not oam and vll";
+        if-feature "not oam";
     }
 }

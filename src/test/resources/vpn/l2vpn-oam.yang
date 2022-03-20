@@ -5,4 +5,6 @@ submodule l2vpn-oam {
     }
 
     feature oam;
+
+    grouping oam;
 }

@@ -25,7 +25,7 @@ public class YangModuleCompiler {
     private final List<String> errors = new ArrayList<>();
     private final YangContext context = new YangContext();
 
-    public void compile(List<String> filenames) {
+    public List<YangModule> compile(List<String> filenames) {
         errors.clear();
         YangGrammarChecker checker = new YangGrammarChecker();
         List<YangMainModule> addModules = new ArrayList<>();
@@ -57,6 +57,8 @@ public class YangModuleCompiler {
         setOriModule(allModules);
         FeatureCompiler.collectFeatures(allModules);
         FeatureCompiler.checkIfFeatures(allModules);
+        GroupingCompiler.collectGroupings(allModules);
+        return allModules;
     }
 
     public List<String> getErrors() {

@@ -20,6 +20,10 @@ import java.util.Map;
  * 处理 feature 和 if-feature 语句。
  */
 class FeatureCompiler {
+    /**
+     *
+     * @param modules 主模块和子模块。
+     */
     static void collectFeatures(List<YangModule> modules) {
         // 搜索每个模块、子模块定义的特性。
         Map<YangModule, Map<String, YangFeature>> moduleToFeatures = new HashMap<>();
@@ -27,7 +31,7 @@ class FeatureCompiler {
             moduleToFeatures.put(module, searchOneModule(module));
         }
 
-        // 复制包含的子模块的特性
+        // 复制子模块定义的特性
         for (YangModule module : modules) {
             module.setFeatures(copyIncludedFeatures(module, moduleToFeatures));
         }
@@ -39,7 +43,7 @@ class FeatureCompiler {
             String name = fea.getValue();
             YangFeature exist = featureMap.get(name);
             if (exist != null) {
-                module.addError(fea, " is already defined, " + exist.toString());
+                module.addError(fea, " is already defined in " + exist.toString());
             } else {
                 YangStmt ifFea = fea.searchOne(YangKeyword.IF_FEATURE);
                 featureMap.put(name, new YangFeature(name, fea, ifFea));
@@ -62,8 +66,8 @@ class FeatureCompiler {
                 for (YangFeature feature : temp.values()) {
                     YangFeature exist = ret.get(feature.getName());
                     if (exist != null) {
-                        module.addError(feature.getFeature(), String.format(" is already defined in %s, %s",
-                            exist.getFeature().getModuleName(), exist.getFeature().toString()));
+                        module.addError(feature.getFeature(), String.format(" is already defined in %s",
+                            exist.getFeature().toString()));
                     } else {
                         ret.put(feature.getName(), feature);
                     }

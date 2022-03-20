@@ -105,6 +105,9 @@ public class YangStmt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        if (oriModule != null) {
+            sb.append(oriModule.getName()).append(' ');
+        }
         sb.append("line ").append(line)
                 .append(" : ").append(key);
         if (value != null) {

@@ -2,4 +2,85 @@ module network {
     yang-version 1.1;
     namespace "wjl:network";
     prefix net;
+
+    grouping device {
+        leaf id {
+            type string;
+        }
+
+        leaf name {
+            type string;
+        }
+
+        leaf deploy {
+            type boolean;
+        }
+
+        container impl {
+        }
+    }
+
+    grouping port {
+        leaf devId {
+            type string;
+        }
+
+        leaf id {
+            type string;
+        }
+
+        leaf name {
+            type string;
+        }
+
+        leaf description {
+            type string;
+        }
+
+        leaf linkId {
+            type string;
+        }
+
+        leaf role {
+            type string;
+        }
+    }
+
+    grouping link {
+        leaf id {
+            type string;
+        }
+
+        leaf name {
+            type string;
+        }
+
+        leaf deploy {
+            type boolean;
+        }
+
+        list ports {
+            key id;
+            uses port;
+        }
+    }
+
+    container networks {
+        list network {
+            key id;
+            leaf id {
+                type string;
+            }
+
+            list device {
+                key id;
+                uses device;
+            }
+
+            list link {
+                key id;
+                uses link;
+            }
+        }
+    }
 }

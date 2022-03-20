@@ -188,7 +188,7 @@ class YangGrammar {
         Stmt unique = new Stmt("unique", YangToken.STRING);
 
         // key
-        Stmt key = new Stmt("key", YangToken.STRING);
+        Stmt key = new Stmt("key", YangToken.IDENTITY, YangToken.STRING);
 
         // value
         Stmt value = new Stmt("value", YangToken.STRING);
@@ -409,13 +409,13 @@ class YangGrammar {
         Stmt leaf = new Stmt("leaf", YangToken.IDENTITY);
         Stmt list = new Stmt("list", YangToken.IDENTITY);
         Stmt leafList = new Stmt("leaf-list", YangToken.IDENTITY);
-        Stmt grouping = new Stmt("grouping", YangToken.IDENTITY);
+        Stmt grouping = new Stmt(YangKeyword.GROUPING, YangToken.IDENTITY);
         Stmt choice = new Stmt("choice", YangToken.IDENTITY);
         Stmt cases = new Stmt("cases", YangToken.IDENTITY);
         Stmt augment = new Stmt("augment", YangToken.STRING);
         // useAugment和augment的格式是一样的，只是使用位置不同
         Stmt usesAugment = augment;
-        Stmt uses = new Stmt("uses", YangToken.IDENTITY, YangToken.PREFIX_ID);
+        Stmt uses = new Stmt(YangKeyword.USES, YangToken.IDENTITY, YangToken.PREFIX_ID);
         Stmt notification = new Stmt("notification", YangToken.IDENTITY);
         Stmt action = new Stmt("action", YangToken.IDENTITY);
 

@@ -1,6 +1,9 @@
 package wjl.yang.compile;
 
 import org.junit.Test;
+import wjl.yang.model.YangMainModule;
+import wjl.yang.model.YangModule;
+import wjl.yang.utils.YangError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +25,18 @@ public class YangModuleTest {
             filenames.add(dir + filename);
         }
 
-        compiler.compile(filenames);
+        List<YangModule> allModules = compiler.compile(filenames);
         for (String err : compiler.getErrors()) {
             System.err.println(err);
+        }
+
+        for (YangModule module : allModules) {
+            if (!module.getErrors().isEmpty()) {
+                System.err.println(module.getName() + " have errors:");
+                for (YangError err : module.getErrors()) {
+                    System.err.println(err.toString());
+                }
+            }
         }
     }
 }
