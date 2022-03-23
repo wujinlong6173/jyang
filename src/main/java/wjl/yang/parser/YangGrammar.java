@@ -412,7 +412,7 @@ class YangGrammar {
         Stmt grouping = new Stmt(YangKeyword.GROUPING, YangToken.IDENTITY);
         Stmt choice = new Stmt("choice", YangToken.IDENTITY);
         Stmt cases = new Stmt("cases", YangToken.IDENTITY);
-        Stmt augment = new Stmt("augment", YangToken.STRING);
+        Stmt augment = new Stmt(YangKeyword.AUGMENT, YangToken.STRING);
         // useAugment和augment的格式是一样的，只是使用位置不同
         Stmt usesAugment = augment;
         Stmt uses = new Stmt(YangKeyword.USES, YangToken.IDENTITY, YangToken.PREFIX_ID);

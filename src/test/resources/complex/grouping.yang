@@ -1,0 +1,54 @@
+module grouping {
+    yang-version 1.1;
+    namespace "wjl:grouping";
+    prefix g;
+
+    grouping g1 {
+        container c1 {
+        }
+    }
+
+    grouping g2 {
+        container c2 {
+        }
+    }
+
+    grouping g3 {
+        container c3 {
+        }
+        uses g1;
+    }
+
+    grouping g4 {
+        uses g3 {
+            augment "c3" {
+                container c34 {
+                    grouping g5 {
+                        container c5 {
+                        }
+                    }
+                    uses g2;
+                    uses g5 {
+                        augment "c5" {
+                            container c55 {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        container c4 {
+        }
+    }
+
+    container root {
+        uses g2;
+        uses g4 {
+            augment "c4" {
+                container c44 {
+                    uses g1;
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package wjl.yang.utils;
 
 public interface YangKeyword {
+    String AUGMENT = "augment";
     String BELONGS_TO = "belongs-to";
     String FEATURE = "feature";
     String IF_FEATURE = "if-feature";

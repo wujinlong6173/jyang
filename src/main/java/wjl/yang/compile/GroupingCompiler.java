@@ -3,8 +3,11 @@ package wjl.yang.compile;
 import wjl.yang.model.ModuleAndIdentify;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
+import wjl.yang.utils.UiGraph;
+import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,10 +16,12 @@ import java.util.Set;
 
 /**
  * 处理 grouping 和 uses 语句，将 uses 语句替换成 grouping 中的内容。
+ * 计算grouping的依赖关系时，将uses>augment 后面的内容看成一个匿名的grouping。
  */
 class GroupingCompiler {
     private Map<YangModule, Map<String, YangStmt>> moduleToGroupings;
-    private final Map<YangStmt, UsesToGrouping> usesToGroupingMap = new HashMap<>();
+    private final List<UsesToGrouping> usesToGroupings = new ArrayList<>();
+    private List<YangStmt> sortedUses;
 
     /**
      *
@@ -26,6 +31,10 @@ class GroupingCompiler {
         moduleToGroupings = CompileUtil.collectSpecialStmt(modules, YangKeyword.GROUPING);
         // 先展开各模块顶层定义的groupings，要注意循环引用。
         searchUsesStmt(modules);
+        // 将uses、grouping、uses>augment三种语句放在一个有向图中排序，得到uses语句的执行顺序
+        UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
+        sortedUses = UiGraphSort.sortReverse(groupDepends,
+            (node) -> node != null && YangKeyword.USES.equals(node.getKey()));
     }
 
     private void searchUsesStmt(List<YangModule> modules) {
@@ -48,8 +57,13 @@ class GroupingCompiler {
         Map<String, YangStmt> scopeGroupings) {
         if (YangKeyword.USES.equals(stmt.getKey())) {
             YangStmt targetGrouping = findTargetGrouping(stmt, scopeGroupings);
-            usesToGroupingMap.put(stmt, new UsesToGrouping(parentGrouping, parentStmt, targetGrouping));
-        } else if (YangKeyword.GROUPING.endsWith(stmt.getKey())) {
+            if (targetGrouping != null) {
+                usesToGroupings.add(new UsesToGrouping(parentGrouping, parentStmt, stmt, targetGrouping));
+            }
+        } else if (YangKeyword.GROUPING.equals(stmt.getKey())) {
+            parentGrouping = stmt;
+        } else if (YangKeyword.AUGMENT.equals(stmt.getKey()) && YangKeyword.USES.equals(parentStmt.getKey())) {
+            usesToGroupings.add(new UsesToGrouping(parentGrouping, null, parentStmt, stmt));
             parentGrouping = stmt;
         }
 
@@ -108,17 +122,40 @@ class GroupingCompiler {
         return targetGrouping;
     }
 
+    private UiGraph<YangStmt, UsesToGrouping> buildGroupDepends() {
+        UiGraph<YangStmt, UsesToGrouping> graph = new UiGraph<>();
+        for (UsesToGrouping val : usesToGroupings) {
+            if (val.parentGrouping != null) {
+                graph.addEdge(val.parentGrouping, val.uses, null);
+            }
+            graph.addEdge(val.uses, val.targetGrouping, val);
+        }
+        return graph;
+    }
+
+    /**
+     * 让测试用例检查中间结果，只检查最终结果很难保证算法没问题
+     *
+     * @return 排好序的所有uses语句
+     */
+    List<YangStmt> getSortedUses() {
+        return sortedUses;
+    }
+
     static class UsesToGrouping {
-        // 从uses语句往上找到的grouping语句，可能为空
+        // 从uses语句往上找到的grouping语句，可能为空；或者是uses>augment语句
         final YangStmt parentGrouping;
-        // 从uses语句往上找到的语句
+        // 从uses语句往上找到的语句；目标为匿名grouping时填空
         final YangStmt parentStmt;
-        // uses语句引用的grouping语句
+        // uses语句本身
+        final YangStmt uses;
+        // uses语句引用的grouping语句；或者是uses>augment语句
         final YangStmt targetGrouping;
 
-        UsesToGrouping(YangStmt parentGrouping, YangStmt parentStmt, YangStmt targetGrouping) {
+        UsesToGrouping(YangStmt parentGrouping, YangStmt parentStmt, YangStmt uses, YangStmt targetGrouping) {
             this.parentGrouping = parentGrouping;
             this.parentStmt = parentStmt;
+            this.uses = uses;
             this.targetGrouping = targetGrouping;
         }
     }

@@ -7,5 +7,15 @@ module l3vpn {
         prefix net;
     }
 
+    import common {
+        prefix common;
+    }
+
     include l3vpn-bgp;
+
+    list l3vpn {
+        key id;
+        leaf id {type string;}
+        uses common:qos;
+    }
 }

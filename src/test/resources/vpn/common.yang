@@ -2,4 +2,11 @@ module common {
     yang-version 1.1;
     namespace "wjl:common";
     prefix util;
+
+    grouping qos {
+        leaf cir {type integer;}
+        leaf pir {type integer;}
+        leaf cbr {type integer;}
+        leaf pbr {type integer;}
+    }
 }
