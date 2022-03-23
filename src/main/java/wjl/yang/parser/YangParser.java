@@ -93,7 +93,7 @@ public class YangParser {
             || token == YangToken.PREFIX_ID;
     }
 
-    private String readStringValue() throws IOException {
+    private String readStringValue() throws IOException, YangParseException {
         StringBuilder sb = new StringBuilder();
         String str = lex.getString();
         sb.append(str.substring(1, str.length() - 1));

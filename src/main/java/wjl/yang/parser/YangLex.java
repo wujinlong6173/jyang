@@ -26,6 +26,9 @@ public class YangLex {
     public void if_feature_expr() {
         yybegin(if_feature_expr);
     }
+    public void schema_node_id() {
+        yybegin(schema_node_id);
+    }
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -67,10 +70,12 @@ public class YangLex {
 	private final int if_feature_expr = 2;
 	private final int YYINITIAL = 0;
 	private final int COMMENT = 1;
+	private final int schema_node_id = 3;
 	private final int yy_state_dtrans[] = {
 		0,
 		13,
-		43
+		45,
+		47
 	};
 	private void yybegin (int state) {
 		yy_lexical_state = state;
@@ -243,18 +248,18 @@ public class YangLex {
 		/* 19 */ YY_NO_ANCHOR,
 		/* 20 */ YY_NO_ANCHOR,
 		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NOT_ACCEPT,
+		/* 22 */ YY_NO_ANCHOR,
 		/* 23 */ YY_NO_ANCHOR,
-		/* 24 */ YY_NO_ANCHOR,
+		/* 24 */ YY_NOT_ACCEPT,
 		/* 25 */ YY_NO_ANCHOR,
-		/* 26 */ YY_NOT_ACCEPT,
+		/* 26 */ YY_NO_ANCHOR,
 		/* 27 */ YY_NO_ANCHOR,
-		/* 28 */ YY_NO_ANCHOR,
-		/* 29 */ YY_NOT_ACCEPT,
+		/* 28 */ YY_NOT_ACCEPT,
+		/* 29 */ YY_NO_ANCHOR,
 		/* 30 */ YY_NO_ANCHOR,
-		/* 31 */ YY_NO_ANCHOR,
-		/* 32 */ YY_NOT_ACCEPT,
-		/* 33 */ YY_NOT_ACCEPT,
+		/* 31 */ YY_NOT_ACCEPT,
+		/* 32 */ YY_NO_ANCHOR,
+		/* 33 */ YY_NO_ANCHOR,
 		/* 34 */ YY_NOT_ACCEPT,
 		/* 35 */ YY_NOT_ACCEPT,
 		/* 36 */ YY_NOT_ACCEPT,
@@ -266,42 +271,49 @@ public class YangLex {
 		/* 42 */ YY_NOT_ACCEPT,
 		/* 43 */ YY_NOT_ACCEPT,
 		/* 44 */ YY_NOT_ACCEPT,
-		/* 45 */ YY_NO_ANCHOR,
-		/* 46 */ YY_NO_ANCHOR,
+		/* 45 */ YY_NOT_ACCEPT,
+		/* 46 */ YY_NOT_ACCEPT,
 		/* 47 */ YY_NOT_ACCEPT,
 		/* 48 */ YY_NO_ANCHOR,
-		/* 49 */ YY_NOT_ACCEPT,
+		/* 49 */ YY_NO_ANCHOR,
 		/* 50 */ YY_NOT_ACCEPT,
 		/* 51 */ YY_NO_ANCHOR,
 		/* 52 */ YY_NOT_ACCEPT,
 		/* 53 */ YY_NOT_ACCEPT,
-		/* 54 */ YY_NO_ANCHOR
+		/* 54 */ YY_NO_ANCHOR,
+		/* 55 */ YY_NOT_ACCEPT,
+		/* 56 */ YY_NOT_ACCEPT,
+		/* 57 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
 "7:9,13,8,7:2,14,7:18,13,7,5,7:4,9,17:2,16,1,7,10,12,15,11,3:9,4,1,7:5,2:26," +
 "7,6,7:4,18,2:2,20,2:9,19,21,2:2,22,2,23,2:6,1,7,1,7:2,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,55,
-"0,1:2,2,3,1:3,4,1,5,6,1,7,1,8,1:2,8,9,8:2,10,11,12,13,14,15,16,17,18,19,20," +
-"21,22,6,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41")[0];
+	private int yy_rmap[] = unpackFromString(1,58,
+"0,1:2,2,3,1:3,4,1,5,6,1,7,1:2,8,1:2,8,9,8:2,1,10,11,12,13,14,15,16,17,18,19" +
+",20,21,22,6,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42")[0];
 
-	private int yy_nxt[][] = unpackFromString(42,24,
-"1,2,3,4,-1,22,-1:2,5,26,29,23,-1,5,32,33,-1:2,3:6,-1:26,3:2,34,-1:5,3:2,-1:" +
-"6,3:6,-1:3,51,-1:7,51,35,-1:12,8:7,-1,8:5,-1,8:9,-1:2,10:2,-1:6,10:2,-1:6,1" +
-"0:6,-1:3,11,-1:7,11,-1:12,1,24:15,41,24:7,-1:2,15:2,44,-1:5,15:2,-1:6,15:6," +
-"-1:2,19:2,-1:6,19:2,-1:6,19:6,-1,22:4,6,36,22:17,-1:3,38,-1:7,38,35,-1:12,2" +
-"4:15,42,24:7,-1:2,15:2,44,-1:5,15:2,-1:6,15:4,18,15,-1,26:5,37,26:2,7,26:14" +
-",-1:12,35,-1:13,15:2,44,-1:5,15:2,-1:6,15:2,20,15:3,-1:3,54,-1:7,27,-1:15,5" +
-"4,-1:6,49,54,35,-1:13,15:2,44,-1:5,15:2,-1:6,15:5,21,-1:8,5,-1:30,8,9,-1:9," +
-"10,-1:15,10:6,-1,22:7,-1,22:5,-1,22:9,-1,26:7,-1,26:5,-1,26:9,-1:3,47,-1:7," +
-"47,-1:22,49,-1:16,12,-1:7,12,-1:13,24:14,14,24:8,-1,24:14,-1,24:8,1,-1,15,-" +
-"1:10,16,-1:3,17,46,48,15,25,15:2,-1:2,19,-1:15,19:6,-1:3,30,-1:7,30,35,-1:1" +
-"3,15:2,44,-1:5,15:2,-1:6,15,28,15:4,-1:3,39,-1:7,39,-1:14,15:2,44,-1:5,15:2" +
-",-1:6,15:3,31,15:2,-1:3,53,-1:7,53,-1:15,40,-1:7,40,-1:15,45,-1:7,45,35,-1:" +
-"21,50,-1:16,52,-1:7,52,-1:15,54,-1:7,54,35,-1:11");
+	private int yy_nxt[][] = unpackFromString(43,24,
+"1,2,3,4,-1,24,-1:2,5,28,31,25,-1,5,34,35,-1:2,3:6,-1:26,3:2,36,-1:5,3:2,-1:" +
+"6,3:6,-1:3,54,-1:7,54,37,-1:12,8:7,-1,8:5,-1,8:9,-1:2,10:2,-1:6,10:2,-1:6,1" +
+"0:6,-1:3,11,-1:7,11,-1:12,1,26:15,43,26:7,-1:2,16:2,46,-1:5,16:2,-1:6,16:6," +
+"-1:2,20:2,-1:6,20:2,-1:6,20:6,-1,24:4,6,38,24:17,-1:3,40,-1:7,40,37,-1:12,2" +
+"6:15,44,26:7,-1:2,16:2,46,-1:5,16:2,-1:6,16:4,19,16,-1,28:5,39,28:2,7,28:14" +
+",-1:12,37,-1:13,16:2,46,-1:5,16:2,-1:6,16:2,21,16:3,-1:3,57,-1:7,29,-1:15,5" +
+"7,-1:6,52,57,37,-1:13,16:2,46,-1:5,16:2,-1:6,16:5,22,-1:8,5,-1:30,8,9,-1:9," +
+"10,-1:15,10:6,-1,24:7,-1,24:5,-1,24:9,-1,28:7,-1,28:5,-1,28:9,-1:3,50,-1:7," +
+"50,-1:22,52,-1:16,12,-1:7,12,-1:13,26:14,14,26:8,-1,26:14,-1,26:8,1,15,16,1" +
+"5:5,-1,15:4,17,-1,15:2,18,49,51,16,27,16:2,-1:2,20,-1:15,20:6,1,15,16,15:5," +
+"-1,15:5,-1,23,15:2,16:6,-1:3,32,-1:7,32,37,-1:13,16:2,46,-1:5,16:2,-1:6,16," +
+"30,16:4,-1:3,41,-1:7,41,-1:14,16:2,46,-1:5,16:2,-1:6,16:3,33,16:2,-1:3,56,-" +
+"1:7,56,-1:15,42,-1:7,42,-1:15,48,-1:7,48,37,-1:21,53,-1:16,55,-1:7,55,-1:15" +
+",57,-1:7,57,37,-1:11");
 
 	public int yylex ()
-		throws java.io.IOException {
+		throws java.io.IOException, 
+YangParseException
+
+		{
 		int yy_lookahead;
 		int yy_anchor = YY_NO_ANCHOR;
 		int yy_state = yy_state_dtrans[yy_lexical_state];
@@ -401,80 +413,89 @@ public class YangLex {
 					case -15:
 						break;
 					case 15:
-						{ return YangToken.PREFIX_ID; }
+						{
+            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
 					case -16:
 						break;
 					case 16:
-						{}
+						{ return YangToken.PREFIX_ID; }
 					case -17:
 						break;
 					case 17:
-						{ return getChar(); }
+						{}
 					case -18:
 						break;
 					case 18:
-						{ return YangToken.OR; }
+						{ return getChar(); }
 					case -19:
 						break;
 					case 19:
-						{ return YangToken.PREFIX_ID; }
+						{ return YangToken.OR; }
 					case -20:
 						break;
 					case 20:
-						{ return YangToken.AND; }
+						{ return YangToken.PREFIX_ID; }
 					case -21:
 						break;
 					case 21:
-						{ return YangToken.NOT; }
+						{ return YangToken.AND; }
 					case -22:
 						break;
-					case 23:
-						{ return YangToken.INTEGER; }
+					case 22:
+						{ return YangToken.NOT; }
 					case -23:
 						break;
-					case 24:
-						{}
+					case 23:
+						{ return getChar(); }
 					case -24:
 						break;
 					case 25:
-						{ return YangToken.PREFIX_ID; }
+						{ return YangToken.INTEGER; }
 					case -25:
 						break;
-					case 27:
-						{ return YangToken.INTEGER; }
+					case 26:
+						{}
 					case -26:
 						break;
-					case 28:
+					case 27:
 						{ return YangToken.PREFIX_ID; }
 					case -27:
 						break;
-					case 30:
+					case 29:
 						{ return YangToken.INTEGER; }
 					case -28:
 						break;
-					case 31:
+					case 30:
 						{ return YangToken.PREFIX_ID; }
 					case -29:
 						break;
-					case 45:
+					case 32:
 						{ return YangToken.INTEGER; }
 					case -30:
 						break;
-					case 46:
+					case 33:
 						{ return YangToken.PREFIX_ID; }
 					case -31:
 						break;
 					case 48:
-						{ return YangToken.PREFIX_ID; }
+						{ return YangToken.INTEGER; }
 					case -32:
 						break;
-					case 51:
-						{ return YangToken.INTEGER; }
+					case 49:
+						{ return YangToken.PREFIX_ID; }
 					case -33:
+						break;
+					case 51:
+						{ return YangToken.PREFIX_ID; }
+					case -34:
 						break;
 					case 54:
 						{ return YangToken.INTEGER; }
-					case -34:
+					case -35:
+						break;
+					case 57:
+						{ return YangToken.INTEGER; }
+					case -36:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

@@ -8,6 +8,9 @@ import wjl.yang.model.YangToken;
 %class YangLex
 %integer
 %line
+%yylexthrow{
+YangParseException
+%yylexthrow}
 
 %{
     public char getChar() {
@@ -25,6 +28,10 @@ import wjl.yang.model.YangToken;
     public void if_feature_expr() {
         yybegin(if_feature_expr);
     }
+
+    public void schema_node_id() {
+        yybegin(schema_node_id);
+    }
 %}
 
 %eofval{
@@ -33,6 +40,7 @@ import wjl.yang.model.YangToken;
 
 %state COMMENT
 %state if_feature_expr
+%state schema_node_id
 
 ALPHA = [A-Za-z]
 CRLF = [\r]?\n
@@ -63,6 +71,11 @@ ID = {ALPHA}[A-Za-z0-9-]*
 <if_feature_expr>   "and"                     { return YangToken.AND; }
 <if_feature_expr>   "or"                      { return YangToken.OR; }
 <if_feature_expr>   "not"                     { return YangToken.NOT; }
-<if_feature_expr>   {ID}                      { return YangToken.PREFIX_ID; }
-<if_feature_expr>   ({ID}):({ID})             { return YangToken.PREFIX_ID; }
+<if_feature_expr,schema_node_id>   {ID}                      { return YangToken.PREFIX_ID; }
+<if_feature_expr,schema_node_id>   ({ID}):({ID})             { return YangToken.PREFIX_ID; }
 <if_feature_expr>   {SP}                      {}
+
+<schema_node_id>   [/]                        { return getChar(); }
+
+<if_feature_expr,schema_node_id>      .       {
+            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
