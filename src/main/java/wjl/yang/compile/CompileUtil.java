@@ -2,6 +2,7 @@ package wjl.yang.compile;
 
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
+import wjl.yang.model.YangStmtClone;
 import wjl.yang.model.YangSubModule;
 import wjl.yang.utils.YangKeyword;
 
@@ -84,5 +85,32 @@ final class CompileUtil {
             }
         }
         return ret;
+    }
+
+    /**
+     * 深度复制一条语句
+     *
+     * @param belong
+     * @param source
+     * @return
+     */
+    static YangStmtClone cloneStmt(YangModule belong, YangStmt uses, YangStmt source) {
+        if (source == null) {
+            return null;
+        }
+
+        YangStmtClone clone = new YangStmtClone();
+        clone.setOriModule(belong);
+        clone.setSource(source);
+        clone.setUses(uses);
+        clone.setKey(source.getKey());
+        clone.setValue(source.getValue());
+        clone.setValueToken(source.getValueToken());
+        if (source.getSubStatements() != null) {
+            for (YangStmt sub : source.getSubStatements()) {
+                clone.addSubStatement(cloneStmt(belong, uses, sub));
+            }
+        }
+        return clone;
     }
 }

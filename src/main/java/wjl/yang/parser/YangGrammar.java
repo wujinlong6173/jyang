@@ -405,7 +405,7 @@ class YangGrammar {
         refine.addSub(description, 0, 1);
         refine.addSub(reference, 0, 1);
 
-        Stmt container = new Stmt("container", YangToken.IDENTITY);
+        Stmt container = new Stmt(YangKeyword.CONTAINER, YangToken.IDENTITY);
         Stmt leaf = new Stmt("leaf", YangToken.IDENTITY);
         Stmt list = new Stmt("list", YangToken.IDENTITY);
         Stmt leafList = new Stmt("leaf-list", YangToken.IDENTITY);
