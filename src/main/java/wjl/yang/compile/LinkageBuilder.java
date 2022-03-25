@@ -41,7 +41,7 @@ class LinkageBuilder {
                     module.addError(sub, "can not include two submodule with same name.");
                 } else {
                     included.add(name);
-                    target.setIncludedByMain();
+                    target.setMainModule(module);
                     target.addPrefix(target.getPrefix(), module);
                     module.addSubModule(target);
                 }
@@ -66,7 +66,7 @@ class LinkageBuilder {
                         module.addError(sub, "submodule not belongs to same module.");
                     } else if (included.contains(name)) {
                         module.addError(sub, "can not include two submodule with same name.");
-                    } else if (!target.isIncludedByMain()) {
+                    } else if (target.getMainModule() == null) {
                         module.addError(sub, "submodule should be included by main module.");
                     } else {
                         included.add(name);

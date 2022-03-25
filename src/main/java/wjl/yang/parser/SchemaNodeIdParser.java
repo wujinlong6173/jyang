@@ -3,34 +3,32 @@ package wjl.yang.parser;
 import wjl.yang.model.YangToken;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SchemaNodeIdParser {
-    private final List<String> stack = new ArrayList<>();
-
-    /**
-     *
-     * @param lex
-     * @return 是不是绝对路径，以斜杠开头的是绝对路径
-     * @throws IOException
-     * @throws YangParseException
-     */
-    public boolean parse(YangLex lex) throws IOException, YangParseException {
+    public static List<String> parse(String pathStr, boolean absolute) throws IOException, YangParseException {
+        YangLex lex = new YangLex(new StringReader(pathStr));
         lex.schema_node_id();
-        boolean absolute = false;
-        stack.clear();
+        List<String> path = new ArrayList<>();
 
         int nextToken = lex.yylex();
-        if (nextToken == '/') {
-            absolute = true;
-            nextToken = lex.yylex();
+        if (absolute) {
+            if (nextToken == '/') {
+                nextToken = lex.yylex();
+            } else {
+                throw new YangParseException("require absolute schema id.");
+            }
+        } else if (nextToken == '/') {
+            throw new YangParseException("require descendant schema id.");
         }
+
         while (nextToken == YangToken.PREFIX_ID) {
-            stack.add(lex.getString());
+            path.add(lex.getString());
             nextToken = lex.yylex();
             if (nextToken == -1) {
-                return absolute;
+                return path;
             } else if (nextToken != '/') {
                 throw new YangParseException("require /", lex.getLine(), lex.getString());
             } else {
@@ -38,9 +36,5 @@ public class SchemaNodeIdParser {
             }
         }
         throw new YangParseException("require node identifier", lex.getLine(), lex.getString());
-    }
-
-    public List<String> getStack() {
-        return stack;
     }
 }

@@ -1,0 +1,22 @@
+module search {
+    yang-version 1.1;
+    namespace "wjl:search";
+    prefix s;
+    description "networks";
+    reference "networks";
+    container networks {
+        list network {
+            key "id";
+            leaf id { type string; }
+            leaf name { type string; }
+            container nodes {
+                list node {
+                    key "id";
+                    leaf id { type string; }
+                    leaf name { type string; }
+                    anydata impl;
+                }
+            }
+        }
+    }
+}

@@ -12,6 +12,7 @@ public abstract class YangModule {
     private final String prefix;
     private final String version;
 
+    private YangMainModule mainModule;
     private final Map<String, YangMainModule> prefixToModule = new HashMap<>();
     private final List<YangSubModule> subModules = new ArrayList<>();
     private final List<YangError> errors = new ArrayList<>();
@@ -88,5 +89,11 @@ public abstract class YangModule {
         return errors;
     }
 
-    public abstract boolean isMainModule();
+    public YangMainModule getMainModule() {
+        return mainModule;
+    }
+
+    public void setMainModule(YangMainModule mainModule) {
+        this.mainModule = mainModule;
+    }
 }

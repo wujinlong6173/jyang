@@ -102,6 +102,10 @@ public class YangStmt {
         return oriModule;
     }
 
+    public YangModule getMainModule() {
+        return oriModule != null ? oriModule.getMainModule() : null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

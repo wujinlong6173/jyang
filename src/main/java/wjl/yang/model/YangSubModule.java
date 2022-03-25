@@ -7,11 +7,6 @@ public class YangSubModule extends YangModule {
     private final String belongTo;
 
     /**
-     * 有没有被主模块包含
-     */
-    private boolean includedByMain;
-
-    /**
      * 子模块
      *
      * @param name 子模块的名称
@@ -26,18 +21,5 @@ public class YangSubModule extends YangModule {
 
     public String getBelongTo() {
         return belongTo;
-    }
-
-    public void setIncludedByMain() {
-        includedByMain = true;
-    }
-
-    public boolean isIncludedByMain() {
-        return includedByMain;
-    }
-
-    @Override
-    public boolean isMainModule() {
-        return false;
     }
 }

@@ -1,5 +1,6 @@
 package wjl.yang.compile;
 
+import wjl.yang.model.ModuleAndIdentify;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
 import wjl.yang.model.YangStmtClone;
@@ -7,10 +8,27 @@ import wjl.yang.model.YangSubModule;
 import wjl.yang.utils.YangKeyword;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 final class CompileUtil {
+    private static final Set<String> SCHEMA_NODE_KEYS;
+
+    static {
+        SCHEMA_NODE_KEYS = new HashSet<>();
+        SCHEMA_NODE_KEYS.add(YangKeyword.CONTAINER);
+        SCHEMA_NODE_KEYS.add(YangKeyword.LIST);
+        SCHEMA_NODE_KEYS.add(YangKeyword.LEAF);
+        SCHEMA_NODE_KEYS.add(YangKeyword.LEAF_LIST);
+        SCHEMA_NODE_KEYS.add(YangKeyword.ANYDATA);
+        SCHEMA_NODE_KEYS.add(YangKeyword.ANYXML);
+        SCHEMA_NODE_KEYS.add(YangKeyword.CHOICE);
+        SCHEMA_NODE_KEYS.add(YangKeyword.CASE);
+    }
+
     static String version(YangStmt stmt) {
         YangStmt version = stmt.searchOne(YangKeyword.REVISION);
         return version != null ? version.getValue() : null;
@@ -95,10 +113,6 @@ final class CompileUtil {
      * @return
      */
     static YangStmtClone cloneStmt(YangModule belong, YangStmt uses, YangStmt source) {
-        if (source == null) {
-            return null;
-        }
-
         YangStmtClone clone = new YangStmtClone();
         clone.setOriModule(belong);
         clone.setSource(source);
@@ -112,5 +126,52 @@ final class CompileUtil {
             }
         }
         return clone;
+    }
+
+    /**
+     * 搜索模型节点
+     *
+     * @param module 当前模板，用于根据前缀找模块
+     * @param pos 出现错误时定位到此语句
+     * @param top 搜索的起点
+     * @param path 搜索的路径
+     * @return 找到的模型节点，返回空时肯定会填错误信息
+     */
+    static YangStmt searchSchemaNode(YangModule module, YangStmt pos, YangStmt top, List<String> path) {
+        YangStmt curr = top;
+        for (String hop : path) {
+            ModuleAndIdentify mi = module.separate(hop, true);
+            if (mi == null) {
+                module.addError(pos, hop + " invalid prefix.");
+                return null;
+            }
+
+            YangStmt found = null;
+            if (curr.getSubStatements() != null) {
+                for (YangStmt sub : curr.getSubStatements()) {
+                    if (matchModuleAndId(mi, sub)) {
+                        found = sub;
+                        break;
+                    }
+                }
+            }
+
+            curr = found;
+            if (found == null) {
+                module.addError(pos, hop + " is not found.");
+            }
+        }
+
+        return curr;
+    }
+
+    private static boolean matchModuleAndId(ModuleAndIdentify mi, YangStmt stmt) {
+        if (!Objects.equals(mi.getIdentify(), stmt.getValue())) {
+            return false;
+        }
+        if (mi.getModule() != stmt.getOriModule() && mi.getModule() != stmt.getMainModule()) {
+            return false;
+        }
+        return SCHEMA_NODE_KEYS.contains(stmt.getKey());
     }
 }
