@@ -12,6 +12,7 @@ public class YangStmt {
     private int valueToken; // 在YangToken中定义
     private List<YangStmt> subStatements;
     private YangModule oriModule; // 该语句是在哪个模块定义的
+    private YangMainModule schemaModule; // 哪个主模块将此语句加入到模型树
 
     public int getLine() {
         return line;
@@ -102,8 +103,16 @@ public class YangStmt {
         return oriModule;
     }
 
-    public YangModule getMainModule() {
-        return oriModule != null ? oriModule.getMainModule() : null;
+    public void setSchemaModule(YangMainModule schemaModule) {
+        this.schemaModule = schemaModule;
+    }
+
+    public YangMainModule getSchemaModule() {
+        if (schemaModule != null) {
+            return schemaModule;
+        } else {
+            return oriModule.getMainModule();
+        }
     }
 
     @Override
@@ -123,9 +132,5 @@ public class YangStmt {
         }
         sb.append(' ');
         return sb.toString();
-    }
-
-    public String getModuleName() {
-        return oriModule != null ? oriModule.getName() : "";
     }
 }

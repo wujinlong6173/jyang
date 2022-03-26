@@ -1,6 +1,7 @@
 package wjl.yang.compile;
 
 import wjl.yang.model.ModuleAndIdentify;
+import wjl.yang.model.YangMainModule;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
 import wjl.yang.model.YangStmtClone;
@@ -108,21 +109,27 @@ final class CompileUtil {
     /**
      * 深度复制一条语句
      *
-     * @param belong
      * @param source
      * @return
      */
-    static YangStmtClone cloneStmt(YangModule belong, YangStmt uses, YangStmt source) {
+    static YangStmtClone cloneStmt(YangStmt uses, YangStmt source) {
+        YangModule usesModule = uses.getOriModule();
+        YangMainModule schemaModule = usesModule.getMainModule();
+        return cloneStmt(schemaModule, uses, source);
+    }
+
+    private static YangStmtClone cloneStmt(YangMainModule schemaModule, YangStmt uses, YangStmt source) {
         YangStmtClone clone = new YangStmtClone();
-        clone.setOriModule(belong);
+        clone.setSchemaModule(schemaModule);
         clone.setSource(source);
         clone.setUses(uses);
+        clone.setOriModule(source.getOriModule());
         clone.setKey(source.getKey());
         clone.setValue(source.getValue());
         clone.setValueToken(source.getValueToken());
         if (source.getSubStatements() != null) {
             for (YangStmt sub : source.getSubStatements()) {
-                clone.addSubStatement(cloneStmt(belong, uses, sub));
+                clone.addSubStatement(cloneStmt(schemaModule, uses, sub));
             }
         }
         return clone;
@@ -139,6 +146,7 @@ final class CompileUtil {
      */
     static YangStmt searchSchemaNode(YangModule module, YangStmt pos, YangStmt top, List<String> path) {
         YangStmt curr = top;
+        outer:
         for (String hop : path) {
             ModuleAndIdentify mi = module.separate(hop, true);
             if (mi == null) {
@@ -146,32 +154,25 @@ final class CompileUtil {
                 return null;
             }
 
-            YangStmt found = null;
             if (curr.getSubStatements() != null) {
                 for (YangStmt sub : curr.getSubStatements()) {
                     if (matchModuleAndId(mi, sub)) {
-                        found = sub;
-                        break;
+                        curr = sub;
+                        continue outer;
                     }
                 }
             }
 
-            curr = found;
-            if (found == null) {
-                module.addError(pos, hop + " is not found.");
-            }
+            module.addError(pos, hop + " is not found.");
+            return null;
         }
 
         return curr;
     }
 
     private static boolean matchModuleAndId(ModuleAndIdentify mi, YangStmt stmt) {
-        if (!Objects.equals(mi.getIdentify(), stmt.getValue())) {
-            return false;
-        }
-        if (mi.getModule() != stmt.getOriModule() && mi.getModule() != stmt.getMainModule()) {
-            return false;
-        }
-        return SCHEMA_NODE_KEYS.contains(stmt.getKey());
+        return Objects.equals(mi.getIdentify(), stmt.getValue())
+            && mi.getModule().getMainModule() == stmt.getSchemaModule()
+            && SCHEMA_NODE_KEYS.contains(stmt.getKey());
     }
 }

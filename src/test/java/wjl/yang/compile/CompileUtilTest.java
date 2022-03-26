@@ -29,7 +29,7 @@ public class CompileUtilTest {
         uses.setKey(YangKeyword.USES);
         uses.setLine(25);
         uses.setValue("clone");
-        YangStmtClone clone = CompileUtil.cloneStmt(dummy, uses, module.getStmt());
+        YangStmtClone clone = CompileUtil.cloneStmt(uses, module.getStmt());
         YangStmt srcRoot = module.getStmt().searchOne(YangKeyword.CONTAINER);
         YangStmt cloneRoot = clone.searchOne(YangKeyword.CONTAINER);
         Assert.assertEquals("grouping line 44 : container root ", srcRoot.toString());
