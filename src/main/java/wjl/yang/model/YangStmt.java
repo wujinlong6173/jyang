@@ -53,8 +53,41 @@ public class YangStmt {
         subStatements.add(stmt);
     }
 
+    public void addSubStatements(List<YangStmt> stmtList) {
+        if (subStatements == null) {
+            subStatements = new ArrayList<>();
+        }
+        subStatements.addAll(stmtList);
+    }
+
+    /**
+     * 替换指定的字句
+     *
+     * @param del 被替换的语句
+     * @param stmtList 需要插入的语句列表
+     */
+    public void replaceStmt(YangStmt del, List<YangStmt> stmtList) {
+        if (subStatements == null) {
+            subStatements = stmtList;
+            return;
+        }
+        List<YangStmt> clone = new ArrayList<>();
+        for (YangStmt sub : subStatements) {
+            if (sub == del) {
+                clone.addAll(stmtList);
+            } else {
+                clone.add(sub);
+            }
+        }
+        subStatements = clone;
+    }
+
     public List<YangStmt> getSubStatements() {
         return subStatements;
+    }
+
+    public void clearSubStatements() {
+        subStatements = null;
     }
 
     public YangStmt searchOne(String key) {
@@ -110,9 +143,15 @@ public class YangStmt {
     public YangMainModule getSchemaModule() {
         if (schemaModule != null) {
             return schemaModule;
-        } else {
+        } else if (oriModule != null) {
             return oriModule.getMainModule();
+        } else {
+            return null;
         }
+    }
+
+    public void reportError(String msg) {
+        oriModule.addError(this, msg);
     }
 
     @Override

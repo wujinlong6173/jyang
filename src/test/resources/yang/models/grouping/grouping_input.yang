@@ -3,24 +3,31 @@ module grouping {
     namespace "wjl:grouping";
     prefix g;
 
+    feature test3;
+    feature test4;
+
     grouping g1 {
         container c1 {
+            description "c1 in g1";
         }
     }
 
     grouping g2 {
         container c2 {
+            description "c2 in g2";
         }
     }
 
     grouping g3 {
         container c3 {
+            description "c3 in g3";
         }
         uses g1;
     }
 
     grouping g4 {
         uses g3 {
+            if-feature test3;
             augment "c3" {
                 container c34 {
                     grouping g5 {
@@ -32,6 +39,7 @@ module grouping {
                         augment "c5" {
                             container c55 {
                             }
+                            uses g2;
                         }
                     }
                 }
@@ -44,6 +52,7 @@ module grouping {
     container root {
         uses g2;
         uses g4 {
+            if-feature test4;
             augment "c4" {
                 container c44 {
                     uses g1;

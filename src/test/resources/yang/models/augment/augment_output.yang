@@ -1,0 +1,61 @@
+module ma {
+    yang-version 1.1;
+    namespace "wjl:test";
+    prefix ma;
+
+    container a {
+        container orders {
+            leaf name { type string; }
+            container mb:address {
+                leaf mb:street {type string;}
+                leaf mb:city {type string;}
+                if-feature send;
+                leaf mc:hop {
+                    type string;
+                    if-feature trace;
+                }
+            }
+            leaf mb:phone {
+                type string;
+                if-feature send;
+            }
+            list mc:route {
+                key 'id';
+                leaf mc:id {type int32;}
+                leaf mc:hop {type string;}
+                if-feature trace;
+            }
+        }
+    }
+}
+
+module mb {
+    yang-version 1.1;
+    namespace "wjl:test";
+    prefix mb;
+
+    import ma {
+        prefix ma;
+    }
+
+    feature send;
+    augment "/ma:a/ma:orders";
+}
+
+module mc {
+    yang-version 1.1;
+    namespace "wjl:test";
+    prefix mc;
+
+    import ma {
+        prefix ma;
+    }
+
+    import mb {
+        prefix mb;
+    }
+
+    feature trace;
+    augment "/ma:a/ma:orders";
+    augment "/ma:a/ma:orders/mb:address";
+}

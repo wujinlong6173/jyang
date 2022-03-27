@@ -31,10 +31,26 @@ class GroupingCompiler {
         moduleToGroupings = CompileUtil.collectSpecialStmt(modules, YangKeyword.GROUPING);
         // 先展开各模块顶层定义的groupings，要注意循环引用。
         searchUsesStmt(modules);
+
         // 将uses、grouping、uses>augment三种语句放在一个有向图中排序，得到uses语句的执行顺序
         UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
         sortedUses = UiGraphSort.sortReverse(groupDepends,
             (node) -> node != null && YangKeyword.USES.equals(node.getKey()));
+
+        // 方便根据uses语句查找相关信息
+        Map<YangStmt, UsesToGrouping> usesToGroupingMap = new HashMap<>();
+        for (UsesToGrouping utg : usesToGroupings) {
+            if (utg.parentStmt != null) {
+                usesToGroupingMap.put(utg.uses, utg);
+            }
+        }
+
+        // 按顺序展开所有uses语句
+        GroupingCopier copier = new GroupingCopier();
+        for (YangStmt uses : sortedUses) {
+            UsesToGrouping utg = usesToGroupingMap.get(uses);
+            copier.copy(utg.parentStmt, utg.uses, utg.targetGrouping);
+        }
     }
 
     private void searchUsesStmt(List<YangModule> modules) {

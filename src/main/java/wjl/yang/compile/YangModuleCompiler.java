@@ -23,30 +23,22 @@ public class YangModuleCompiler {
     private final List<String> errors = new ArrayList<>();
     private final YangContext context = new YangContext();
 
-    public List<YangModule> compile(List<String> filenames) {
-        errors.clear();
+    public List<YangModule> compileStmtList(List<YangStmt> stmtList) {
         YangGrammarChecker checker = new YangGrammarChecker();
         List<YangMainModule> addModules = new ArrayList<>();
 
-        for (String filename : filenames) {
-            try (InputStream fin = new FileInputStream(filename)) {
-                YangLex lex = new YangLex(fin);
-                YangParser parser = new YangParser();
-                YangStmt stmt = parser.parse(lex);
-                if (!checker.check(stmt)) {
-                    errors.add(filename + " has errors:");
-                    for (YangError err : checker.getErrors()) {
-                        errors.add("  " + err.toString());
-                    }
-                } else if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
-                    YangMainModule module = mainModule(stmt);
-                    addModules.add(module);
-                    context.addMainModule(module);
-                } else {
-                    context.addSubModule(subModule(stmt));
+        for (YangStmt stmt : stmtList) {
+            if (!checker.check(stmt)) {
+                errors.add(stmt.toString() + " has errors:");
+                for (YangError err : checker.getErrors()) {
+                    errors.add("  " + err.toString());
                 }
-            } catch (IOException | YangParseException err) {
-                errors.add(filename + " : " + err.getMessage());
+            } else if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
+                YangMainModule module = mainModule(stmt);
+                addModules.add(module);
+                context.addMainModule(module);
+            } else {
+                context.addSubModule(subModule(stmt));
             }
         }
 
@@ -55,7 +47,46 @@ public class YangModuleCompiler {
         setOriModule(allModules);
         new FeatureCompiler().collectFeatures(allModules);
         new GroupingCompiler().expandGrouping(allModules);
+        new AugmentCompiler().expandAugment(allModules);
         return allModules;
+    }
+
+    public List<YangModule> compileFiles(List<String> filenames) {
+        List<YangStmt> stmtList = new ArrayList<>();
+        for (String filename : filenames) {
+            try (InputStream fin = new FileInputStream(filename)) {
+                YangLex lex = new YangLex(fin);
+                YangParser parser = new YangParser();
+                YangStmt stmt = parser.parse(lex);
+                if (stmt != null) {
+                    stmtList.add(stmt);
+                }
+            } catch (IOException | YangParseException err) {
+                errors.add(filename + " : " + err.getMessage());
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            return null;
+        }
+
+        return compileStmtList(stmtList);
+    }
+
+    public void addError(String filename, String msg) {
+        errors.add(filename + " : " + msg);
+    }
+
+    public void addError(String msg) {
+        errors.add(msg);
+    }
+
+    public void clearErrors() {
+        errors.clear();
+    }
+
+    public boolean hasError() {
+        return !errors.isEmpty();
     }
 
     public List<String> getErrors() {

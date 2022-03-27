@@ -235,10 +235,11 @@ class YangGrammar {
         Stmt position = new Stmt("position", YangToken.STRING);
 
         // if-feature
-        Stmt ifFeature = new Stmt(YangKeyword.IF_FEATURE, YangToken.STRING);
+        Stmt ifFeature = new Stmt(YangKeyword.IF_FEATURE, YangToken.IDENTITY, YangToken.PREFIX_ID,
+            YangToken.STRING);
 
         // feature
-        Stmt feature = new Stmt(YangKeyword.FEATURE, YangToken.STRING, YangToken.IDENTITY);
+        Stmt feature = new Stmt(YangKeyword.FEATURE, YangToken.IDENTITY, YangToken.STRING);
         feature.addSub(ifFeature, 0, -1);
         feature.addSub(status, 0, 1);
         feature.addSub(description, 0, 1);

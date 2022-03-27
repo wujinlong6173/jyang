@@ -1,0 +1,91 @@
+module grouping {
+    yang-version 1.1;
+    namespace "wjl:grouping";
+    prefix g;
+
+    feature test3;
+    feature test4;
+
+    grouping g1 {
+        container c1 {
+            description "c1 in g1";
+        }
+    }
+
+    grouping g2 {
+        container c2 {
+            description "c2 in g2";
+        }
+    }
+
+    grouping g3 {
+        container c3 {
+            description "c3 in g3";
+        }
+        container c1 {
+            description "c1 in g1";
+        }
+    }
+
+    grouping g4 {
+        container c3 {
+            description "c3 in g3";
+            container c34 {
+                grouping g5 {
+                    container c5;
+                }
+                container c2 {
+                    description "c2 in g2";
+                }
+                container c5 {
+                    container c55;
+                    container c2 {
+                        description "c2 in g2";
+                    }
+                }
+            }
+            if-feature test3;
+        }
+        container c1 {
+            description "c1 in g1";
+            if-feature test3;
+        }
+        container c4 {
+        }
+    }
+
+    container root {
+        container c2 {
+            description "c2 in g2";
+        }
+        container c3 {
+            description "c3 in g3";
+            container c34 {
+                container c2 {
+                    description "c2 in g2";
+                }
+                container c5 {
+                    container c55;
+                    container c2 {
+                        description "c2 in g2";
+                    }
+                }
+            }
+            if-feature test3;
+            if-feature test4;
+        }
+        container c1 {
+            description "c1 in g1";
+            if-feature test3;
+            if-feature test4;
+        }
+        container c4 {
+            container c44 {
+                container c1 {
+                    description "c1 in g1";
+                }
+            }
+            if-feature test4;
+        }
+    }
+}

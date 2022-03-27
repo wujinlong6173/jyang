@@ -4,16 +4,37 @@ import wjl.yang.model.YangStmt;
 import wjl.yang.model.YangToken;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class YangParser {
-    private final Stack<YangStmt> stack = new Stack<>();
     private YangLex lex;
     private int cacheToken = 0;
 
     public YangStmt parse(YangLex lex) throws IOException, YangParseException {
+        List<YangStmt> topStmtList = parseFragment(lex);
+        if (topStmtList.isEmpty()) {
+            return null;
+        } else if (topStmtList.size() > 1) {
+            throw makeException("one file can define on statement.");
+        } else {
+            return topStmtList.get(0);
+        }
+    }
+
+    /**
+     * 解析模型片段，一个文件中可以定义多条语句
+     *
+     * @param lex
+     * @return 顶层定义的语句列表
+     * @throws IOException
+     * @throws YangParseException
+     */
+    public List<YangStmt> parseFragment(YangLex lex) throws IOException, YangParseException {
         this.lex = lex;
-        this.stack.clear();
+        final Stack<YangStmt> stack = new Stack<>();
+        final List<YangStmt> topStmtList = new ArrayList<>();
 
         YangStmt parent;
         YangStmt curr;
@@ -23,7 +44,7 @@ public class YangParser {
             token = lex.yylex();
             if (token == -1) {
                 if (stack.isEmpty()) {
-                    return null;
+                    return topStmtList;
                 } else {
                     throw makeException("require right brace");
                 }
@@ -39,14 +60,14 @@ public class YangParser {
                 }
                 curr = stack.pop();
                 if (stack.isEmpty()) {
-                    checkEndOfFile();
-                    return curr;
+                    topStmtList.add(curr);
+                } else {
+                    parent = stack.peek();
+                    parent.addSubStatement(curr);
                 }
-                parent = stack.peek();
-                parent.addSubStatement(curr);
                 continue;
             } else {
-                throw makeException("require wjl.yang keyword");
+                throw makeException("require yang keyword");
             }
 
             // read value
@@ -71,11 +92,11 @@ public class YangParser {
             }
             if (token == YangToken.SEMI) {
                 if (stack.isEmpty()) {
-                    checkEndOfFile();
-                    return curr;
+                    topStmtList.add(curr);
+                } else {
+                    parent = stack.peek();
+                    parent.addSubStatement(curr);
                 }
-                parent = stack.peek();
-                parent.addSubStatement(curr);
             } else if (token == YangToken.LEFT_BRACE) {
                 stack.push(curr);
             } else {
@@ -115,12 +136,13 @@ public class YangParser {
         return sb.toString();
     }
 
+    /**
     void checkEndOfFile() throws IOException, YangParseException {
         int token = lex.yylex();
         if (token != -1) {
             throw makeException("expect end of file");
         }
-    }
+    }*/
 
     private YangParseException makeException(String msg) {
         return new YangParseException(msg, lex.getLine(), lex.getString());

@@ -1,7 +1,6 @@
 package wjl.yang.compile;
 
 import org.junit.Test;
-import wjl.yang.model.YangMainModule;
 import wjl.yang.model.YangModule;
 import wjl.yang.utils.YangError;
 
@@ -25,7 +24,7 @@ public class YangModuleTest {
             filenames.add(dir + filename);
         }
 
-        List<YangModule> allModules = compiler.compile(filenames);
+        List<YangModule> allModules = compiler.compileFiles(filenames);
         for (String err : compiler.getErrors()) {
             System.err.println(err);
         }
