@@ -1,0 +1,53 @@
+module refine {
+    yang-version 1.1;
+    namespace "wjl:refine";
+    prefix r;
+
+    feature f1;
+    feature f2;
+
+    grouping g1 {
+        leaf x {
+            if-feature f1;
+            type string;
+        }
+        leaf-list y {
+            description "will be refined";
+            type int32;
+            config true;
+        }
+        container c;
+        list d {
+            key id;
+            leaf id {type int32;}
+            reference "will be refined";
+            must "condition1";
+            min-elements 10;
+            max-elements 100;
+        }
+    }
+
+    container root {
+        uses g1 {
+            refine "x" {
+                if-feature f2;
+                description "useful x";
+            }
+            refine "y" {
+                 description "useful y";
+                 config false;
+            }
+            refine "c" {
+                reference "refined";
+                config true;
+                presence "true";
+            }
+            refine "d" {
+                reference "refined";
+                must "condition2";
+                min-elements 11;
+                max-elements 101;
+            }
+        }
+    }
+}

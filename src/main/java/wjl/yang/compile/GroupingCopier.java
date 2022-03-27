@@ -63,6 +63,7 @@ class GroupingCopier {
 
         List<YangStmt> cloneSubs = cloneGrouping(uses, grouping);
         applyAugment(uses, cloneSubs);
+        applyRefine(uses, cloneSubs);
         ConditionCopier.copyConditions(uses, cloneSubs);
         parent.replaceStmt(uses, cloneSubs);
     }
@@ -102,14 +103,14 @@ class GroupingCopier {
     }
 
     private void applyAugment(YangStmt uses, List<YangStmt> cloneSubs) {
-        if (uses.getSubStatements() == null) {
-            return;
-        }
+        uses.forEach(YangKeyword.AUGMENT, (aug) -> {
+            AugmentCopier.usesAugment(aug, cloneSubs);
+        });
+    }
 
-        for (YangStmt aug : uses.getSubStatements()) {
-            if (YangKeyword.AUGMENT.equals(aug.getKey())) {
-                AugmentCopier.usesAugment(aug, cloneSubs);
-            }
-        }
+    private void applyRefine(YangStmt uses, List<YangStmt> cloneSubs) {
+        uses.forEach(YangKeyword.REFINE, (ref) -> {
+            RefineCopier.usesRefine(ref, cloneSubs);
+        });
     }
 }

@@ -25,4 +25,14 @@ public class MultiModulesCases {
             Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
         }
     }
+
+    @Test
+    public void testRefine() {
+        MultiModulesComparator comparator = new MultiModulesComparator("refine");
+        if (comparator.compare()) {
+            Assert.assertEquals(comparator.getOutputStr(), comparator.getResultStr());
+        } else {
+            Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
+        }
+    }
 }

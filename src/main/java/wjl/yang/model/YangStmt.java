@@ -1,6 +1,7 @@
 package wjl.yang.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -80,6 +81,23 @@ public class YangStmt {
             }
         }
         subStatements = clone;
+    }
+
+    public void replaceStmt(YangStmt add) {
+        if (subStatements == null) {
+            subStatements = new ArrayList<>();
+            subStatements.add(add);
+            return;
+        }
+
+        for (int idx = 0; idx < subStatements.size(); idx++) {
+            YangStmt sub = subStatements.get(idx);
+            if (Objects.equals(sub.getKey(), add.getKey())) {
+                subStatements.set(idx, add);
+                return;
+            }
+        }
+        subStatements.add(add);
     }
 
     public List<YangStmt> getSubStatements() {

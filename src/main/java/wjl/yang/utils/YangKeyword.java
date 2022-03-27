@@ -7,7 +7,9 @@ public interface YangKeyword {
     String BELONGS_TO = "belongs-to";
     String CASE = "case";
     String CHOICE = "choice";
+    String CONFIG = "config";
     String CONTAINER = "container";
+    String DEFAULT = "default";
     String DESCRIPTION = "description";
     String FEATURE = "feature";
     String IF_FEATURE = "if-feature";
@@ -18,11 +20,16 @@ public interface YangKeyword {
     String LEAF = "leaf";
     String LEAF_LIST = "leaf-list";
     String LIST = "list";
+    String MANDATORY = "mandatory";
+    String MAX_ELEMENTS = "max-elements";
+    String MIN_ELEMENTS = "min-elements";
     String MODULE = "module";
     String MUST = "must";
     String OUTPUT = "output";
+    String PRESENCE = "presence";
     String PREFIX = "prefix";
     String REFERENCE = "reference";
+    String REFINE = "refine";
     String REVISION = "revision";
     String REVISION_DATE = "revision-date";
     String RPC = "rpc";

@@ -194,10 +194,10 @@ class YangGrammar {
         Stmt value = new Stmt("value", YangToken.STRING);
 
         // min-elements
-        Stmt minElements = new Stmt("min-elements", YangToken.STRING);
+        Stmt minElements = new Stmt("min-elements", YangToken.INTEGER, YangToken.STRING);
 
         // max-elements
-        Stmt maxElements = new Stmt("max-elements", YangToken.STRING);
+        Stmt maxElements = new Stmt("max-elements", YangToken.INTEGER, YangToken.STRING);
 
         // error-message
         Stmt errorMessage = new Stmt("error-message", YangToken.STRING);
@@ -394,7 +394,7 @@ class YangGrammar {
         deviation.addSub(deviateAll, 0, -1);
 
         // refine
-        Stmt refine = new Stmt("refine", YangToken.STRING);
+        Stmt refine = new Stmt(YangKeyword.REFINE, YangToken.STRING);
         refine.addSub(ifFeature, 0, -1);
         refine.addSub(must, 0, -1);
         refine.addSub(presence, 0, 1);
