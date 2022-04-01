@@ -49,6 +49,7 @@ public class YangModuleCompiler {
         new GroupingCompiler().expandGrouping(allModules);
         new AugmentCompiler().expandAugment(allModules);
         new TypedefCompiler().compile(allModules);
+        new IdentityCompiler().compile(allModules);
         return allModules;
     }
 

@@ -42,12 +42,16 @@ class GroupingCopier {
         NO_NEED_COPY_KEYS.add(YangKeyword.DESCRIPTION);
         NO_NEED_COPY_KEYS.add(YangKeyword.REFERENCE);
         NO_NEED_COPY_KEYS.add(YangKeyword.STATUS);
-        NO_NEED_COPY_KEYS.add(YangKeyword.TYPE);
-        NO_NEED_COPY_KEYS.add(YangKeyword.TYPEDEF);
         NO_NEED_COPY_KEYS.add(YangKeyword.UNIQUE);
         NO_NEED_COPY_KEYS.add(YangKeyword.IF_FEATURE);
         NO_NEED_COPY_KEYS.add(YangKeyword.WHEN);
         NO_NEED_COPY_KEYS.add(YangKeyword.MUST);
+        NO_NEED_COPY_KEYS.add(YangKeyword.TYPE);
+        NO_NEED_COPY_KEYS.add(YangKeyword.BASE);
+
+        // 复制会导致算法错误的语句
+        NO_NEED_COPY_KEYS.add(YangKeyword.TYPEDEF);
+        NO_NEED_COPY_KEYS.add(YangKeyword.IDENTITY);
     }
 
     /**

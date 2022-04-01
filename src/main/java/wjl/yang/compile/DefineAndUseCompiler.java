@@ -11,6 +11,12 @@ import java.util.Map;
 import java.util.Set;
 
 abstract class DefineAndUseCompiler {
+    /**
+     * grouping typedef 可以定义在任意地方。
+     * identity 只能定义在模块顶层。
+     */
+    protected boolean hasLocalDefine = true;
+
     private final String defKey;
     private final String useKey;
     private Map<YangModule, Map<String, YangStmt>> moduleToDefines;
@@ -39,11 +45,16 @@ abstract class DefineAndUseCompiler {
             }
 
             Map<String, YangStmt> moduleDefines = moduleToDefines.get(module);
-            Map<String, YangStmt> scopeDefines = moduleToDefines == null
-                ? new HashMap<>() : new HashMap<>(moduleDefines);
-
-            for (YangStmt topStmt : stmtModule.getSubStatements()) {
-                searchDefineAndUse(null, stmtModule, topStmt, scopeDefines);
+            if (hasLocalDefine) {
+                Map<String, YangStmt> scopeDefines = moduleToDefines == null
+                    ? new HashMap<>() : new HashMap<>(moduleDefines);
+                for (YangStmt topStmt : stmtModule.getSubStatements()) {
+                    searchDefineAndUse(null, stmtModule, topStmt, scopeDefines);
+                }
+            } else {
+                for (YangStmt topStmt : stmtModule.getSubStatements()) {
+                    searchUseOnly(null, stmtModule, topStmt, moduleDefines);
+                }
             }
         }
     }
@@ -94,6 +105,28 @@ abstract class DefineAndUseCompiler {
             for (String local : localDefines) {
                 scopeDefines.remove(local);
             }
+        }
+    }
+
+    private void searchUseOnly(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt,
+        Map<String, YangStmt> moduleDefines) {
+        if (useKey.equals(stmt.getKey())) {
+            if (!checkInternalDefine(parentStmt, stmt)) {
+                YangStmt targetDefine = findTargetDefine(stmt, moduleDefines);
+                if (targetDefine != null) {
+                    onMatch(parentDefine, parentStmt, stmt, targetDefine);
+                }
+            }
+        } else if (defKey.equals(stmt.getKey())) {
+            parentDefine = stmt;
+        }
+
+        if (stmt.getSubStatements() == null) {
+            return;
+        }
+
+        for (YangStmt sub : stmt.getSubStatements()) {
+            searchUseOnly(parentDefine, stmt, sub, moduleDefines);
         }
     }
 

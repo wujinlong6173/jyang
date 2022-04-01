@@ -1,0 +1,54 @@
+module ta {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix ta;
+
+    identity vpn;
+
+    identity l2vpn {
+        base vpn;
+    }
+
+    identity l3vpn {
+        base vpn;
+    }
+}
+
+module tb {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix tb;
+    import ta { prefix ta; }
+
+    identity pe-l3vpn {
+        base ta:l3vpn;
+    }
+
+    identity ce-l3vpn {
+        base ta:l3vpn;
+    }
+
+    identity protocol;
+
+    identity igp {
+        base protocol;
+    }
+
+    identity ospf {
+        base igp;
+    }
+
+    container root {
+        leaf type {
+            type identityref {
+                base ta:vpn;
+            }
+        }
+
+        leaf route {
+            type identityref {
+                base protocol;
+            }
+        }
+    }
+}

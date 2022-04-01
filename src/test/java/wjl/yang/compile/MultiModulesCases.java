@@ -45,4 +45,14 @@ public class MultiModulesCases {
             Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
         }
     }
+
+    @Test
+    public void testIdentity() {
+        MultiModulesComparator comparator = new MultiModulesComparator("identity");
+        if (comparator.compare()) {
+            Assert.assertEquals(comparator.getOutputStr(), comparator.getResultStr());
+        } else {
+            Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
+        }
+    }
 }

@@ -129,19 +129,19 @@ class YangGrammar {
 
     static {
         // description
-        Stmt description = new Stmt("description", YangToken.STRING);
+        Stmt description = new Stmt(YangKeyword.DESCRIPTION, YangToken.STRING);
 
         // reference
-        Stmt reference = new Stmt("reference", YangToken.STRING);
+        Stmt reference = new Stmt(YangKeyword.REFERENCE, YangToken.STRING);
 
         /*----------- module header -----------*/
 
         // yang-version
-        Stmt yangVersion = new Stmt("yang-version", YangToken.DECIMAL);
+        Stmt yangVersion = new Stmt(YangKeyword.YANG_VERSION, YangToken.DECIMAL);
         yangVersion.setValidValues("1.1");
 
         // namespace
-        Stmt namespace = new Stmt("namespace", YangToken.STRING);
+        Stmt namespace = new Stmt(YangKeyword.NAMESPACE, YangToken.STRING);
 
         // prefix
         Stmt prefix = new Stmt(YangKeyword.PREFIX, YangToken.IDENTITY);
@@ -177,10 +177,8 @@ class YangGrammar {
         Stmt belongsTo = new Stmt(YangKeyword.BELONGS_TO, YangToken.IDENTITY);
         belongsTo.addSub(prefix, 1, 1);
 
-
-
         // when
-        Stmt when = new Stmt("when", YangToken.STRING);
+        Stmt when = new Stmt(YangKeyword.WHEN, YangToken.STRING);
         when.addSub(description, 0, 1);
         when.addSub(reference, 0, 1);
 
@@ -206,29 +204,29 @@ class YangGrammar {
         Stmt errorAppTag = new Stmt("error-app-tag", YangToken.STRING);
 
         // must
-        Stmt must = new Stmt("must", YangToken.STRING);
+        Stmt must = new Stmt(YangKeyword.MUST, YangToken.STRING);
         must.addSub(errorMessage, 0, 1);
         must.addSub(errorAppTag, 0, 1);
         must.addSub(description, 0, 1);
         must.addSub(reference, 0, 1);
 
         // presence
-        Stmt presence = new Stmt("presence", YangToken.STRING);
+        Stmt presence = new Stmt(YangKeyword.PRESENCE, YangToken.STRING);
 
         // ordered-by
         Stmt orderedBy = new Stmt("ordered-by", YangToken.STRING);
         orderedBy.setValidValues("user", "system");
 
         // mandatory
-        Stmt mandatory = new Stmt("mandatory", YangToken.STRING);
+        Stmt mandatory = new Stmt(YangKeyword.MANDATORY, YangToken.STRING);
         mandatory.setValidValues("true", "false");
 
         // config
-        Stmt config = new Stmt("config", YangToken.IDENTITY, YangToken.IDENTITY);
+        Stmt config = new Stmt(YangKeyword.CONFIG, YangToken.IDENTITY, YangToken.IDENTITY);
         config.setValidValues("true", "false");
 
         // status
-        Stmt status = new Stmt("status", YangToken.STRING, YangToken.IDENTITY);
+        Stmt status = new Stmt(YangKeyword.STATUS, YangToken.STRING, YangToken.IDENTITY);
         status.setValidValues("current", "obsolete", "deprecated");
 
         // position
@@ -246,10 +244,10 @@ class YangGrammar {
         feature.addSub(reference, 0, 1);
 
         // base
-        Stmt base = new Stmt("base", YangToken.STRING);
+        Stmt base = new Stmt(YangKeyword.BASE, YangToken.IDENTITY, YangToken.PREFIX_ID);
 
         // identity
-        Stmt identity = new Stmt("identity", YangToken.STRING);
+        Stmt identity = new Stmt(YangKeyword.IDENTITY, YangToken.IDENTITY);
         identity.addSub(ifFeature, 0, -1);
         identity.addSub(base, 0, -1);
         identity.addSub(status, 0, 1);
@@ -330,7 +328,7 @@ class YangGrammar {
         range.addSub(reference, 0, 1);
 
         // type 没有严格按标准校验，下列子句只能按特定的方式组合
-        Stmt type = new Stmt("type", YangToken.IDENTITY, YangToken.PREFIX_ID);
+        Stmt type = new Stmt(YangKeyword.TYPE, YangToken.IDENTITY, YangToken.PREFIX_ID);
         type.addSub(range, 0, 1);
         type.addSub(fractionDigits, 0, 1);
         type.addSub(length, 0, 1);
@@ -352,7 +350,7 @@ class YangGrammar {
         typedef.addSub(reference, 0, 1);
 
         // anyxml
-        Stmt anyxml = new Stmt("anyxml", YangToken.IDENTITY);
+        Stmt anyxml = new Stmt(YangKeyword.ANYXML, YangToken.IDENTITY);
         anyxml.addSub(when, 0, 1);
         anyxml.addSub(ifFeature, 0, -1);
         anyxml.addSub(must, 0, -1);
@@ -363,7 +361,7 @@ class YangGrammar {
         anyxml.addSub(reference, 0, 1);
 
         // anydata
-        Stmt anydata = new Stmt("anydata", YangToken.IDENTITY);
+        Stmt anydata = new Stmt(YangKeyword.ANYDATA, YangToken.IDENTITY);
         anydata.addSub(when, 0, 1);
         anydata.addSub(ifFeature, 0, -1);
         anydata.addSub(must, 0, -1);
@@ -407,12 +405,12 @@ class YangGrammar {
         refine.addSub(reference, 0, 1);
 
         Stmt container = new Stmt(YangKeyword.CONTAINER, YangToken.IDENTITY);
-        Stmt leaf = new Stmt("leaf", YangToken.IDENTITY);
-        Stmt list = new Stmt("list", YangToken.IDENTITY);
-        Stmt leafList = new Stmt("leaf-list", YangToken.IDENTITY);
+        Stmt leaf = new Stmt(YangKeyword.LEAF, YangToken.IDENTITY);
+        Stmt list = new Stmt(YangKeyword.LIST, YangToken.IDENTITY);
+        Stmt leafList = new Stmt(YangKeyword.LEAF_LIST, YangToken.IDENTITY);
         Stmt grouping = new Stmt(YangKeyword.GROUPING, YangToken.IDENTITY);
-        Stmt choice = new Stmt("choice", YangToken.IDENTITY);
-        Stmt cases = new Stmt("cases", YangToken.IDENTITY);
+        Stmt choice = new Stmt(YangKeyword.CHOICE, YangToken.IDENTITY);
+        Stmt cases = new Stmt(YangKeyword.CASE, YangToken.IDENTITY);
         Stmt augment = new Stmt(YangKeyword.AUGMENT, YangToken.STRING);
         // useAugment和augment的格式是一样的，只是使用位置不同
         Stmt usesAugment = augment;
@@ -509,21 +507,20 @@ class YangGrammar {
         notification.addSub(0, -1, container, leaf, leafList, list, choice, anydata, anyxml, uses);
 
         // input 这个语句没有值，标准要求至少有一条data-def子句
-        Stmt input = new Stmt("input");
+        Stmt input = new Stmt(YangKeyword.INPUT);
         input.addSub(must, 0, -1);
         input.addSub(typedef, 0, -1);
         input.addSub(grouping, 0, -1);
         input.addSub(1, -1, container, leaf, leafList, list, choice, anydata, anyxml, uses);
 
         // output 这个语句没有值，标准要求至少有一条data-def子句
-        Stmt output = new Stmt("output");
+        Stmt output = new Stmt(YangKeyword.OUTPUT);
         output.addSub(must, 0, -1);
         output.addSub(typedef, 0, -1);
         output.addSub(grouping, 0, -1);
         input.addSub(1, -1, container, leaf, leafList, list, choice, anydata, anyxml, uses);
 
         // action
-
         action.addSub(ifFeature, 0, -1);
         action.addSub(status, 0, 1);
         action.addSub(description, 0, 1);
@@ -534,7 +531,7 @@ class YangGrammar {
         action.addSub(output, 0, 1);
 
         // rpc
-        Stmt rpc = new Stmt("rpc", YangToken.IDENTITY);
+        Stmt rpc = new Stmt(YangKeyword.RPC, YangToken.IDENTITY);
         rpc.addSub(ifFeature, 0, -1);
         rpc.addSub(status, 0, 1);
         rpc.addSub(description, 0, 1);
@@ -556,7 +553,6 @@ class YangGrammar {
         choice.addSub(0, -1, container, leaf, leafList, list, choice, anydata, anyxml, cases);
 
         // case
-
         cases.addSub(when, 0, 1);
         cases.addSub(ifFeature, 0, -1);
         cases.addSub(status, 0, 1);

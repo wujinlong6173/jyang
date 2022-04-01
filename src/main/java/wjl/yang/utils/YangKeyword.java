@@ -4,6 +4,7 @@ public interface YangKeyword {
     String ANYDATA = "anydata";
     String ANYXML = "anyxml";
     String AUGMENT = "augment";
+    String BASE = "base";
     String BELONGS_TO = "belongs-to";
     String CASE = "case";
     String CHOICE = "choice";
@@ -14,6 +15,7 @@ public interface YangKeyword {
     String FEATURE = "feature";
     String IF_FEATURE = "if-feature";
     String GROUPING = "grouping";
+    String IDENTITY = "identity";
     String IMPORT = "import";
     String INCLUDE = "include";
     String INPUT = "input";
@@ -25,6 +27,7 @@ public interface YangKeyword {
     String MIN_ELEMENTS = "min-elements";
     String MODULE = "module";
     String MUST = "must";
+    String NAMESPACE = "namespace";
     String OUTPUT = "output";
     String PRESENCE = "presence";
     String PREFIX = "prefix";
@@ -40,4 +43,5 @@ public interface YangKeyword {
     String UNIQUE = "unique";
     String USES = "uses";
     String WHEN = "when";
+    String YANG_VERSION = "yang-version";
 }
