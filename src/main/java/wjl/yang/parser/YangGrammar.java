@@ -343,7 +343,7 @@ class YangGrammar {
         type.addSub(type, 0, -1);
 
         // typedef
-        Stmt typedef = new Stmt("typedef", YangToken.STRING);
+        Stmt typedef = new Stmt(YangKeyword.TYPEDEF, YangToken.IDENTITY);
         typedef.addSub(type, 1, 1);
         typedef.addSub(units, 0, 1);
         typedef.addSub(defaults, 0, 1);

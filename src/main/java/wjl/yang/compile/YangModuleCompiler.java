@@ -48,6 +48,7 @@ public class YangModuleCompiler {
         new FeatureCompiler().collectFeatures(allModules);
         new GroupingCompiler().expandGrouping(allModules);
         new AugmentCompiler().expandAugment(allModules);
+        new TypedefCompiler().compile(allModules);
         return allModules;
     }
 

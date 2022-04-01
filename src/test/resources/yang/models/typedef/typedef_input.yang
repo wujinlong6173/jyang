@@ -1,0 +1,43 @@
+module ta {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix ta;
+
+    typedef address {
+        type string {
+            length "1..64";
+        }
+    }
+}
+
+module tb {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix tb;
+    import ta { prefix ta; }
+
+    typedef adr {
+        type ta:address;
+    }
+}
+
+module tc {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix tc;
+    import tb { prefix tb; }
+
+    container root {
+        leaf id {
+            type int32;
+        }
+
+        leaf adr {
+            type adr;
+        }
+
+        typedef adr {
+            type tb:adr;
+        }
+    }
+}

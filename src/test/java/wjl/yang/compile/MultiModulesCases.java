@@ -35,4 +35,14 @@ public class MultiModulesCases {
             Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
         }
     }
+
+    @Test
+    public void testTypedef() {
+        MultiModulesComparator comparator = new MultiModulesComparator("typedef");
+        if (comparator.compare()) {
+            Assert.assertEquals(comparator.getOutputStr(), comparator.getResultStr());
+        } else {
+            Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
+        }
+    }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 处理 grouping 和 uses 语句，将 uses 语句替换成 grouping 中的内容。
@@ -34,6 +35,13 @@ class GroupingCompiler extends DefineAndUseCompiler {
         UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
         sortedUses = UiGraphSort.sortReverse(groupDepends,
             (node) -> node != null && YangKeyword.USES.equals(node.getKey()));
+
+        if (!groupDepends.isEmpty()) {
+            Set<YangStmt> errList = groupDepends.copyNodes();
+            for (YangStmt err : errList) {
+                err.reportError("circular dependency");
+            }
+        }
 
         // 方便根据uses语句查找相关信息
         Map<YangStmt, UsesToGrouping> usesToGroupingMap = new HashMap<>();

@@ -51,9 +51,11 @@ abstract class DefineAndUseCompiler {
     private void searchDefineAndUse(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt,
         Map<String, YangStmt> scopeDefines) {
         if (useKey.equals(stmt.getKey())) {
-            YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
-            if (targetDefine != null) {
-                onMatch(parentDefine, parentStmt, stmt, targetDefine);
+            if (!checkInternalDefine(parentStmt, stmt)) {
+                YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
+                if (targetDefine != null) {
+                    onMatch(parentDefine, parentStmt, stmt, targetDefine);
+                }
             }
         } else if (defKey.equals(stmt.getKey())) {
             parentDefine = stmt;
@@ -112,9 +114,20 @@ abstract class DefineAndUseCompiler {
         }
 
         if (target == null) {
-            oriModule.addError(use,  String.format("undefined %s.", defKey));
+            oriModule.addError(use,  "undefined.");
         }
         return target;
+    }
+
+    /**
+     * 是不是内置的定义
+     *
+     * @param parentStmt 父语句
+     * @param stmt 被判断的语句
+     * @return 是不是内置的
+     */
+    protected boolean checkInternalDefine(YangStmt parentStmt, YangStmt stmt) {
+        return false;
     }
 
     /**
