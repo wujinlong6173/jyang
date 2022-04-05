@@ -29,7 +29,8 @@ class GroupingCompiler extends DefineAndUseCompiler {
      * @param modules 主模块和子模块。
      */
     void expandGrouping(List<YangModule> modules) {
-        match(modules);
+        searchDefineInModules(modules);
+        searchUseInModules(modules, true);
 
         // 将uses、grouping、uses>augment三种语句放在一个有向图中排序，得到uses语句的执行顺序
         UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
@@ -80,13 +81,22 @@ class GroupingCompiler extends DefineAndUseCompiler {
     }
 
     @Override
-    protected boolean checkHiddenDefine(YangStmt parentStmt, YangStmt stmt) {
-        return YangKeyword.AUGMENT.equals(stmt.getKey()) && YangKeyword.USES.equals(parentStmt.getKey());
+    protected void onUse(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt,
+        Map<String, YangStmt> scopeDefines) {
+        YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
+        if (targetDefine != null) {
+            usesToGroupings.add(new UsesToGrouping(parentDefine, parentStmt, stmt, targetDefine));
+        }
     }
 
     @Override
-    protected void onMatch(YangStmt parentDefine, YangStmt parentStmt, YangStmt use, YangStmt targetDefine) {
-        usesToGroupings.add(new UsesToGrouping(parentDefine, parentStmt, use, targetDefine));
+    protected boolean checkHiddenDefine(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt) {
+        if (YangKeyword.AUGMENT.equals(stmt.getKey()) && YangKeyword.USES.equals(parentStmt.getKey())) {
+            usesToGroupings.add(new UsesToGrouping(parentDefine, null, parentStmt, stmt));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     static class UsesToGrouping {

@@ -7,6 +7,7 @@ import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,7 +18,6 @@ class IdentityCompiler extends DefineAndUseCompiler {
 
     IdentityCompiler() {
         super(YangKeyword.IDENTITY, YangKeyword.BASE);
-        hasLocalDefine = false;
     }
 
     /**
@@ -26,7 +26,9 @@ class IdentityCompiler extends DefineAndUseCompiler {
      */
     void compile(List<YangModule> modules) {
         identityDepends = new UiGraph<>();
-        match(modules);
+        searchDefineInModules(modules);
+        searchUseInModules(modules, false);
+
         List<YangStmt> sortedIdentities = UiGraphSort.sortReverse(identityDepends, null);
         if (!identityDepends.isEmpty()) {
             Set<YangStmt> errList = identityDepends.copyNodes();
@@ -37,8 +39,12 @@ class IdentityCompiler extends DefineAndUseCompiler {
     }
 
     @Override
-    protected void onMatch(YangStmt parentDefine, YangStmt parentStmt, YangStmt use, YangStmt targetDefine) {
-        if (parentDefine != null) {
+    protected void onUse(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt,
+        Map<String, YangStmt> scopeDefines) {
+        // 如果parentDefine为空，parentStmt必定是type identityref语句，
+        // 否则，parentStmt必定是identity语句。
+        YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
+        if (targetDefine != null && parentDefine != null) {
             identityDepends.addEdge(parentDefine, targetDefine, null);
         }
     }

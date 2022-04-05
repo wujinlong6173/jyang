@@ -8,6 +8,7 @@ import wjl.yang.utils.YangKeyword;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -62,7 +63,9 @@ class TypedefCompiler extends DefineAndUseCompiler {
      */
     void compile(List<YangModule> modules) {
         typedefDepends = new UiGraph<>();
-        match(modules);
+        searchDefineInModules(modules);
+        searchUseInModules(modules, true);
+
         List<YangStmt> sortedTypedefs = UiGraphSort.sortReverse(typedefDepends, null);
         if (!typedefDepends.isEmpty()) {
             Set<YangStmt> errList = typedefDepends.copyNodes();
@@ -73,14 +76,15 @@ class TypedefCompiler extends DefineAndUseCompiler {
     }
 
     @Override
-    protected boolean checkInternalDefine(YangStmt parentStmt, YangStmt stmt) {
-        String id = stmt.getValue();
-        return INTERNAL_TYPES.contains(id);
-    }
-
-    @Override
-    protected void onMatch(YangStmt parentDefine, YangStmt parentStmt, YangStmt use, YangStmt targetDefine) {
-        if (parentDefine != null) {
+    protected void onUse(YangStmt parentDefine, YangStmt parentStmt, YangStmt stmt,
+        Map<String, YangStmt> scopeDefines) {
+        if (INTERNAL_TYPES.contains(stmt.getValue())) {
+            return; // 使用内置数据类型
+        }
+        // 如果parentDefine为空，parentStmt必定是leaf或leaf-list语句，
+        // 否则，parentStmt必定是typedef语句。
+        YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
+        if (targetDefine != null && parentDefine != null) {
             typedefDepends.addEdge(parentDefine, targetDefine, null);
         }
     }
