@@ -22,6 +22,15 @@ public class YangStmt {
         this.line = line;
     }
 
+    /**
+     * 如果是扩展关键字，返回扩展关键字的前缀
+     *
+     * @return 扩展关键字的前缀
+     */
+    public String getExtensionPrefix() {
+        return null;
+    }
+
     public String getKey() {
         return key;
     }

@@ -1,0 +1,38 @@
+module tailf-common {
+  namespace "http://tail-f.com/yang/common";
+  prefix tailf;
+
+  include tailf-meta-extensions {
+    revision-date 2017-03-08;
+  }
+
+  include tailf-cli-extensions {
+    revision-date 2017-08-23;
+  }
+}
+
+submodule tailf-cli-extensions {
+  belongs-to tailf-common {
+    prefix tailf;
+  }
+
+  include tailf-meta-extensions {
+    revision-date 2017-03-08;
+  }
+
+  revision 2017-08-23;
+}
+
+submodule tailf-meta-extensions {
+  belongs-to tailf-common {
+    prefix tailf;
+  }
+
+  revision 2017-03-08;
+
+  extension use-in {
+    argument name;
+    tailf:use-in "extension";
+    description "Specifies in which statements a particular extension statement can be used.";
+  }
+}

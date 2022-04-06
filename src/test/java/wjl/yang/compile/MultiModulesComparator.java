@@ -9,6 +9,7 @@ import wjl.yang.utils.YangError;
 import wjl.yang.writer.YangWriter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,7 @@ public class MultiModulesComparator {
     public boolean compare() {
         List<YangStmt> inputs = readFile(inputFile);
         List<YangStmt> outputs = readFile(outputFile);
-        if (compiler.hasError() || inputs == null || outputs == null) {
+        if (compiler.hasError() || inputs == null) {
             return false;
         }
 
@@ -65,6 +66,11 @@ public class MultiModulesComparator {
     }
 
     private List<YangStmt> readFile(String filename) {
+        File file = new File(filename);
+        if (!file.isFile()) {
+            return null;
+        }
+
         try (InputStream fin = new FileInputStream(filename)) {
             YangLex lex = new YangLex(fin);
             YangParser parser = new YangParser();
@@ -102,6 +108,10 @@ public class MultiModulesComparator {
     }
 
     private String stmtToString(List<YangStmt> stmtList) {
+        if (stmtList == null) {
+            return null;
+        }
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
         OutputStreamWriter out = new OutputStreamWriter(bos);
         YangWriter writer = new YangWriter();
@@ -112,17 +122,6 @@ public class MultiModulesComparator {
             return bos.toString();
         } catch (IOException err) {
             compiler.addError("write model failed : " + err.getMessage());
-            return null;
-        }
-    }
-
-    private List<YangStmt> readString(String str) {
-        try {
-            YangLex lex = new YangLex(new StringReader(str));
-            YangParser parser = new YangParser();
-            return parser.parseFragment(lex);
-        } catch (IOException | YangParseException err) {
-            compiler.addError("read string failed : " + err.getMessage());
             return null;
         }
     }

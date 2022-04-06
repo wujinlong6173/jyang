@@ -51,19 +51,27 @@ public class YangGrammarChecker {
         Map<String, YangGrammar.SubStmt> subGramMap = gram.getSubStatements();
         if (subGramMap.isEmpty()) {
             if (stmt.getSubStatements() != null) {
+                // 关键字不需要子句，却写了字句
                 for (YangStmt sub : stmt.getSubStatements()) {
-                    addError(sub, NOT_SUPPORTED_STMT);
+                    if (sub.getExtensionPrefix() == null) {
+                        addError(sub, NOT_SUPPORTED_STMT);
+                    }
                 }
             }
         } else if (stmt.getSubStatements() == null) {
+            // 没有写字句，检查必须写的字句
             for (Map.Entry<String, YangGrammar.SubStmt> entry : subGramMap.entrySet()) {
                 if (entry.getValue().getMin() > 0) {
                     addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
                 }
             }
         } else {
+            // 检查
             int[] count = new int[gram.getSubStatementCount()];
             for (YangStmt sub : stmt.getSubStatements()) {
+                if (sub.getExtensionPrefix() != null) {
+                    continue;
+                }
                 YangGrammar.SubStmt subGram = subGramMap.get(sub.getKey());
                 if (subGram == null) {
                     addError(sub, NOT_SUPPORTED_STMT);
@@ -72,6 +80,8 @@ public class YangGrammarChecker {
                     count[subGram.getIndex()] ++;
                 }
             }
+
+            // 检查子句的数量是否满足要求
             for (Map.Entry<String, YangGrammar.SubStmt> entry : subGramMap.entrySet()) {
                 YangGrammar.SubStmt subGram = entry.getValue();
                 if (count[subGram.getIndex()] < subGram.getMin()) {
@@ -87,5 +97,4 @@ public class YangGrammarChecker {
     private void addError(YangStmt stmt, String err) {
         errors.add(new YangError(stmt, err));
     }
-
 }

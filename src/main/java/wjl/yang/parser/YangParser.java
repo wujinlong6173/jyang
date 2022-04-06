@@ -1,6 +1,7 @@
 package wjl.yang.parser;
 
 import wjl.yang.model.YangStmt;
+import wjl.yang.model.YangStmtExt;
 import wjl.yang.model.YangToken;
 
 import java.io.IOException;
@@ -54,6 +55,13 @@ public class YangParser {
                 curr = new YangStmt();
                 curr.setKey(lex.getString());
                 curr.setLine(lex.getLine());
+            } else if (token == YangToken.PREFIX_ID) {
+                // 带前缀的关键字，是自定义的扩展关键字
+                YangStmtExt ext = new YangStmtExt();
+                curr = ext;
+                curr.setKey(lex.getString());
+                curr.setLine(lex.getLine());
+                ext.setExtensionPrefix(getPrefix(curr.getKey()));
             } else if (token == YangToken.RIGHT_BRACE) {
                 if (stack.isEmpty()) {
                     throw makeException("not matched right brace");
@@ -136,15 +144,11 @@ public class YangParser {
         return sb.toString();
     }
 
-    /**
-    void checkEndOfFile() throws IOException, YangParseException {
-        int token = lex.yylex();
-        if (token != -1) {
-            throw makeException("expect end of file");
-        }
-    }*/
-
     private YangParseException makeException(String msg) {
         return new YangParseException(msg, lex.getLine(), lex.getString());
+    }
+
+    private static String getPrefix(String prefixId) {
+        return prefixId.substring(0, prefixId.indexOf(':'));
     }
 }

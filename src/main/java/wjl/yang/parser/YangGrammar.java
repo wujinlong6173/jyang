@@ -254,15 +254,16 @@ class YangGrammar {
         identity.addSub(description, 0, 1);
         identity.addSub(reference, 0, 1);
 
-        // yin-element
-        Stmt yinElement = new Stmt("yin-element", YangToken.STRING);
+        // extension > argument > yin-element
+        Stmt yinElement = new Stmt("yin-element", YangToken.IDENTITY);
+        yinElement.setValidValues("true", "false");
 
-        // argument
-        Stmt argument = new Stmt("argument", YangToken.STRING);
+        // extension > argument
+        Stmt argument = new Stmt("argument", YangToken.IDENTITY);
         argument.addSub(yinElement, 0, 1);
 
         // extension
-        Stmt extension = new Stmt("extension", YangToken.STRING);
+        Stmt extension = new Stmt("extension", YangToken.IDENTITY);
         extension.addSub(argument, 0, 1);
         extension.addSub(status, 0, 1);
         extension.addSub(description, 0, 1);
