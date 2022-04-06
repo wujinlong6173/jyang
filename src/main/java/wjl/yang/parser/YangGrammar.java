@@ -519,7 +519,7 @@ class YangGrammar {
         output.addSub(must, 0, -1);
         output.addSub(typedef, 0, -1);
         output.addSub(grouping, 0, -1);
-        input.addSub(1, -1, container, leaf, leafList, list, choice, anydata, anyxml, uses);
+        output.addSub(1, -1, container, leaf, leafList, list, choice, anydata, anyxml, uses);
 
         // action
         action.addSub(ifFeature, 0, -1);

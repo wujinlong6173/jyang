@@ -7,11 +7,10 @@ import wjl.yang.model.YangToken;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class YangParser {
     private YangLex lex;
-    private int cacheToken = 0;
+    private int nextToken = 0;
 
     public YangStmt parse(YangLex lex) throws IOException, YangParseException {
         List<YangStmt> topStmtList = parseFragment(lex);
@@ -34,83 +33,66 @@ public class YangParser {
      */
     public List<YangStmt> parseFragment(YangLex lex) throws IOException, YangParseException {
         this.lex = lex;
-        final Stack<YangStmt> stack = new Stack<>();
         final List<YangStmt> topStmtList = new ArrayList<>();
 
-        YangStmt parent;
-        YangStmt curr;
-        int token;
-        while (true) {
-            // read key
-            token = lex.yylex();
-            if (token == -1) {
-                if (stack.isEmpty()) {
-                    return topStmtList;
-                } else {
-                    throw makeException("require right brace");
-                }
-            }
-
-            if (token == YangToken.IDENTITY) {
-                curr = new YangStmt();
-                curr.setKey(lex.getString());
-                curr.setLine(lex.getLine());
-            } else if (token == YangToken.PREFIX_ID) {
-                // 带前缀的关键字，是自定义的扩展关键字
-                YangStmtExt ext = new YangStmtExt();
-                curr = ext;
-                curr.setKey(lex.getString());
-                curr.setLine(lex.getLine());
-                ext.setExtensionPrefix(getPrefix(curr.getKey()));
-            } else if (token == YangToken.RIGHT_BRACE) {
-                if (stack.isEmpty()) {
-                    throw makeException("not matched right brace");
-                }
-                curr = stack.pop();
-                if (stack.isEmpty()) {
-                    topStmtList.add(curr);
-                } else {
-                    parent = stack.peek();
-                    parent.addSubStatement(curr);
-                }
-                continue;
-            } else {
-                throw makeException("require yang keyword");
-            }
-
-            // read value
-            token = lex.yylex();
-            if (token == YangToken.STRING) {
-                curr.setValueToken(token);
-                String str = readStringValue();
-                curr.setValue(str);
-            } else if (isValue(token)) {
-                curr.setValueToken(token);
-                curr.setValue(lex.getString());
-            } else {
-                throw makeException("require wjl.yang value");
-            }
-
-            // read semicolon or left brace
-            if (cacheToken == 0) {
-                token = lex.yylex();
-            } else {
-                token = cacheToken;
-                cacheToken = 0;
-            }
-            if (token == YangToken.SEMI) {
-                if (stack.isEmpty()) {
-                    topStmtList.add(curr);
-                } else {
-                    parent = stack.peek();
-                    parent.addSubStatement(curr);
-                }
-            } else if (token == YangToken.LEFT_BRACE) {
-                stack.push(curr);
-            } else {
-                throw makeException("require semicolon or left brace");
-            }
+        nextToken = lex.yylex();
+        while (nextToken != -1) {
+            YangStmt top = statement();
+            topStmtList.add(top);
         }
+        return topStmtList;
+    }
+
+    private YangStmt statement() throws YangParseException, IOException {
+        YangStmt curr;
+        // 解析语句的键值
+        if (nextToken == YangToken.IDENTITY) {
+            curr = new YangStmt();
+            curr.setKey(lex.getString());
+            curr.setLine(lex.getLine());
+        } else if (nextToken == YangToken.PREFIX_ID) {
+            // 带前缀的关键字，是自定义的扩展关键字
+            YangStmtExt ext = new YangStmtExt();
+            curr = ext;
+            curr.setKey(lex.getString());
+            curr.setLine(lex.getLine());
+            ext.setExtensionPrefix(getPrefix(curr.getKey()));
+        } else {
+            throw makeException("require yang keyword");
+        }
+
+        // 解析语句的值，部分语句不需要值
+        nextToken = lex.yylex();
+        if (nextToken == YangToken.STRING) {
+            curr.setValueToken(nextToken);
+            String str = readStringValue();
+            curr.setValue(str);
+        } else if (isValue(nextToken)) {
+            curr.setValueToken(nextToken);
+            curr.setValue(lex.getString());
+            nextToken = lex.yylex();
+        }
+
+        // 读取分号或者子句
+        if (nextToken == YangToken.LEFT_BRACE) {
+            nextToken = lex.yylex();
+            while (true) {
+                if (nextToken == -1) {
+                    throw makeException("require right brace");
+                } else if (nextToken == YangToken.RIGHT_BRACE) {
+                    nextToken = lex.yylex();
+                    break;
+                } else {
+                    YangStmt sub = statement();
+                    curr.addSubStatement(sub);
+                }
+            }
+        } else if (nextToken == YangToken.SEMI) {
+            nextToken = lex.yylex();
+        } else {
+            throw makeException("require semicolon or left brace");
+        }
+        return curr;
     }
 
     private boolean isValue(int token) {
@@ -125,21 +107,15 @@ public class YangParser {
     private String readStringValue() throws IOException, YangParseException {
         StringBuilder sb = new StringBuilder();
         String str = lex.getString();
-        sb.append(str.substring(1, str.length() - 1));
-        int token;
-        while (true) {
-            token = lex.yylex();
-            if (token != YangToken.PLUS) {
-                cacheToken = token;
-                break;
-            }
-            token = lex.yylex();
-            if (token != YangToken.STRING) {
-                cacheToken = token;
+        sb.append(str, 1, str.length() - 1);
+        nextToken = lex.yylex();
+        while (nextToken == YangToken.PLUS) {
+            nextToken = lex.yylex();
+            if (nextToken != YangToken.STRING) {
                 break;
             }
             str = lex.getString();
-            sb.append(str.substring(1, str.length() - 1));
+            sb.append(str, 1, str.length() - 1);
         }
         return sb.toString();
     }

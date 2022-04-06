@@ -59,7 +59,7 @@ public class YangWriter {
             out.write('"');
             out.write(stmt.getValue());
             out.write('"');
-        } else {
+        } else if (stmt.getValue() != null) {
             out.write(stmt.getValue());
         }
 

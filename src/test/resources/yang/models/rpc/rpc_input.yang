@@ -1,0 +1,14 @@
+module ma {
+    namespace "rpc";
+    prefix ma;
+
+    rpc active {
+        input {
+            leaf x { type int32; }
+        }
+
+        output {
+            leaf y { type int32; }
+        }
+    }
+}

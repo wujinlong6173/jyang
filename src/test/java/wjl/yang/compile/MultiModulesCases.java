@@ -54,4 +54,11 @@ public class MultiModulesCases {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testRpc() {
+        MultiModulesComparator comparator = new MultiModulesComparator("rpc");
+        comparator.compare();
+        check(comparator);
+    }
 }
