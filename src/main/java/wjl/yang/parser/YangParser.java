@@ -108,8 +108,7 @@ public class YangParser {
         StringBuilder sb = new StringBuilder();
         String str = lex.getString();
         sb.append(str, 1, str.length() - 1);
-        nextToken = lex.yylex();
-        while (nextToken == YangToken.PLUS) {
+        while ((nextToken = lex.yylex()) == YangToken.PLUS) {
             nextToken = lex.yylex();
             if (nextToken != YangToken.STRING) {
                 break;
