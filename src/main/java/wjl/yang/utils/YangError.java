@@ -11,8 +11,16 @@ public class YangError {
         this.msg = msg;
     }
 
+    public YangStmt getPos() {
+        return pos;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
     @Override
     public String toString() {
-        return pos.toString() + msg;
+        return pos.toString() + " " + msg;
     }
 }

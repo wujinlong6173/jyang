@@ -65,14 +65,7 @@ class TypedefCompiler extends DefineAndUseCompiler {
         typedefDepends = new UiGraph<>();
         searchDefineInModules(modules);
         searchUseInModules(modules, true);
-
-        List<YangStmt> sortedTypedefs = UiGraphSort.sortReverse(typedefDepends, null);
-        if (!typedefDepends.isEmpty()) {
-            Set<YangStmt> errList = typedefDepends.copyNodes();
-            for (YangStmt err : errList) {
-                err.reportError("circular dependency");
-            }
-        }
+        CompileUtil.reportCircularDependency(typedefDepends);
     }
 
     @Override

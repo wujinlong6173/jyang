@@ -1,7 +1,12 @@
 package wjl.yang.compile;
 
 import wjl.yang.model.YangStmt;
+import wjl.yang.utils.UiGraph;
+import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
+
+import java.util.List;
+import java.util.Set;
 
 final class CompileUtil {
     static String version(YangStmt stmt) {
@@ -19,4 +24,13 @@ final class CompileUtil {
         return ver != null ? ver.getValue() : null;
     }
 
+    static void reportCircularDependency(UiGraph<YangStmt, Void> dependGraph) {
+        UiGraphSort.sortReverse(dependGraph, null);
+        if (!dependGraph.isEmpty()) {
+            Set<YangStmt> errList = dependGraph.copyNodes();
+            for (YangStmt err : errList) {
+                err.reportError("circular dependency");
+            }
+        }
+    }
 }

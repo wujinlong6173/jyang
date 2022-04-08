@@ -49,7 +49,6 @@ class LinkageBuilder {
         }
     }
 
-
     private static void includeInSub(YangContext context, List<YangMainModule> modules) {
         for (YangMainModule main : modules) {
             List<YangSubModule> subModules = main.getSubModules();

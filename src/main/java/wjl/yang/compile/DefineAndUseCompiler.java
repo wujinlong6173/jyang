@@ -65,26 +65,30 @@ abstract class DefineAndUseCompiler {
     private Map<String, YangStmt> copyIncludedStmt(YangModule module,
         Map<YangModule, Map<String, YangStmt>> moduleToStmt) {
         Map<String, YangStmt> ret = new HashMap<>();
-        Map<String, YangStmt> temp = moduleToStmt.get(module);
-        if (temp != null) {
-            ret.putAll(temp);
-        }
 
+        Map<String, YangStmt> temp;
         for (YangSubModule sub : module.getSubModules()) {
             temp = moduleToStmt.get(sub);
-            if (temp != null) {
-                for (YangStmt inc : temp.values()) {
-                    YangStmt exist = ret.get(inc.getValue());
-                    if (exist != null) {
-                        module.addError(inc, String.format(" is already defined in %s",
-                            exist.toString()));
-                    } else {
-                        ret.put(inc.getValue(), inc);
-                    }
+            mergeDefines(module, ret, temp);
+        }
+
+        temp = moduleToStmt.get(module);
+        mergeDefines(module, ret, temp);
+        return ret;
+    }
+
+    private void mergeDefines(YangModule module, Map<String, YangStmt> ret, Map<String, YangStmt> temp) {
+        if (temp != null) {
+            for (YangStmt inc : temp.values()) {
+                YangStmt exist = ret.get(inc.getValue());
+                if (exist != null) {
+                    module.addError(inc, String.format("conflict with %s.",
+                        exist.toString()));
+                } else {
+                    ret.put(inc.getValue(), inc);
                 }
             }
         }
-        return ret;
     }
 
     /**
@@ -136,7 +140,7 @@ abstract class DefineAndUseCompiler {
                 String name = define.getValue();
                 YangStmt exist = scopeDefines.get(name);
                 if (exist != null) {
-                    stmt.getOriModule().addError(define, String.format(" is already defined in %s", exist.toString()));
+                    stmt.getOriModule().addError(define, String.format("conflict with %s.", exist.toString()));
                 } else {
                     scopeDefines.put(name, define);
                     if (localDefines == null) {

@@ -195,7 +195,7 @@ public class YangStmt {
                 sb.append(" ").append(value);
             }
         }
-        sb.append(' ');
+        //sb.append(' ');
         return sb.toString();
     }
 }

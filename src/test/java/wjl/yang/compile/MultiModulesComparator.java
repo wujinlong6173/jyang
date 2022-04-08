@@ -6,6 +6,7 @@ import wjl.yang.parser.YangLex;
 import wjl.yang.parser.YangParseException;
 import wjl.yang.parser.YangParser;
 import wjl.yang.utils.YangError;
+import wjl.yang.writer.YangErrorWriter;
 import wjl.yang.writer.YangWriter;
 
 import java.io.ByteArrayOutputStream;
@@ -14,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -23,34 +23,40 @@ import java.util.Objects;
  * 测试辅助工具，允许在一个文件中定义多个模块，处理后和预期的结果做比较。
  */
 public class MultiModulesComparator {
-    private static final String BASE_DIR = "src/test/resources/yang/models";
+
     private final String inputFile;
     private final String outputFile;
+    private final String errorFile;
     private final YangModuleCompiler compiler = new YangModuleCompiler();
     private String resultStr;
     private String outputStr;
+    private String inputErr;
+    private String expectErr;
 
-    public MultiModulesComparator(String caseName) {
-        inputFile = String.format("%s/%s/%s_input.yang", BASE_DIR, caseName, caseName);
-        outputFile = String.format("%s/%s/%s_output.yang", BASE_DIR, caseName, caseName);
+    public MultiModulesComparator(String baseDir, String caseName) {
+        inputFile = String.format("%s/%s/%s_input.yang", baseDir, caseName, caseName);
+        outputFile = String.format("%s/%s/%s_output.yang", baseDir, caseName, caseName);
+        errorFile = String.format("%s/%s/%s_error.yang", baseDir, caseName, caseName);
     }
 
-    public boolean compare() {
+    public void compare() {
         List<YangStmt> inputs = readFile(inputFile);
         List<YangStmt> outputs = readFile(outputFile);
+        List<YangStmt> errors = readFile(errorFile);
         if (compiler.hasError() || inputs == null) {
-            return false;
+            return;
         }
 
         List<YangModule> inputModules = compiler.compileStmtList(inputs);
         copyErrorInModules(inputModules);
-        if (compiler.hasError()) {
-            return false;
+        if (outputs != null) {
+            resultStr = moduleToString(inputModules);
+            outputStr = stmtToString(outputs);
         }
-
-        resultStr = moduleToString(inputModules);
-        outputStr = stmtToString(outputs);
-        return true;
+        if (errors != null) {
+            inputErr = errToString(inputModules);
+            expectErr = stmtToString(errors);
+        }
     }
 
     public String getResultStr() {
@@ -59,6 +65,14 @@ public class MultiModulesComparator {
 
     public String getOutputStr() {
         return outputStr;
+    }
+
+    public String getInputErr() {
+        return inputErr;
+    }
+
+    public String getExpectErr() {
+        return expectErr;
     }
 
     public List<String> getErrors() {
@@ -158,5 +172,20 @@ public class MultiModulesComparator {
         return Objects.equals(result.getKey(), output.getKey())
             && Objects.equals(result.getValue(), output.getValue())
             && compareStmtList(result.getSubStatements(), output.getSubStatements());
+    }
+
+    private String errToString(List<YangModule> modules) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
+        OutputStreamWriter out = new OutputStreamWriter(bos);
+        YangErrorWriter errorWriter = new YangErrorWriter();
+        try {
+            for (YangModule module : modules) {
+                errorWriter.write(out, module);
+            }
+            return bos.toString();
+        } catch (IOException err) {
+            compiler.addError("write model failed : " + err.getMessage());
+            return null;
+        }
     }
 }

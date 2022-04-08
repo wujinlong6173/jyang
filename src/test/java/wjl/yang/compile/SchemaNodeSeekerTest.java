@@ -19,11 +19,11 @@ public class SchemaNodeSeekerTest {
         YangMainModule module = parser.parseMainModule("complex/search-schema-node.yang");
         List<String> path = SchemaNodeIdParser.parse("networks/network/s:nodes/s:node", false);
         YangStmt found = SchemaNodeSeeker.searchInModule(module.getStmt(), path);
-        Assert.assertEquals("search line 13 : list node ", found.toString());
+        Assert.assertEquals("search line 13 : list node", found.toString());
 
         path = SchemaNodeIdParser.parse("networks/network/id", false);
         found = SchemaNodeSeeker.searchInModule(module.getStmt(), path);
-        Assert.assertEquals("search line 10 : leaf id ", found.toString());
+        Assert.assertEquals("search line 10 : leaf id", found.toString());
 
         assertError(module, "networks/x:network", "search line 1 : module search x:network invalid prefix.");
         assertError(module, "networks/nodes", "search line 1 : module search nodes is not found.");

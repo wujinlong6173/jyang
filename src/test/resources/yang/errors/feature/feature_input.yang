@@ -1,0 +1,43 @@
+module ma {
+  yang-version 1.1;
+  prefix ma;
+
+  feature ether {
+    if-feature ether;
+  }
+
+  feature ip {
+    if-feature l3;
+  }
+}
+
+module mb {
+  yang-version 1.1;
+  prefix mb;
+  import ma {
+    prefix ma;
+  }
+
+  include mb1;
+  include mb2;
+
+  feature ipv6;
+}
+
+submodule mb1 {
+    yang-version 1.1;
+    belongs-to mb {
+        prefix mb;
+    }
+
+    feature ipv6;
+}
+
+submodule mb2 {
+    yang-version 1.1;
+    belongs-to mb {
+        prefix mb;
+    }
+
+    feature ipv6;
+}

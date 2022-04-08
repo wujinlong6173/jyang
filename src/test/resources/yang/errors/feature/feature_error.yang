@@ -1,0 +1,21 @@
+module ma {
+  feature ether {
+    error "circular dependency";
+  }
+
+  feature ip {
+    if-feature l3 {
+        error "l3 undefined feature.";
+    }
+  }
+}
+
+module mb {
+  feature ipv6 {
+    error "conflict with mb1 line 33 : feature ipv6.";
+  }
+
+  feature mb2:ipv6 {
+    error "conflict with mb1 line 33 : feature ipv6.";
+  }
+}

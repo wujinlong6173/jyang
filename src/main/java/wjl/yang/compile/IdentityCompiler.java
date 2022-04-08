@@ -28,14 +28,7 @@ class IdentityCompiler extends DefineAndUseCompiler {
         identityDepends = new UiGraph<>();
         searchDefineInModules(modules);
         searchUseInModules(modules, false);
-
-        List<YangStmt> sortedIdentities = UiGraphSort.sortReverse(identityDepends, null);
-        if (!identityDepends.isEmpty()) {
-            Set<YangStmt> errList = identityDepends.copyNodes();
-            for (YangStmt err : errList) {
-                err.reportError("circular dependency");
-            }
-        }
+        CompileUtil.reportCircularDependency(identityDepends);
     }
 
     @Override
