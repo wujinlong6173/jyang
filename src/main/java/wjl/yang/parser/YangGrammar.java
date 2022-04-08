@@ -297,7 +297,7 @@ class YangGrammar {
         enums.addSub(reference, 0, 1);
 
         // default
-        Stmt defaults = new Stmt("default", YangToken.STRING);
+        Stmt defaults = new Stmt("default", YangToken.INTEGER, YangToken.STRING, YangToken.IDENTITY);
 
         // modifier
         Stmt modifier = new Stmt("modifier", YangToken.STRING);
