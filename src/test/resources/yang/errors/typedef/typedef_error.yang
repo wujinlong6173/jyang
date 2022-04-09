@@ -1,0 +1,20 @@
+module ta {
+  typedef address {
+    error "conflict with ta line 6 : typedef address";
+  }
+  container root {
+    typedef phone {
+      error "require sub statement type.";
+    }
+    typedef uuid {
+      error "conflict with ta line 16 : typedef uuid.";
+    }
+    list items {
+      leaf id {
+        type UUID {
+          error "undefined.";
+        }
+      }
+    }
+  }
+}

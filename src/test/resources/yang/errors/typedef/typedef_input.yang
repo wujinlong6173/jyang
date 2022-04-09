@@ -1,0 +1,52 @@
+module ta {
+    yang-version 1.1;
+    namespace "wjl:typedef";
+    prefix ta;
+
+    typedef address {
+        type string {
+            length "1..64";
+        }
+    }
+
+    typedef address {
+        type int32;
+    }
+
+    typedef uuid {
+        type string {
+            length "32";
+        }
+    }
+
+    container root {
+        leaf id {
+            type uuid;
+        }
+
+        leaf p {
+            type phone;
+        }
+
+        typedef phone;
+
+        typedef uuid {
+            type string {
+                length "32";
+            }
+        }
+
+        list items {
+            key id;
+            leaf id {
+                type UUID;
+            }
+        }
+    }
+
+    container other {
+        typedef phone {
+            type string;
+        }
+    }
+}

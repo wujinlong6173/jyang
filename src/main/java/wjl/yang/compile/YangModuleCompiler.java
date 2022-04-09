@@ -28,17 +28,21 @@ public class YangModuleCompiler {
         List<YangMainModule> addModules = new ArrayList<>();
 
         for (YangStmt stmt : stmtList) {
-            if (!checker.check(stmt)) {
+            checker.check(stmt);
+            if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
+                YangMainModule module = mainModule(stmt);
+                addModules.add(module);
+                context.addMainModule(module);
+                copyError(checker.getErrors(), module);
+            } else if (Objects.equals(YangKeyword.SUBMODULE, stmt.getKey())) {
+                YangSubModule module = subModule(stmt);
+                context.addSubModule(module);
+                copyError(checker.getErrors(), module);
+            } else {
                 errors.add(stmt.toString() + " has errors:");
                 for (YangError err : checker.getErrors()) {
                     errors.add("  " + err.toString());
                 }
-            } else if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
-                YangMainModule module = mainModule(stmt);
-                addModules.add(module);
-                context.addMainModule(module);
-            } else {
-                context.addSubModule(subModule(stmt));
             }
         }
 
@@ -115,6 +119,14 @@ public class YangModuleCompiler {
         YangSubModule ret = new YangSubModule(stmt.getValue(), pre, CompileUtil.version(stmt), parent);
         ret.setStmt(stmt);
         return ret;
+    }
+
+    private void copyError(List<YangError> errorList, YangModule module) {
+        if (errorList != null) {
+            for (YangError err : errorList) {
+                module.addError(err.getPos(), err.getMsg());
+            }
+        }
     }
 
     private List<YangModule> allUsedModules(List<YangMainModule> modules) {

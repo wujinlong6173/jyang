@@ -29,4 +29,11 @@ public class YangModuleCompilerErrorTest {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testTypedef() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "typedef");
+        comparator.compare();
+        check(comparator);
+    }
 }
