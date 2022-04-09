@@ -25,7 +25,9 @@ final class CompileUtil {
     }
 
     static void reportCircularDependency(UiGraph<YangStmt, Void> dependGraph) {
+        // 如果存在循环依赖，只提示环内语句有错，其它依赖环内语句的语句不报错
         UiGraphSort.sortReverse(dependGraph, null);
+        UiGraphSort.sort(dependGraph, null);
         if (!dependGraph.isEmpty()) {
             Set<YangStmt> errList = dependGraph.copyNodes();
             for (YangStmt err : errList) {

@@ -50,13 +50,13 @@ abstract class DefineAndUseCompiler {
 
     private Map<String, YangStmt> searchDefineInModule(YangModule module) {
         Map<String, YangStmt> stmtMap = new HashMap<>();
-        module.getStmt().forEach(defKey, (group) -> {
-            String name = group.getValue();
+        module.getStmt().forEach(defKey, (def) -> {
+            String name = def.getValue();
             YangStmt exist = stmtMap.get(name);
             if (exist != null) {
-                module.addError(group, " is already defined in " + exist.toString());
+                module.addError(def, " is already defined in " + exist.toString());
             } else {
-                stmtMap.put(name, group);
+                stmtMap.put(name, def);
             }
         });
         return stmtMap;

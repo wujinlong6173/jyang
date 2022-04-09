@@ -9,6 +9,10 @@ module ma {
   feature ip {
     if-feature l3;
   }
+
+  feature EoIP {
+    if-feature "ip and ether";
+  }
 }
 
 module mb {
@@ -39,5 +43,7 @@ submodule mb2 {
         prefix mb;
     }
 
-    feature ipv6;
+    feature ipv6 {
+        if-feature ma:ip;
+    }
 }

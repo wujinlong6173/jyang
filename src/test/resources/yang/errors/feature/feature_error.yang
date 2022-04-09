@@ -12,10 +12,18 @@ module ma {
 
 module mb {
   feature ipv6 {
-    error "conflict with mb1 line 33 : feature ipv6.";
+    error "conflict with mb1 line 37 : feature ipv6.";
   }
 
   feature mb2:ipv6 {
-    error "conflict with mb1 line 33 : feature ipv6.";
+    error "conflict with mb1 line 37 : feature ipv6.";
+  }
+}
+
+submodule mb2 {
+  feature ipv6 {
+    if-feature ma:ip {
+      error "ma:ip invalid prefix.";
+    }
   }
 }
