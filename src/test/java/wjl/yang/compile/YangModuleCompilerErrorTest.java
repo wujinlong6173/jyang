@@ -22,4 +22,11 @@ public class YangModuleCompilerErrorTest {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testIdentity() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "identity");
+        comparator.compare();
+        check(comparator);
+    }
 }

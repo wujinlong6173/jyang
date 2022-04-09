@@ -1,0 +1,23 @@
+module mb {
+  identity vpn {
+    error "conflict with mb line 26 : identity vpn";
+  }
+  container root {
+    leaf t2 {
+      type identityref {
+        base ma:cloud-vpn {
+          error "undefined.";
+        }
+      }
+    }
+  }
+}
+
+submodule mb1 {
+  identity oam {
+    error "circular dependency";
+  }
+  identity bfd {
+    error "circular dependency";
+  }
+}

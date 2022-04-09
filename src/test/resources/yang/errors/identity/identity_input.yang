@@ -1,0 +1,64 @@
+module ma {
+    yang-version 1.1;
+    prefix ma;
+
+    identity vpn;
+
+    identity l2vpn {
+        base vpn;
+    }
+
+    identity l3vpn {
+        base vpn;
+    }
+}
+
+module mb {
+    yang-version 1.1;
+    prefix mb;
+
+    import ma {
+        prefix ma;
+    }
+
+    include mb1;
+
+    identity vpn {
+        base ma:vpn;
+    }
+
+    identity vpn;
+
+    container root {
+        leaf t1 {
+            type identityref {
+                base ma:vpn;
+            }
+        }
+        leaf t2 {
+            type identityref {
+                base ma:cloud-vpn;
+            }
+        }
+        leaf t3 {
+            type identityref {
+                base oam;
+            }
+        }
+    }
+}
+
+submodule mb1 {
+    yang-version 1.1;
+    belongs-to mb {
+        prefix mb;
+    }
+
+    identity oam {
+        base bfd;
+    }
+
+    identity bfd {
+        base oam;
+    }
+}

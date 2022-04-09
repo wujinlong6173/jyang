@@ -54,7 +54,7 @@ abstract class DefineAndUseCompiler {
             String name = def.getValue();
             YangStmt exist = stmtMap.get(name);
             if (exist != null) {
-                module.addError(def, " is already defined in " + exist.toString());
+                module.addError(def, "conflict with " + exist.toString());
             } else {
                 stmtMap.put(name, def);
             }
