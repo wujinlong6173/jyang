@@ -36,4 +36,11 @@ public class YangModuleCompilerErrorTest {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testGrouping() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "grouping");
+        comparator.compare();
+        check(comparator);
+    }
 }

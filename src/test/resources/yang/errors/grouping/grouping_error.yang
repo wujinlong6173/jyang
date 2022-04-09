@@ -1,0 +1,80 @@
+module ma {
+  grouping g2 {
+    container c2 {
+      uses g1 {
+        augment "c1" {
+          uses g3 {
+            error "circular dependency";
+          }
+        }
+        error "circular dependency";
+      }
+    }
+  }
+  grouping g3 {
+    uses g2 {
+      error "circular dependency";
+    }
+  }
+}
+
+module mb {
+  grouping g1 {
+    container c1 {
+      uses ma:gx {
+        error "undefined.";
+      }
+    }
+  }
+  container root {
+    uses mx:g2 {
+      error "invalid prefix.";
+    }
+    uses g3 {
+      error "undefined.";
+    }
+  }
+}
+
+module mc {
+  container root {
+    grouping g1 {
+      error "conflict with mc line 50 : grouping g1.";
+    }
+    container order {
+      grouping g2 {
+        error "conflict with mc line 54 : grouping g2.";
+      }
+    }
+  }
+}
+
+module md {
+  container root {
+    uses g1 {
+      augment "x1" {
+        error "md line 75 : uses g1> md line 70 : leaf x1 cannot be augmented";
+      }
+      augment "c1/x2" {
+        error "x2 is not found.";
+      }
+    }
+  }
+  container other {
+    uses g1 {
+      refine "c1" {
+        default "error" {
+          error "can not apply to md line 82 : uses g1> md line 71 : container c1";
+        }
+      }
+      refine "xx" {
+        error "xx is not found.";
+      }
+      refine "x1" {
+        unknown key {
+          error "unknown refine key.";
+        }
+      }
+    }
+  }
+}

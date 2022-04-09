@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 处理 grouping 和 uses 语句，将 uses 语句替换成 grouping 中的内容。
@@ -35,7 +36,15 @@ class GroupingCompiler extends DefineAndUseCompiler {
         UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
         sortedUses = UiGraphSort.sortReverse(groupDepends,
             (node) -> node != null && YangKeyword.USES.equals(node.getKey()));
-        CompileUtil.reportCircularDependency(groupDepends);
+        UiGraphSort.sort(groupDepends, null);
+        if (!groupDepends.isEmpty()) {
+            Set<YangStmt> errList = groupDepends.copyNodes();
+            for (YangStmt err : errList) {
+                if (YangKeyword.USES.equals(err.getKey())) {
+                    err.reportError("circular dependency");
+                }
+            }
+        }
 
         // 方便根据uses语句查找相关信息
         Map<YangStmt, UsesToGrouping> usesToGroupingMap = new HashMap<>();
@@ -62,15 +71,6 @@ class GroupingCompiler extends DefineAndUseCompiler {
             graph.addEdge(val.uses, val.targetGrouping, val);
         }
         return graph;
-    }
-
-    /**
-     * 让测试用例检查中间结果，只检查最终结果很难保证算法没问题
-     *
-     * @return 排好序的所有uses语句
-     */
-    List<YangStmt> getSortedUses() {
-        return sortedUses;
     }
 
     @Override

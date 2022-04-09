@@ -65,11 +65,14 @@ class GroupingCopier {
         oriModule = uses.getOriModule();
         schemaModule = oriModule.getMainModule();
 
+        int errCount1 = uses.getOriModule().getErrors().size();
         List<YangStmt> cloneSubs = cloneGrouping(uses, grouping);
         applyAugment(uses, cloneSubs);
         applyRefine(uses, cloneSubs);
         ConditionCopier.copyConditions(uses, cloneSubs);
-        parent.replaceStmt(uses, cloneSubs);
+        // 成功时移除uses语句；出错时保留uses语句，用于按YANG格式显示错误信息
+        int errCount2 = uses.getOriModule().getErrors().size();
+        parent.replaceStmt(uses, cloneSubs, errCount1 == errCount2);
     }
 
     private List<YangStmt> cloneGrouping(YangStmt uses, YangStmt grouping) {

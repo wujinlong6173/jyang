@@ -75,7 +75,7 @@ public class YangStmt {
      * @param del 被替换的语句
      * @param stmtList 需要插入的语句列表
      */
-    public void replaceStmt(YangStmt del, List<YangStmt> stmtList) {
+    public void replaceStmt(YangStmt del, List<YangStmt> stmtList, boolean replace) {
         if (subStatements == null) {
             subStatements = stmtList;
             return;
@@ -83,6 +83,9 @@ public class YangStmt {
         List<YangStmt> clone = new ArrayList<>();
         for (YangStmt sub : subStatements) {
             if (sub == del) {
+                if (!replace) {
+                    clone.add(sub);
+                }
                 clone.addAll(stmtList);
             } else {
                 clone.add(sub);

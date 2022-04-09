@@ -39,6 +39,7 @@ class SchemaNodeSeeker {
     static YangStmt searchInGrouping(YangStmt pos, List<YangStmt> cloneSubs, List<String> path) {
         Iterator<String> it = path.iterator();
         if (!it.hasNext()) {
+            pos.reportError(" path is empty.");
             return null;
         }
 

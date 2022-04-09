@@ -1,0 +1,92 @@
+module ma {
+  yang-version 1.1;
+  prefix ma;
+
+  grouping g1 {
+    container c1 {
+      leaf c11 { type string; }
+    }
+  }
+
+  grouping g2 {
+    container c2 {
+      uses g1 {
+        augment "c1" {
+          uses g3;
+        }
+      }
+    }
+  }
+
+  grouping g3 {
+    uses g2;
+  }
+}
+
+module mb {
+  yang-version 1.1;
+  prefix mb;
+
+  import ma {
+    prefix ma;
+  }
+
+  grouping g1 {
+    container c1 {
+      uses ma:gx;
+    }
+  }
+
+  container root {
+    uses mx:g2;
+    uses g3;
+  }
+}
+
+module mc {
+  yang-version 1.1;
+  prefix mc;
+
+  grouping g1;
+
+  container root {
+    grouping g1;
+    grouping g2;
+    container order {
+      grouping g2;
+    }
+  }
+
+  container other {
+    grouping g2;
+  }
+}
+
+module md {
+  yang-version 1.1;
+  prefix md;
+
+  grouping g1 {
+    leaf x1 { type int32; }
+    container c1 { }
+  }
+
+  container root {
+    uses g1 {
+      augment "x1" { }
+      augment "c1/x2" { }
+    }
+  }
+
+  container other {
+    uses g1 {
+      refine "c1" {
+        default "error";
+      }
+      refine "xx" { }
+      refine "x1" {
+        unknown key;
+      }
+    }
+  }
+}
