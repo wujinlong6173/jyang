@@ -2,7 +2,7 @@ package wjl.yang.compile;
 
 import wjl.yang.model.YangMainModule;
 import wjl.yang.model.YangStmt;
-import wjl.yang.parser.YangGrammarChecker;
+import wjl.yang.grammar.YangGrammarChecker;
 import wjl.yang.parser.YangLex;
 import wjl.yang.parser.YangParseException;
 import wjl.yang.parser.YangParser;

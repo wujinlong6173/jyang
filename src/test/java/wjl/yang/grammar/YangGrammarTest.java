@@ -1,8 +1,11 @@
-package wjl.yang.parser;
+package wjl.yang.grammar;
 
 import org.junit.Assert;
 import org.junit.Test;
 import wjl.yang.model.YangStmt;
+import wjl.yang.parser.YangLex;
+import wjl.yang.parser.YangParseException;
+import wjl.yang.parser.YangParser;
 import wjl.yang.utils.YangError;
 
 import java.io.IOException;

@@ -1,10 +1,14 @@
-package wjl.yang.parser;
+package wjl.yang.grammar;
 
 import wjl.yang.model.YangStmt;
 import wjl.yang.utils.YangError;
 import wjl.yang.utils.YangKeyword;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 校验单个YANG文件是否满足格式要求。
@@ -30,7 +34,7 @@ public class YangGrammarChecker {
         return errors;
     }
 
-    private void check(YangStmt stmt, YangGrammar.Stmt gram) {
+    private void check(YangStmt stmt, StmtGrammar gram) {
         // 调用者保证键值匹配
         String err = gram.checkToken(stmt.getValueToken());
         if (err != null) {
@@ -47,8 +51,8 @@ public class YangGrammarChecker {
         checkSubStatements(stmt, gram);
     }
 
-    private void checkSubStatements(YangStmt stmt, YangGrammar.Stmt gram) {
-        Map<String, YangGrammar.SubStmt> subGramMap = gram.getSubStatements();
+    private void checkSubStatements(YangStmt stmt, StmtGrammar gram) {
+        Map<String, SubStmtGrammar> subGramMap = gram.getSubStatements();
         if (subGramMap.isEmpty()) {
             if (stmt.getSubStatements() != null) {
                 // 关键字不需要子句，却写了字句
@@ -60,7 +64,7 @@ public class YangGrammarChecker {
             }
         } else if (stmt.getSubStatements() == null) {
             // 没有写字句，检查必须写的字句
-            for (Map.Entry<String, YangGrammar.SubStmt> entry : subGramMap.entrySet()) {
+            for (Map.Entry<String, SubStmtGrammar> entry : subGramMap.entrySet()) {
                 if (entry.getValue().getMin() > 0) {
                     addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
                 }
@@ -72,7 +76,7 @@ public class YangGrammarChecker {
                 if (sub.getExtensionPrefix() != null) {
                     continue;
                 }
-                YangGrammar.SubStmt subGram = subGramMap.get(sub.getKey());
+                SubStmtGrammar subGram = subGramMap.get(sub.getKey());
                 if (subGram == null) {
                     addError(sub, NOT_SUPPORTED_STMT);
                 } else {
@@ -82,8 +86,8 @@ public class YangGrammarChecker {
             }
 
             // 检查子句的数量是否满足要求
-            for (Map.Entry<String, YangGrammar.SubStmt> entry : subGramMap.entrySet()) {
-                YangGrammar.SubStmt subGram = entry.getValue();
+            for (Map.Entry<String, SubStmtGrammar> entry : subGramMap.entrySet()) {
+                SubStmtGrammar subGram = entry.getValue();
                 if (count[subGram.getIndex()] < subGram.getMin()) {
                     addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
                 }
