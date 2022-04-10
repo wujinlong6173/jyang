@@ -1,0 +1,67 @@
+module mb {
+  typedef phone {
+    type string {
+      pattern 666 {
+        error "require string, but is integer.";
+      }
+      error "too many sub statement length.";
+    }
+  }
+  container number {
+    leaf x1 {
+      type int8 {
+        length 13 {
+          error "not supported statement.";
+        }
+      }
+    }
+  }
+  container other {
+    leaf bool {
+      type boolean {
+        description "wrong" {
+          error "not supported statement.";
+        }
+      }
+    }
+    leaf emp {
+      type empty {
+        description "wrong" {
+          error "not supported statement.";
+        }
+      }
+    }
+    leaf bin {
+      type binary {
+        len 4096 {
+          error "not supported statement.";
+        }
+      }
+    }
+    leaf enum {
+      type enumeration {
+        error "require sub statement enum.";
+      }
+    }
+    leaf bit {
+      type bits {
+        error "require sub statement bit.";
+      }
+    }
+    leaf ref1 {
+      type leafref {
+        error "require sub statement path.";
+      }
+    }
+    leaf ref2 {
+      type identityref {
+        error "require sub statement base.";
+      }
+    }
+    leaf union {
+      type union {
+        error "require sub statement type.";
+      }
+    }
+  }
+}

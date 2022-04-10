@@ -42,6 +42,10 @@ class StmtGrammar {
         }
     }
 
+    void setBooleanValues() {
+        this.validValues = new String[] {"true", "false"};
+    }
+
     void setValidValues(String... validValues) {
         this.validValues = validValues;
     }
@@ -50,11 +54,13 @@ class StmtGrammar {
         return key;
     }
 
-    int getSubStatementCount() {
-        return subStatementCount;
-    }
-
-    Map<String, SubStmtGrammar> getSubStatements() {
+    /**
+     * 获取支持的子句
+     *
+     * @param value 语句的值，部分语句需要根据值决定支持哪些子句
+     * @return 支持的子句
+     */
+    Map<String, SubStmtGrammar> getSubStatements(String value) {
         return subStatementByName;
     }
 

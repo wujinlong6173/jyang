@@ -9,10 +9,10 @@ class YangGrammar {
 
     static {
         // description
-        StmtGrammar description = new StmtGrammar(YangKeyword.DESCRIPTION, YangToken.STRING);
+        StmtGrammar description = GrammarConst.DESCRIPTION;
 
         // reference
-        StmtGrammar reference = new StmtGrammar(YangKeyword.REFERENCE, YangToken.STRING);
+        StmtGrammar reference = GrammarConst.REFERENCE;
 
         /*----------- module header -----------*/
 
@@ -63,32 +63,19 @@ class YangGrammar {
         when.addSub(reference, 0, 1);
 
         // unique
-        StmtGrammar unique = new StmtGrammar("unique", YangToken.STRING);
+        StmtGrammar unique = GrammarConst.UNIQUE;
 
         // key
         StmtGrammar key = new StmtGrammar("key", YangToken.IDENTITY, YangToken.STRING);
 
-        // value
-        StmtGrammar value = new StmtGrammar("value", YangToken.STRING);
-
         // min-elements
-        StmtGrammar minElements = new StmtGrammar("min-elements", YangToken.INTEGER, YangToken.STRING);
+        StmtGrammar minElements = GrammarConst.MIN_ELEMENTS;
 
         // max-elements
-        StmtGrammar maxElements = new StmtGrammar("max-elements", YangToken.INTEGER, YangToken.STRING);
-
-        // error-message
-        StmtGrammar errorMessage = new StmtGrammar("error-message", YangToken.STRING);
-
-        // error-app-tag
-        StmtGrammar errorAppTag = new StmtGrammar("error-app-tag", YangToken.STRING);
+        StmtGrammar maxElements = GrammarConst.MAX_ELEMENTS;
 
         // must
-        StmtGrammar must = new StmtGrammar(YangKeyword.MUST, YangToken.STRING);
-        must.addSub(errorMessage, 0, 1);
-        must.addSub(errorAppTag, 0, 1);
-        must.addSub(description, 0, 1);
-        must.addSub(reference, 0, 1);
+        StmtGrammar must = GrammarConst.MUST;
 
         // presence
         StmtGrammar presence = new StmtGrammar(YangKeyword.PRESENCE, YangToken.STRING);
@@ -98,23 +85,15 @@ class YangGrammar {
         orderedBy.setValidValues("user", "system");
 
         // mandatory
-        StmtGrammar mandatory = new StmtGrammar(YangKeyword.MANDATORY, YangToken.STRING);
-        mandatory.setValidValues("true", "false");
+        StmtGrammar mandatory = GrammarConst.MANDATORY;
 
         // config
-        StmtGrammar config = new StmtGrammar(YangKeyword.CONFIG, YangToken.IDENTITY, YangToken.IDENTITY);
-        config.setValidValues("true", "false");
+        StmtGrammar config = GrammarConst.CONFIG;
 
         // status
-        StmtGrammar status = new StmtGrammar(YangKeyword.STATUS, YangToken.STRING, YangToken.IDENTITY);
-        status.setValidValues("current", "obsolete", "deprecated");
-
-        // position
-        StmtGrammar position = new StmtGrammar("position", YangToken.STRING);
-
+        StmtGrammar status = GrammarConst.STATUS;
         // if-feature
-        StmtGrammar ifFeature = new StmtGrammar(YangKeyword.IF_FEATURE, YangToken.IDENTITY, YangToken.PREFIX_ID,
-            YangToken.STRING);
+        StmtGrammar ifFeature = GrammarConst.IF_FEATURE;
 
         // feature
         StmtGrammar feature = new StmtGrammar(YangKeyword.FEATURE, YangToken.IDENTITY, YangToken.STRING);
@@ -124,7 +103,7 @@ class YangGrammar {
         feature.addSub(reference, 0, 1);
 
         // base
-        StmtGrammar base = new StmtGrammar(YangKeyword.BASE, YangToken.IDENTITY, YangToken.PREFIX_ID);
+        StmtGrammar base = GrammarConst.BASE;
 
         // identity
         StmtGrammar identity = new StmtGrammar(YangKeyword.IDENTITY, YangToken.IDENTITY);
@@ -136,7 +115,7 @@ class YangGrammar {
 
         // extension > argument > yin-element
         StmtGrammar yinElement = new StmtGrammar("yin-element", YangToken.IDENTITY);
-        yinElement.setValidValues("true", "false");
+        yinElement.setBooleanValues();
 
         // extension > argument
         StmtGrammar argument = new StmtGrammar("argument", YangToken.IDENTITY);
@@ -150,76 +129,13 @@ class YangGrammar {
         extension.addSub(reference, 0, 1);
 
         // units
-        StmtGrammar units = new StmtGrammar("units", YangToken.STRING);
-
-        // bit
-        StmtGrammar bit = new StmtGrammar("bit", YangToken.IDENTITY);
-        bit.addSub(ifFeature, 0, -1);
-        bit.addSub(position, 0, 1);
-        bit.addSub(position, 0, 1);
-        bit.addSub(status, 0, 1);
-        bit.addSub(description, 0, 1);
-        bit.addSub(reference, 0, 1);
-
-        // require-instance
-        StmtGrammar requireInstance = new StmtGrammar("require-instance", YangToken.IDENTITY);
-        requireInstance.setValidValues("true", "false");
-
-        // path
-        StmtGrammar path = new StmtGrammar("path", YangToken.STRING);
-
-        // enum
-        StmtGrammar enums = new StmtGrammar("enum", YangToken.STRING);
-        enums.addSub(ifFeature, 0, -1);
-        enums.addSub(value, 0, 1);
-        enums.addSub(status, 0, 1);
-        enums.addSub(description, 0, 1);
-        enums.addSub(reference, 0, 1);
+        StmtGrammar units = GrammarConst.UNITS;
 
         // default
-        StmtGrammar defaults = new StmtGrammar("default", YangToken.INTEGER, YangToken.STRING, YangToken.IDENTITY);
-
-        // modifier
-        StmtGrammar modifier = new StmtGrammar("modifier", YangToken.STRING);
-        modifier.setValidValues("invert-match");
-
-        // pattern
-        StmtGrammar pattern = new StmtGrammar("pattern", YangToken.STRING);
-        pattern.addSub(modifier, 0, 1);
-        pattern.addSub(errorMessage, 0, 1);
-        pattern.addSub(errorAppTag, 0, 1);
-        pattern.addSub(description, 0, 1);
-        pattern.addSub(reference, 0, 1);
-
-        // length
-        StmtGrammar length = new StmtGrammar("length", YangToken.STRING);
-        length.addSub(errorMessage, 0, 1);
-        length.addSub(errorAppTag, 0, 1);
-        length.addSub(description, 0, 1);
-        length.addSub(reference, 0, 1);
-
-        // fraction-digits
-        StmtGrammar fractionDigits = new StmtGrammar("fraction-digits", YangToken.STRING);
-
-        // range
-        StmtGrammar range = new StmtGrammar("range", YangToken.STRING);
-        range.addSub(errorMessage, 0, 1);
-        range.addSub(errorAppTag, 0, 1);
-        range.addSub(description, 0, 1);
-        range.addSub(reference, 0, 1);
+        StmtGrammar defaults = GrammarConst.DEFAULT;
 
         // type 没有严格按标准校验，下列子句只能按特定的方式组合
-        StmtGrammar type = new StmtGrammar(YangKeyword.TYPE, YangToken.IDENTITY, YangToken.PREFIX_ID);
-        type.addSub(range, 0, 1);
-        type.addSub(fractionDigits, 0, 1);
-        type.addSub(length, 0, 1);
-        type.addSub(pattern, 0, -1);
-        type.addSub(enums, 0, -1);
-        type.addSub(path, 0, 1);
-        type.addSub(requireInstance, 0, 1);
-        type.addSub(base, 0, -1);
-        type.addSub(bit, 0, -1);
-        type.addSub(type, 0, -1);
+        StmtGrammar type = GrammarConst.TYPE;
 
         // typedef
         StmtGrammar typedef = new StmtGrammar(YangKeyword.TYPEDEF, YangToken.IDENTITY);
@@ -252,25 +168,13 @@ class YangGrammar {
         anydata.addSub(description, 0, 1);
         anydata.addSub(reference, 0, 1);
 
-        // 这几条语句比较特别，有两个关键字，没有严格按标准做校验，放宽了限制
-        // deviate-add deviate-delete deviate-replace deviate-not-supported
-        StmtGrammar deviateAll = new StmtGrammar("deviate", YangToken.IDENTITY);
-        deviateAll.setValidValues("add", "delete", "replace", "not-supported");
-        deviateAll.addSub(type, 0, 1);
-        deviateAll.addSub(units, 0, 1);
-        deviateAll.addSub(must, 0, -1);
-        deviateAll.addSub(defaults, 0, -1);
-        deviateAll.addSub(unique, 0, -1);
-        deviateAll.addSub(config, 0, 1);
-        deviateAll.addSub(mandatory, 0, 1);
-        deviateAll.addSub(minElements, 0, 1);
-        deviateAll.addSub(maxElements, 0, 1);
+        StmtGrammar deviate = new DeviateGrammar("deviate", YangToken.IDENTITY);
 
-        // deviation 和标准略有差异，标准规定not-supported不能和add/delete/replace同时出现
+        // deviation
         StmtGrammar deviation = new StmtGrammar("deviation", YangToken.STRING);
         deviation.addSub(description, 0, 1);
         deviation.addSub(reference, 0, 1);
-        deviation.addSub(deviateAll, 0, -1);
+        deviation.addSub(deviate, 0, -1);
 
         // refine
         StmtGrammar refine = new StmtGrammar(YangKeyword.REFINE, YangToken.STRING);

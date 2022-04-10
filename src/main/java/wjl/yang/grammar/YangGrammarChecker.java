@@ -52,7 +52,7 @@ public class YangGrammarChecker {
     }
 
     private void checkSubStatements(YangStmt stmt, StmtGrammar gram) {
-        Map<String, SubStmtGrammar> subGramMap = gram.getSubStatements();
+        Map<String, SubStmtGrammar> subGramMap = gram.getSubStatements(stmt.getValue());
         if (subGramMap.isEmpty()) {
             if (stmt.getSubStatements() != null) {
                 // 关键字不需要子句，却写了字句
@@ -71,7 +71,7 @@ public class YangGrammarChecker {
             }
         } else {
             // 检查
-            int[] count = new int[gram.getSubStatementCount()];
+            int[] count = new int[subGramMap.size()];
             for (YangStmt sub : stmt.getSubStatements()) {
                 if (sub.getExtensionPrefix() != null) {
                     continue;
