@@ -77,5 +77,5 @@ ID = {ALPHA}[A-Za-z0-9-]*
 
 <schema_node_id>   [/]                        { return getChar(); }
 
-<if_feature_expr,schema_node_id>      .       {
+<if_feature_expr,schema_node_id,YYINITIAL>      .       {
             throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
