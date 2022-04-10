@@ -50,4 +50,11 @@ public class YangModuleCompilerErrorTest {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testDeviation() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "deviation");
+        comparator.compare();
+        check(comparator);
+    }
 }

@@ -1,0 +1,30 @@
+module error-deviations {
+  deviation "/base:system/base:daytime" {
+    deviate not-supported {
+      default "admin" {
+        error "not supported statement.";
+      }
+    }
+  }
+  deviation "/base:system/base:user/base:type" {
+    deviate add {
+      type int32 {
+        error "not supported statement.";
+      }
+    }
+  }
+  deviation "/base:system/base:name-server" {
+    deviate replace {
+      description "error" {
+        error "not supported statement.";
+      }
+    }
+  }
+  deviation "/base:system" {
+    deviate delete {
+      type "string" {
+        error "not supported statement.";
+      }
+    }
+  }
+}

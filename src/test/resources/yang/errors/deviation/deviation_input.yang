@@ -1,0 +1,94 @@
+module example-base {
+  yang-version 1.1;
+  namespace "urn:example:base";
+  prefix base;
+
+  container system {
+    leaf daytime {
+      type string;
+    }
+
+    leaf time {
+      type string;
+    }
+
+    must "daytime or time";
+
+    container user {
+      leaf type {
+        type string;
+      }
+    }
+
+    list name-server {
+      key id;
+      leaf id { type string; }
+    }
+  }
+}
+
+module example-deviations {
+  yang-version 1.1;
+  namespace "urn:example:deviations";
+  prefix md;
+
+  import example-base {
+    prefix base;
+  }
+
+  deviation "/base:system/base:daytime" {
+    deviate not-supported;
+  }
+
+  deviation "/base:system/base:user/base:type" {
+    deviate add {
+      default "admin";
+    }
+  }
+
+  deviation "/base:system/base:name-server" {
+    deviate replace {
+      max-elements 3;
+    }
+  }
+
+  deviation "/base:system" {
+    deviate delete {
+      must "daytime or time";
+    }
+  }
+}
+
+module error-deviations {
+  yang-version 1.1;
+  namespace "urn:example:deviations";
+  prefix ed;
+
+  import example-base {
+    prefix base;
+  }
+
+  deviation "/base:system/base:daytime" {
+    deviate not-supported {
+      default "admin";
+    }
+  }
+
+  deviation "/base:system/base:user/base:type" {
+    deviate add {
+      type int32;
+    }
+  }
+
+  deviation "/base:system/base:name-server" {
+    deviate replace {
+      description "error";
+    }
+  }
+
+  deviation "/base:system" {
+    deviate delete {
+      type "string";
+    }
+  }
+}
