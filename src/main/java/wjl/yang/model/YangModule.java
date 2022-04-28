@@ -35,7 +35,7 @@ public abstract class YangModule {
         return name;
     }
 
-    public String getPrefix() {
+    public String getByPrefix() {
         return prefix;
     }
 
@@ -59,7 +59,7 @@ public abstract class YangModule {
         prefixToModule.put(pre, module);
     }
 
-    public YangMainModule getPrefix(String pre) {
+    public YangMainModule getByPrefix(String pre) {
         return prefixToModule.get(pre);
     }
 

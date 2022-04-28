@@ -42,7 +42,7 @@ class LinkageBuilder {
                 } else {
                     included.add(name);
                     target.setMainModule(module);
-                    target.addPrefix(target.getPrefix(), module);
+                    target.addPrefix(target.getByPrefix(), module);
                     module.addSubModule(target);
                 }
             });
@@ -85,8 +85,9 @@ class LinkageBuilder {
                 String name = sub.getValue();
                 if (!Objects.equals(name, stmt.getValue())) {
                     String pre = CompileUtil.prefix(sub);
-                    if (module.getPrefix(pre) != null) {
-                        module.addError(sub, "prefix conflict.");
+                    YangModule exist = module.getByPrefix(pre);
+                    if (exist != null) {
+                        module.addError(sub,  "prefix conflict with " + exist.getName() + '.');
                     } else {
                         String ver = CompileUtil.revisionDate(sub);
                         YangMainModule target = context.matchMainModule(name, ver);

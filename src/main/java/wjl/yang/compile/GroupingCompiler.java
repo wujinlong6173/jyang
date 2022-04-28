@@ -18,7 +18,6 @@ import java.util.Set;
  */
 class GroupingCompiler extends DefineAndUseCompiler {
     private final List<UsesToGrouping> usesToGroupings = new ArrayList<>();
-    private List<YangStmt> sortedUses;
 
     GroupingCompiler() {
         super(YangKeyword.GROUPING, YangKeyword.USES);
@@ -34,7 +33,7 @@ class GroupingCompiler extends DefineAndUseCompiler {
 
         // 将uses、grouping、uses>augment三种语句放在一个有向图中排序，得到uses语句的执行顺序
         UiGraph<YangStmt, UsesToGrouping> groupDepends = buildGroupDepends();
-        sortedUses = UiGraphSort.sortReverse(groupDepends,
+        List<YangStmt> sortedUses = UiGraphSort.sortReverse(groupDepends,
             (node) -> node != null && YangKeyword.USES.equals(node.getKey()));
         UiGraphSort.sort(groupDepends, null);
         if (!groupDepends.isEmpty()) {

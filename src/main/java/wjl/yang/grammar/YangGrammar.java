@@ -357,7 +357,8 @@ class YangGrammar {
         // module
         MODULE = new StmtGrammar(YangKeyword.MODULE,  YangToken.IDENTITY);
         // module-header
-        MODULE.addSub(0, 1, 1, yangVersion, namespace, prefix);
+        MODULE.addSub(0, 1, 1, yangVersion, namespace);
+        MODULE.addSub(1, 1, 1, prefix);
         // linkage
         MODULE.addSub(0, -1, 2, imports, include);
         // meta

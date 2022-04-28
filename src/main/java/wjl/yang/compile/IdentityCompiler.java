@@ -3,12 +3,10 @@ package wjl.yang.compile;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
 import wjl.yang.utils.UiGraph;
-import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 处理 identity 和 base 语句。

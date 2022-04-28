@@ -157,7 +157,7 @@ public class YangErrorWriter {
             }
         } else {
             if (stmt.getSchemaModule() != schemaModule && NEED_PREFIX_KEYS.contains(stmt.getKey())) {
-                out.write(stmt.getSchemaModule().getPrefix());
+                out.write(stmt.getSchemaModule().getByPrefix());
                 out.write(':');
             }
         }

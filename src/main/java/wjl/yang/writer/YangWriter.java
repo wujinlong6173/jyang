@@ -77,7 +77,7 @@ public class YangWriter {
 
     private void writePrefix(OutputStreamWriter out, YangStmt stmt) throws IOException {
         if (stmt.getSchemaModule() != schemaModule && NEED_PREFIX_KEYS.contains(stmt.getKey())) {
-            out.write(stmt.getSchemaModule().getPrefix());
+            out.write(stmt.getSchemaModule().getByPrefix());
             out.write(':');
         }
     }

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ConditionCopier {
+    /**
+     * 将语句 from 中的 when/if_feature 浅复制到 cloneSubs
+     */
     static void copyConditions(YangStmt from, List<YangStmt> cloneSubs) {
         if (from == null || cloneSubs == null || from.getSubStatements() == null) {
             return;

@@ -57,4 +57,19 @@ public class YangModuleCompilerErrorTest {
         comparator.compare();
         check(comparator);
     }
+
+    @Test
+    public void testImport() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "import");
+        comparator.compare();
+        check(comparator);
+    }
+
+    @Test
+    public void testInclude() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "include");
+        comparator.compare();
+        check(comparator);
+    }
+
 }

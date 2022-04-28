@@ -1,0 +1,35 @@
+module ma {
+  yang-version 1.1;
+}
+
+module mb {
+  yang-version 1.1;
+  prefix b;
+  prefix c;
+}
+
+module mc {
+  yang-version 1.1;
+  prefix c;
+  revision 2022-04-28;
+}
+
+module md {
+  yang-version 1.1;
+  prefix d;
+  import ma { prefix d; }
+  import mb { prefix x; }
+  import mc { prefix x; }
+  import me { prefix e; }
+  import mf { prefix f; revision-date 2022-04-28; }
+}
+
+module mf {
+  yang-version 1.1;
+  prefix f;
+  revision 2022-04-28;
+  import mc {
+    prefix c;
+    revision-date 2022-04-29;
+  }
+}
