@@ -5,7 +5,6 @@ import wjl.yang.utils.UiGraph;
 import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
-import java.util.List;
 import java.util.Set;
 
 final class CompileUtil {

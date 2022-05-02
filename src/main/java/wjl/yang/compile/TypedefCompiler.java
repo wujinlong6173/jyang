@@ -3,7 +3,6 @@ package wjl.yang.compile;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
 import wjl.yang.utils.UiGraph;
-import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
 import java.util.HashSet;

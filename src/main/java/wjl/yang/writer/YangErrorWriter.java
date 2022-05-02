@@ -86,14 +86,16 @@ public class YangErrorWriter {
     }
 
     private void writeModule(OutputStreamWriter out, YangModule module) throws IOException {
-        List<YangError> errorList = module.getErrors();
-        if (errorList == null || errorList.isEmpty()) {
+        String topErr = stmtToErr.remove(module.getStmt());
+        if (topErr == null) {
             return;
         }
 
         YangStmt moduleStmt = module.getStmt();
         writeKeyValue(out, moduleStmt);
         out.write(" {\n");
+
+        optWriteError(out, 1, topErr);
         if (moduleStmt.getSubStatements() != null) {
             for (YangStmt sub : moduleStmt.getSubStatements()) {
                 writeStmt(out, sub, 1);
@@ -101,7 +103,7 @@ public class YangErrorWriter {
         }
 
         externalErrorMode = true;
-        for (YangError err : errorList) {
+        for (YangError err :  module.getErrors()) {
             if (stmtToErr.containsKey(err.getPos())) {
                 writeStmt(out, err.getPos(), 1);
             }
@@ -119,17 +121,11 @@ public class YangErrorWriter {
         writeIndent(out, indent);
         writeKeyValue(out, stmt);
         out.write(" {\n");
+        optWriteError(out, indent + 1, err);
         if (stmt.getSubStatements() != null) {
             for (YangStmt sub : stmt.getSubStatements()) {
                 writeStmt(out, sub, indent + 1);
             }
-        }
-
-        if (!err.isEmpty()) {
-            writeIndent(out, indent + 1);
-            out.write("error \"");
-            out.write(err);
-            out.write("\";\n");
         }
 
         writeIndent(out, indent);
@@ -167,5 +163,15 @@ public class YangErrorWriter {
         for (int i = 0; i < indent; i++) {
             out.write("  ");
         }
+    }
+
+    private void optWriteError(OutputStreamWriter out, int indent, String err) throws IOException {
+        if (err == null || err.isEmpty()) {
+            return;
+        }
+        writeIndent(out, indent);
+        out.write("error \"");
+        out.write(err);
+        out.write("\";\n");
     }
 }

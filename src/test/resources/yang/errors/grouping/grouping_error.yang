@@ -2,12 +2,12 @@ module ma {
   grouping g2 {
     container c2 {
       uses g1 {
+        error "circular dependency";
         augment "c1" {
           uses g3 {
             error "circular dependency";
           }
         }
-        error "circular dependency";
       }
     }
   }

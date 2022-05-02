@@ -7,14 +7,12 @@ import wjl.yang.parser.IfFeatureExprParser;
 import wjl.yang.parser.YangLex;
 import wjl.yang.parser.YangParseException;
 import wjl.yang.utils.UiGraph;
-import wjl.yang.utils.UiGraphSort;
 import wjl.yang.utils.YangKeyword;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 处理 feature 和 if-feature 语句。

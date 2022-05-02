@@ -1,13 +1,9 @@
 module ma {
-  module ma {
-    error "require sub statement prefix.";
-  }
+  error "require sub statement prefix.";
 }
 
 module mb {
-  module mb {
-    error "too many sub statement prefix.";
-  }
+  error "too many sub statement prefix.";
 }
 
 module md {

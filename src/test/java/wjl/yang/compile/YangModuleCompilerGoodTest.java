@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 
-public class MultiModulesCases {
+public class YangModuleCompilerGoodTest {
     private static final String BASE_DIR = "src/test/resources/yang/models";
 
     private void check(MultiModulesComparator comparator) {

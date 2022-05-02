@@ -1,0 +1,24 @@
+module ma {
+  include s2 {
+    error "can not include two submodule with same name.";
+  }
+  include s3 {
+    error "no matched submodule.";
+  }
+}
+module mb {
+  include s99 {
+    error "no matched submodule.";
+  }
+  include s2 {
+    error "submodule not belongs to this module.";
+  }
+}
+submodule s2 {
+  belongs-to ma {
+    error "require sub statement prefix.";
+  }
+  include s1 {
+    error "submodule should be included by main module.";
+  }
+}

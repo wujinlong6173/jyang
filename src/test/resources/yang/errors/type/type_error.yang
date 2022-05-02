@@ -1,10 +1,10 @@
 module mb {
   typedef phone {
     type string {
+      error "too many sub statement length.";
       pattern 666 {
         error "require string, but is integer.";
       }
-      error "too many sub statement length.";
     }
   }
   container number {
