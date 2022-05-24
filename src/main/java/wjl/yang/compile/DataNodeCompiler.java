@@ -17,6 +17,7 @@ import java.util.Set;
  */
 public class DataNodeCompiler {
     private static final Set<String> DATA_NODE_KEYS;
+    private YangMainModule currModule;
 
     static {
         DATA_NODE_KEYS = new HashSet<>();
@@ -30,6 +31,7 @@ public class DataNodeCompiler {
 
     void compile(List<YangMainModule> modules) {
         for (YangMainModule mainModule : modules) {
+            currModule = mainModule;
             // 合并主模块和子模块定义的模型节点
             Map<String, YangStmt> exists = new HashMap<>();
             for (YangSubModule subModule : mainModule.getSubModules()) {
@@ -110,6 +112,10 @@ public class DataNodeCompiler {
 
     private void checkConflict(Map<String, YangStmt> exists, YangStmt add) {
         String name = add.getValue();
+        YangMainModule schemaModule = add.getSchemaModule();
+        if (schemaModule != currModule && schemaModule != null) {
+            name = schemaModule.getName() + ':' + name;
+        }
         YangStmt old = exists.putIfAbsent(name, add);
         if (old != null) {
             add.reportError(String.format("conflict with %s.", old.toString()));

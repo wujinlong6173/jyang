@@ -1,7 +1,7 @@
 module ma {
   yang-version 1.1;
   prefix a;
-
+  include sa1;
   container c1 {
     container c1 { }
     list c1 { }
@@ -19,4 +19,30 @@ module ma {
     }
   }
   leaf c1 { type string; }
+  leaf c3 { type int32; }
+  container c4 {
+    leaf c4 { type string; }
+  }
+}
+
+submodule sa1 {
+  yang-version 1.1;
+  belongs-to ma {
+    prefix ma;
+  }
+
+  leaf c3 { type string; }
+}
+
+module mb {
+  yang-version 1.1;
+  prefix mb;
+  import ma { prefix ma; }
+  augment '/ma:c4' {
+    leaf c4 { type int32; }
+    container c4 { }
+  }
+  augment '/ma:c4' {
+    leaf-list c4 { type string; }
+  }
 }

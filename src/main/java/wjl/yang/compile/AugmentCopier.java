@@ -94,7 +94,7 @@ class AugmentCopier extends ConditionCopier {
         List<YangStmt> cloneSubs = cloneAugment(augment);
         ConditionCopier.copyConditions(augment, cloneSubs);
         target.addSubStatements(cloneSubs);
-        augment.clearSubStatements();
+        //augment.clearSubStatements();
     }
 
     private static List<YangStmt> cloneAugment(YangStmt augment) {

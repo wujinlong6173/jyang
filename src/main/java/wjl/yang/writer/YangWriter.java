@@ -16,6 +16,7 @@ import java.util.Set;
  */
 public class YangWriter {
     private static final Set<String> NEED_PREFIX_KEYS;
+    private final boolean reduce;
     private YangMainModule schemaModule;
 
     static {
@@ -29,6 +30,10 @@ public class YangWriter {
         NEED_PREFIX_KEYS.add(YangKeyword.ANYXML);
         NEED_PREFIX_KEYS.add(YangKeyword.CHOICE);
         NEED_PREFIX_KEYS.add(YangKeyword.CASE);
+    }
+
+    public YangWriter(boolean reduce) {
+        this.reduce = reduce;
     }
 
     public void write(OutputStreamWriter out, YangModule module) throws IOException {
@@ -63,7 +68,7 @@ public class YangWriter {
             out.write(stmt.getValue());
         }
 
-        if (stmt.getSubStatements() == null) {
+        if (stmt.getSubStatements() == null || ignoreSub(stmt)) {
             out.write(";\n");
         } else {
             out.write(" {\n");
@@ -73,6 +78,10 @@ public class YangWriter {
             writeIndent(out, indent);
             out.write("}\n");
         }
+    }
+
+    private boolean ignoreSub(YangStmt stmt) {
+        return reduce && YangKeyword.AUGMENT.equals(stmt.getKey());
     }
 
     private void writePrefix(OutputStreamWriter out, YangStmt stmt) throws IOException {

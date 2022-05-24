@@ -51,11 +51,11 @@ public class MultiModulesComparator {
         copyErrorInModules(inputModules);
         if (outputs != null) {
             resultStr = moduleToString(inputModules);
-            outputStr = stmtToString(outputs);
+            outputStr = stmtToString(outputs, true);
         }
         if (errors != null) {
             inputErr = errToString(inputModules);
-            expectErr = stmtToString(errors);
+            expectErr = stmtToString(errors, false);
         }
     }
 
@@ -109,7 +109,7 @@ public class MultiModulesComparator {
     private String moduleToString(List<YangModule> modules) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
         OutputStreamWriter out = new OutputStreamWriter(bos);
-        YangWriter writer = new YangWriter();
+        YangWriter writer = new YangWriter(true);
         try {
             for (YangModule module : modules) {
                 writer.write(out, module);
@@ -121,14 +121,14 @@ public class MultiModulesComparator {
         }
     }
 
-    private String stmtToString(List<YangStmt> stmtList) {
+    private String stmtToString(List<YangStmt> stmtList, boolean reduce) {
         if (stmtList == null) {
             return null;
         }
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
         OutputStreamWriter out = new OutputStreamWriter(bos);
-        YangWriter writer = new YangWriter();
+        YangWriter writer = new YangWriter(reduce);
         try {
             for (YangStmt stmt : stmtList) {
                 writer.write(out, stmt);

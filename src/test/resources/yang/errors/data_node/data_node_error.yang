@@ -22,4 +22,20 @@ module ma {
   leaf c1 {
     error "conflict with ma line 5 : container c1.";
   }
+  leaf c3 {
+    error "conflict with sa1 line 34 : leaf c3.";
+  }
+}
+
+module mb {
+  augment "/ma:c4" {
+    container c4 {
+      error "conflict with mb line 42 : leaf c4.";
+    }
+  }
+  augment "/ma:c4" {
+    leaf-list c4 {
+      error "conflict with mb line 42 : leaf c4.";
+    }
+  }
 }
