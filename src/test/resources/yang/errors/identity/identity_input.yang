@@ -22,6 +22,7 @@ module mb {
     }
 
     include mb1;
+    include mb2;
 
     identity vpn {
         base ma:vpn;
@@ -61,4 +62,13 @@ submodule mb1 {
     identity bfd {
         base oam;
     }
+}
+
+submodule mb2 {
+  yang-version 1.1;
+  belongs-to mb {
+    prefix mb;
+  }
+  include mb1;
+  identity oam;
 }

@@ -1,6 +1,6 @@
 module mb {
   identity vpn {
-    error "conflict with mb line 26 : identity vpn";
+    error "conflict with mb line 27 : identity vpn";
   }
   container root {
     leaf t2 {
@@ -11,6 +11,9 @@ module mb {
       }
     }
   }
+  identity mb2:oam {
+    error "conflict with mb1 line 58 : identity oam.";
+  }
 }
 
 submodule mb1 {
@@ -19,5 +22,11 @@ submodule mb1 {
   }
   identity bfd {
     error "circular dependency";
+  }
+}
+
+submodule mb2 {
+  identity oam {
+    error "conflict with mb1 line 58 : identity oam.";
   }
 }

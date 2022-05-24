@@ -1,0 +1,25 @@
+module ma {
+  container c1 {
+    list c1 {
+      error "conflict with ma line 6 : container c1.";
+    }
+    choice c1 {
+      case c1 {
+        leaf-list c1 {
+          error "conflict with ma line 6 : container c1.";
+        }
+      }
+      leaf c1 {
+        error "conflict with ma line 6 : container c1.";
+      }
+      choice c2 {
+        leaf c2 {
+          error "conflict with ma line 13 : container c2.";
+        }
+      }
+    }
+  }
+  leaf c1 {
+    error "conflict with ma line 5 : container c1.";
+  }
+}

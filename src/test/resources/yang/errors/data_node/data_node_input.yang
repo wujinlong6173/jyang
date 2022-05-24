@@ -1,0 +1,22 @@
+module ma {
+  yang-version 1.1;
+  prefix a;
+
+  container c1 {
+    container c1 { }
+    list c1 { }
+    choice c1 {
+        case c1 {
+            leaf-list c1 { type string; }
+        }
+        leaf c1 { type string; }
+        container c2 {
+            leaf c1 { type string; }
+        }
+        choice c2 {
+            leaf c2 { type string; }
+        }
+    }
+  }
+  leaf c1 { type string; }
+}

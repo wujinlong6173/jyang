@@ -25,13 +25,13 @@ public class YangModuleCompiler {
 
     public List<YangModule> compileStmtList(List<YangStmt> stmtList) {
         YangGrammarChecker checker = new YangGrammarChecker();
-        List<YangMainModule> addModules = new ArrayList<>();
+        List<YangMainModule> mainModules = new ArrayList<>();
 
         for (YangStmt stmt : stmtList) {
             checker.check(stmt);
             if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
                 YangMainModule module = mainModule(stmt);
-                addModules.add(module);
+                mainModules.add(module);
                 context.addMainModule(module);
                 copyError(checker.getErrors(), module);
             } else if (Objects.equals(YangKeyword.SUBMODULE, stmt.getKey())) {
@@ -46,14 +46,15 @@ public class YangModuleCompiler {
             }
         }
 
-        LinkageBuilder.build(context, addModules);
-        List<YangModule> allModules = allUsedModules(addModules);
+        LinkageBuilder.build(context, mainModules);
+        List<YangModule> allModules = allUsedModules(mainModules);
         setOriModule(allModules);
         new FeatureCompiler().collectFeatures(allModules);
         new GroupingCompiler().expandGrouping(allModules);
         new AugmentCompiler().expandAugment(allModules);
         new TypedefCompiler().compile(allModules);
         new IdentityCompiler().compile(allModules);
+        new DataNodeCompiler().compile(mainModules);
         return allModules;
     }
 

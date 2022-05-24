@@ -72,4 +72,10 @@ public class YangModuleCompilerErrorTest {
         check(comparator);
     }
 
+    @Test
+    public void testDataNode() {
+        MultiModulesComparator comparator = new MultiModulesComparator(BASE_DIR, "data_node");
+        comparator.compare();
+        check(comparator);
+    }
 }
