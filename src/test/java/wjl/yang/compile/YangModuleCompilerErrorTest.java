@@ -9,10 +9,11 @@ public class YangModuleCompilerErrorTest {
     private static final String BASE_DIR = "src/test/resources/yang/errors";
 
     private void check(MultiModulesComparator comparator) {
+        Assert.assertEquals(Collections.emptyList(), comparator.getParserErrors());
         if (comparator.getExpectErr() != null) {
             Assert.assertEquals(comparator.getExpectErr(), comparator.getInputErr());
         } else {
-            Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
+            Assert.assertNull(comparator.getInputErr());
         }
     }
 

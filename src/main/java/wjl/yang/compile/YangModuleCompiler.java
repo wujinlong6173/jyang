@@ -5,22 +5,15 @@ import wjl.yang.model.YangMainModule;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangSubModule;
 import wjl.yang.grammar.YangGrammarChecker;
-import wjl.yang.parser.YangLex;
-import wjl.yang.parser.YangParseException;
-import wjl.yang.parser.YangParser;
 import wjl.yang.model.YangStmt;
 import wjl.yang.utils.YangError;
 import wjl.yang.utils.YangKeyword;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class YangModuleCompiler {
-    private final List<String> errors = new ArrayList<>();
     private final YangContext context = new YangContext();
 
     public List<YangModule> compileStmtList(List<YangStmt> stmtList) {
@@ -38,11 +31,6 @@ public class YangModuleCompiler {
                 YangSubModule module = subModule(stmt);
                 context.addSubModule(module);
                 copyError(checker.getErrors(), module);
-            } else {
-                errors.add(stmt.toString() + " has errors:");
-                for (YangError err : checker.getErrors()) {
-                    errors.add("  " + err.toString());
-                }
             }
         }
 
@@ -56,48 +44,6 @@ public class YangModuleCompiler {
         new IdentityCompiler().compile(allModules);
         new DataNodeCompiler().compile(mainModules);
         return allModules;
-    }
-
-    public List<YangModule> compileFiles(List<String> filenames) {
-        List<YangStmt> stmtList = new ArrayList<>();
-        for (String filename : filenames) {
-            try (InputStream fin = new FileInputStream(filename)) {
-                YangLex lex = new YangLex(fin);
-                YangParser parser = new YangParser();
-                YangStmt stmt = parser.parse(lex);
-                if (stmt != null) {
-                    stmtList.add(stmt);
-                }
-            } catch (IOException | YangParseException err) {
-                errors.add(filename + " : " + err.getMessage());
-            }
-        }
-
-        if (!errors.isEmpty()) {
-            return null;
-        }
-
-        return compileStmtList(stmtList);
-    }
-
-    public void addError(String filename, String msg) {
-        errors.add(filename + " : " + msg);
-    }
-
-    public void addError(String msg) {
-        errors.add(msg);
-    }
-
-    public void clearErrors() {
-        errors.clear();
-    }
-
-    public boolean hasError() {
-        return !errors.isEmpty();
-    }
-
-    public List<String> getErrors() {
-        return errors;
     }
 
     private YangMainModule mainModule(YangStmt stmt) {

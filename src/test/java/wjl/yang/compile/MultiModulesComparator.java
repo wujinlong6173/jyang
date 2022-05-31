@@ -5,7 +5,6 @@ import wjl.yang.model.YangStmt;
 import wjl.yang.parser.YangLex;
 import wjl.yang.parser.YangParseException;
 import wjl.yang.parser.YangParser;
-import wjl.yang.utils.YangError;
 import wjl.yang.writer.YangErrorWriter;
 import wjl.yang.writer.YangWriter;
 
@@ -15,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +27,10 @@ public class MultiModulesComparator {
     private final String inputFile;
     private final String outputFile;
     private final String errorFile;
+
     private final YangModuleCompiler compiler = new YangModuleCompiler();
+    private final List<String> parserErrors = new ArrayList<>();
+
     private String resultStr;
     private String outputStr;
     private String inputErr;
@@ -43,18 +46,17 @@ public class MultiModulesComparator {
         List<YangStmt> inputs = readFile(inputFile);
         List<YangStmt> outputs = readFile(outputFile);
         List<YangStmt> errors = readFile(errorFile);
-        if (compiler.hasError() || inputs == null) {
+        if (!parserErrors.isEmpty() || inputs == null) {
             return;
         }
 
         List<YangModule> inputModules = compiler.compileStmtList(inputs);
-        copyErrorInModules(inputModules);
         if (outputs != null) {
             resultStr = moduleToString(inputModules);
             outputStr = stmtToString(outputs, true);
         }
+        inputErr = errToString(inputModules);
         if (errors != null) {
-            inputErr = errToString(inputModules);
             expectErr = stmtToString(errors, false);
         }
     }
@@ -75,8 +77,8 @@ public class MultiModulesComparator {
         return expectErr;
     }
 
-    public List<String> getErrors() {
-        return compiler.getErrors();
+    public List<String> getParserErrors() {
+        return parserErrors;
     }
 
     private List<YangStmt> readFile(String filename) {
@@ -90,19 +92,8 @@ public class MultiModulesComparator {
             YangParser parser = new YangParser();
             return parser.parseFragment(lex);
         } catch (IOException | YangParseException err) {
-            compiler.addError(filename, err.getMessage());
+            parserErrors.add(filename + " : " + err.getMessage());
             return null;
-        }
-    }
-
-    private void copyErrorInModules(List<YangModule> modules) {
-        for (YangModule module :modules) {
-            if (!module.getErrors().isEmpty()) {
-                compiler.addError(module.getName() + " have errors:");
-                for (YangError err : module.getErrors()) {
-                    compiler.addError(err.toString());
-                }
-            }
         }
     }
 
@@ -116,7 +107,7 @@ public class MultiModulesComparator {
             }
             return bos.toString();
         } catch (IOException err) {
-            compiler.addError("write model failed : " + err.getMessage());
+            parserErrors.add("write model failed : " + err.getMessage());
             return null;
         }
     }
@@ -135,7 +126,7 @@ public class MultiModulesComparator {
             }
             return bos.toString();
         } catch (IOException err) {
-            compiler.addError("write model failed : " + err.getMessage());
+            parserErrors.add("write model failed : " + err.getMessage());
             return null;
         }
     }
@@ -182,9 +173,10 @@ public class MultiModulesComparator {
             for (YangModule module : modules) {
                 errorWriter.write(out, module);
             }
-            return bos.toString();
+            String ret = bos.toString();
+            return ret.isEmpty() ? null : ret;
         } catch (IOException err) {
-            compiler.addError("write model failed : " + err.getMessage());
+            parserErrors.add("write model failed : " + err.getMessage());
             return null;
         }
     }

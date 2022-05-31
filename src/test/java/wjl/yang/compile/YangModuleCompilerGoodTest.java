@@ -9,10 +9,11 @@ public class YangModuleCompilerGoodTest {
     private static final String BASE_DIR = "src/test/resources/yang/models";
 
     private void check(MultiModulesComparator comparator) {
+        Assert.assertEquals(Collections.emptyList(), comparator.getParserErrors());
+        Assert.assertNull(comparator.getInputErr());
         if (comparator.getOutputStr() != null) {
             Assert.assertEquals(comparator.getOutputStr(), comparator.getResultStr());
         }
-        Assert.assertEquals(Collections.emptyList(), comparator.getErrors());
     }
 
     @Test
