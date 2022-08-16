@@ -2,6 +2,12 @@ package wjl.yang.model;
 
 import java.util.Objects;
 
+/**
+ * 模块名和版本号。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class ModuleNameVersion {
     private final String name;
     private final String version;

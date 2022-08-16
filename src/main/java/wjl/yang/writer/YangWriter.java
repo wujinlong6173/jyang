@@ -13,6 +13,9 @@ import java.util.Set;
 
 /**
  * 输出为YANG模型文件。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class YangWriter {
     private static final Set<String> NEED_PREFIX_KEYS;
@@ -86,7 +89,7 @@ public class YangWriter {
 
     private void writePrefix(OutputStreamWriter out, YangStmt stmt) throws IOException {
         if (stmt.getSchemaModule() != schemaModule && NEED_PREFIX_KEYS.contains(stmt.getKey())) {
-            out.write(stmt.getSchemaModule().getByPrefix());
+            out.write(stmt.getSchemaModule().getPrefix());
             out.write(':');
         }
     }

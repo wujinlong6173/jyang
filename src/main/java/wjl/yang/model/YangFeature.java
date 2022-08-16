@@ -1,7 +1,10 @@
 package wjl.yang.model;
 
 /**
- * 对应 feature 语句。
+ *对 应 feature 语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class YangFeature {
     /**

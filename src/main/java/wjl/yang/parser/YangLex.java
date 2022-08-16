@@ -1,7 +1,12 @@
 package wjl.yang.parser;
 import wjl.yang.model.YangToken;
 
-
+/**
+ * Yang词法解析器，自动生成的代码。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangLex {
 	private final int YY_BUFFER_SIZE = 512;
 	private final int YY_F = -1;

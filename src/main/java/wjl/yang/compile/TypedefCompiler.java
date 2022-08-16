@@ -12,6 +12,9 @@ import java.util.Set;
 
 /**
  * 解析 typedef 语句，确定每个 type 引用哪个定义。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class TypedefCompiler extends DefineAndUseCompiler {
     private final static Set<String> INTERNAL_TYPES;

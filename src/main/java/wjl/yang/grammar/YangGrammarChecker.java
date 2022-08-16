@@ -12,6 +12,9 @@ import java.util.Objects;
 
 /**
  * 校验单个YANG文件是否满足格式要求。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class YangGrammarChecker {
     private static final String MUST_DEFINE_MODULE = "must define module or submodule.";

@@ -7,6 +7,12 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 解析Yang文件中的属性路径。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class SchemaNodeIdParser {
     public static List<String> parse(String pathStr, boolean absolute) throws IOException, YangParseException {
         YangLex lex = new YangLex(new StringReader(pathStr));

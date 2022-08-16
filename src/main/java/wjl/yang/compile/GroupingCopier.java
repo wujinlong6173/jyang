@@ -16,6 +16,9 @@ import java.util.Set;
  * 忽略grouping的status、description、reference子句，忽略所有位置的uses、grouping子句。
  * 可以直接复重用所有位置的description、reference、type、typedef、unique、if-feature等子句。
  * 将uses语句的所有when和if-feature子句复制给grouping中所有的子句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class GroupingCopier {
     private static final Set<String> TOP_IGNORE_KEYS;

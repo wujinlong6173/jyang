@@ -3,6 +3,12 @@ package wjl.yang.grammar;
 import wjl.yang.model.YangToken;
 import wjl.yang.utils.YangKeyword;
 
+/**
+ * 通用的语法规则。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class GrammarConst {
     // description
     static final StmtGrammar DESCRIPTION

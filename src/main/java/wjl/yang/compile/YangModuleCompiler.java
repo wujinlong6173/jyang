@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangModuleCompiler {
     private final YangContext context = new YangContext();
 

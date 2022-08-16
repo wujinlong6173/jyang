@@ -15,6 +15,9 @@ import java.util.Set;
 /**
  * 处理 grouping 和 uses 语句，将 uses 语句替换成 grouping 中的内容。
  * 计算grouping的依赖关系时，将uses>augment 后面的内容看成一个匿名的grouping。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class GroupingCompiler extends DefineAndUseCompiler {
     private final List<UsesToGrouping> usesToGroupings = new ArrayList<>();

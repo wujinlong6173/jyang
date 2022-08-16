@@ -10,6 +10,9 @@ import java.util.Map;
 
 /**
  * 处理 identity 和 base 语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class IdentityCompiler extends DefineAndUseCompiler {
     private UiGraph<YangStmt, Void> identityDepends;

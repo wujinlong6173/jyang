@@ -2,6 +2,12 @@ package wjl.yang.utils;
 
 import wjl.yang.model.YangStmt;
 
+/**
+ * 记录解析过程中发现的错误。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangError {
     private final YangStmt pos;
     private final String msg;

@@ -14,6 +14,9 @@ import java.util.Set;
 /**
  * 1. 同一名字空间的数据节点不能重名，包括 include 引入的定义。
  * 2. 不同模块通过 augment 添加的数据节点，可以重名。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class DataNodeCompiler {
     private static final Set<String> DATA_NODE_KEYS;

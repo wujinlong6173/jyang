@@ -1,5 +1,11 @@
 package wjl.yang.grammar;
 
+/**
+ * 定义语句之间包含关系的规则
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class SubStmtGrammar {
     private final StmtGrammar stmt;
     private final int min;

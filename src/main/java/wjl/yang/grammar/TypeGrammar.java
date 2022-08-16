@@ -1,6 +1,7 @@
 package wjl.yang.grammar;
 
 import wjl.yang.model.YangToken;
+import wjl.yang.utils.YangTypeKeyword;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +9,9 @@ import java.util.Map;
 
 /**
  * type语句，不同类型需要不同的子句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class TypeGrammar extends StmtGrammar {
     private final Map<String, SubStmtGrammar> numerical;
@@ -33,24 +37,24 @@ class TypeGrammar extends StmtGrammar {
         StmtGrammar errorAppTag = GrammarConst.ERROR_APP_TAG;
 
         // value
-        StmtGrammar value = new StmtGrammar("value", YangToken.STRING);
+        StmtGrammar value = new StmtGrammar(YangTypeKeyword.VALUE, YangToken.STRING);
 
         // length
-        StmtGrammar length = new StmtGrammar("length", YangToken.INTEGER, YangToken.STRING);
+        StmtGrammar length = new StmtGrammar(YangTypeKeyword.LENGTH, YangToken.INTEGER, YangToken.STRING);
         length.addSub(errorMessage, 0, 1);
         length.addSub(errorAppTag, 0, 1);
         length.addSub(description, 0, 1);
         length.addSub(reference, 0, 1);
 
         // fraction-digits
-        StmtGrammar fractionDigits = new StmtGrammar("fraction-digits", YangToken.INTEGER);
+        StmtGrammar fractionDigits = new StmtGrammar(YangTypeKeyword.FRACTION_DIGITS, YangToken.INTEGER);
 
         // modifier
         StmtGrammar modifier = new StmtGrammar("modifier", YangToken.STRING);
         modifier.setValidValues("invert-match");
 
         // pattern
-        StmtGrammar pattern = new StmtGrammar("pattern", YangToken.STRING);
+        StmtGrammar pattern = new StmtGrammar(YangTypeKeyword.PATTERN, YangToken.STRING);
         pattern.addSub(modifier, 0, 1);
         pattern.addSub(errorMessage, 0, 1);
         pattern.addSub(errorAppTag, 0, 1);
@@ -58,14 +62,14 @@ class TypeGrammar extends StmtGrammar {
         pattern.addSub(reference, 0, 1);
 
         // range
-        StmtGrammar range = new StmtGrammar("range", YangToken.STRING);
+        StmtGrammar range = new StmtGrammar(YangTypeKeyword.RANGE, YangToken.STRING);
         range.addSub(errorMessage, 0, 1);
         range.addSub(errorAppTag, 0, 1);
         range.addSub(description, 0, 1);
         range.addSub(reference, 0, 1);
 
         // enum
-        StmtGrammar enumItem = new StmtGrammar("enum", YangToken.IDENTITY, YangToken.STRING);
+        StmtGrammar enumItem = new StmtGrammar(YangTypeKeyword.ENUM, YangToken.IDENTITY, YangToken.STRING);
         enumItem.addSub(ifFeature, 0, -1);
         enumItem.addSub(value, 0, 1);
         enumItem.addSub(status, 0, 1);
@@ -73,17 +77,17 @@ class TypeGrammar extends StmtGrammar {
         enumItem.addSub(reference, 0, 1);
 
         // require-instance
-        StmtGrammar requireInstance = new StmtGrammar("require-instance", YangToken.IDENTITY);
+        StmtGrammar requireInstance = new StmtGrammar(YangTypeKeyword.REQUIRE_INSTANCE, YangToken.IDENTITY);
         requireInstance.setValidValues("true", "false");
 
         // path
-        StmtGrammar path = new StmtGrammar("path", YangToken.STRING);
+        StmtGrammar path = new StmtGrammar(YangTypeKeyword.PATH, YangToken.STRING);
 
         // position
-        StmtGrammar position = new StmtGrammar("position", YangToken.STRING);
+        StmtGrammar position = new StmtGrammar(YangTypeKeyword.POSITION, YangToken.STRING);
 
         // bit
-        StmtGrammar bit = new StmtGrammar("bit", YangToken.IDENTITY);
+        StmtGrammar bit = new StmtGrammar(YangTypeKeyword.BIT, YangToken.IDENTITY);
         bit.addSub(ifFeature, 0, -1);
         bit.addSub(position, 0, 1);
         bit.addSub(status, 0, 1);
@@ -128,32 +132,32 @@ class TypeGrammar extends StmtGrammar {
     @Override
     Map<String, SubStmtGrammar> getSubStatements(String value) {
         switch (value) {
-            case "string":
+            case YangTypeKeyword.STRING:
                 return string;
-            case "int8":
-            case "int16":
-            case "int32":
-            case "int64":
-            case "uint8":
-            case "uint16":
-            case "uint32":
-            case "uint64":
+            case YangTypeKeyword.INT8:
+            case YangTypeKeyword.INT16:
+            case YangTypeKeyword.INT32:
+            case YangTypeKeyword.INT64:
+            case YangTypeKeyword.UINT8:
+            case YangTypeKeyword.UINT16:
+            case YangTypeKeyword.UINT32:
+            case YangTypeKeyword.UINT64:
                 return numerical;
-            case "decimal64":
+            case YangTypeKeyword.DECIMAL64:
                 return decimal64;
-            case "enumeration":
+            case YangTypeKeyword.ENUMERATION:
                 return enumeration;
-            case "bits":
+            case YangTypeKeyword.BITS:
                 return bits;
-            case "binary":
+            case YangTypeKeyword.BINARY:
                 return binary;
-            case "leafref":
+            case YangTypeKeyword.LEAF_REF:
                 return leafref;
-            case "identityref":
+            case YangTypeKeyword.IDENTITY_REF:
                 return identityref;
-            case "instance-identifier":
+            case YangTypeKeyword.INSTANCE_IDENTIFIER:
                 return instanceIdentifier;
-            case "union":
+            case YangTypeKeyword.UNION:
                 return union;
             default: // boolean empty and typedef
                 return Collections.emptyMap();

@@ -13,6 +13,9 @@ import java.util.Set;
 
 /**
  * 有些定义语句和使用语句是配对的，处理规则是相似的。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 abstract class DefineAndUseCompiler {
     private final String defKey;

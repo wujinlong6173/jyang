@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Yang语法解析器。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangParser {
     private YangLex lex;
     private int nextToken = 0;

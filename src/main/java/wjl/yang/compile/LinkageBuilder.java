@@ -14,6 +14,9 @@ import java.util.Set;
 
 /**
  * 处理import和include语句，填写YangModule.prefixToModule和subModules。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class LinkageBuilder {
     static void build(YangContext context, List<YangMainModule> modules) {
@@ -42,7 +45,7 @@ class LinkageBuilder {
                 } else {
                     included.add(name);
                     target.setMainModule(module);
-                    target.addPrefix(target.getByPrefix(), module);
+                    target.addPrefix(target.getPrefix(), module);
                     module.addSubModule(target);
                 }
             });

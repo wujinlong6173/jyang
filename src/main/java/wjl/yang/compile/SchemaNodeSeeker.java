@@ -12,6 +12,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * 搜索模型节点。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class SchemaNodeSeeker {
     private static final Set<String> SCHEMA_NODE_KEYS;
 

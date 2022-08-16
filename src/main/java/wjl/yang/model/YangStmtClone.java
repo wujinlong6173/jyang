@@ -3,6 +3,9 @@ package wjl.yang.model;
 /**
  * 展开 uses 语句时，复制 grouping 中定义的语句。
  * oriModule 填 uses 语句所在的模块或子模块，line 填零。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class YangStmtClone extends YangStmt {
     /**

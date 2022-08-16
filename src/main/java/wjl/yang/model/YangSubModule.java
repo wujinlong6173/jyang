@@ -1,5 +1,11 @@
 package wjl.yang.model;
 
+/**
+ * 子模块。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangSubModule extends YangModule {
     /**
      * 所属主模块的名称

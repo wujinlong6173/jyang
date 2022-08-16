@@ -7,6 +7,12 @@ import wjl.yang.utils.YangKeyword;
 
 import java.util.Set;
 
+/**
+ * 解析Yang文件时的通用方法。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 final class CompileUtil {
     static String version(YangStmt stmt) {
         YangStmt version = stmt.searchOne(YangKeyword.REVISION);

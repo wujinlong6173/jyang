@@ -6,6 +6,12 @@ import wjl.yang.utils.YangKeyword;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 浅复制条件语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class ConditionCopier {
     /**
      * 将语句 from 中的 when/if_feature 浅复制到 cloneSubs

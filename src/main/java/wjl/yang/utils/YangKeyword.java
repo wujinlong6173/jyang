@@ -1,5 +1,11 @@
 package wjl.yang.utils;
 
+/**
+ * 在Yang文件中用到的关键字，除去type语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public interface YangKeyword {
     String ANYDATA = "anydata";
     String ANYXML = "anyxml";
@@ -19,6 +25,7 @@ public interface YangKeyword {
     String IMPORT = "import";
     String INCLUDE = "include";
     String INPUT = "input";
+    String KEY = "key";
     String LEAF = "leaf";
     String LEAF_LIST = "leaf-list";
     String LIST = "list";
@@ -28,6 +35,7 @@ public interface YangKeyword {
     String MODULE = "module";
     String MUST = "must";
     String NAMESPACE = "namespace";
+    String NOTIFICATION = "notification";
     String OUTPUT = "output";
     String PRESENCE = "presence";
     String PREFIX = "prefix";

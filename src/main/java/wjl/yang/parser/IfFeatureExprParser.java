@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * 解析 if-feature 语句中的表达式，转换成后缀表达式，用 ^ v ! 代表与或非运算符。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class IfFeatureExprParser {
     private final List<String> stack = new ArrayList<>();

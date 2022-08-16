@@ -1,5 +1,11 @@
 package wjl.yang.model;
 
+/**
+ * Yang词法分析产生的单词。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public interface YangToken {
     int IDENTITY = 1;
     int STRING = 2;

@@ -1,5 +1,11 @@
 package wjl.yang.model;
 
+/**
+ * 模块和标识符。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class ModuleAndIdentify {
     private final YangModule module;
     private final String identify;

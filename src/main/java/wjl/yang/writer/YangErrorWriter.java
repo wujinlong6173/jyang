@@ -17,6 +17,9 @@ import java.util.Set;
 
 /**
  * 以YANG模型的格式输出错误信息，只输出有错误的语句，方便阅读。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class YangErrorWriter {
     private static final Set<String> NEED_PREFIX_KEYS;
@@ -153,7 +156,7 @@ public class YangErrorWriter {
             }
         } else {
             if (stmt.getSchemaModule() != schemaModule && NEED_PREFIX_KEYS.contains(stmt.getKey())) {
-                out.write(stmt.getSchemaModule().getByPrefix());
+                out.write(stmt.getSchemaModule().getPrefix());
                 out.write(':');
             }
         }

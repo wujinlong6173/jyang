@@ -7,6 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 主模块和子模块的父类。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public abstract class YangModule {
     private final String name;
     private final String prefix;
@@ -35,7 +41,7 @@ public abstract class YangModule {
         return name;
     }
 
-    public String getByPrefix() {
+    public String getPrefix() {
         return prefix;
     }
 

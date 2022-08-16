@@ -8,6 +8,9 @@ import java.util.Set;
 
 /**
  * 用哈希表简单地实现单向图。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 public class UiGraph<N, E> {
     private final Map<N, Map<N, E>> predecessors = new HashMap<>();

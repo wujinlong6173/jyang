@@ -16,6 +16,9 @@ import java.util.Map;
 
 /**
  * 处理 feature 和 if-feature 语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class FeatureCompiler extends DefineAndUseCompiler {
     private final IfFeatureExprParser parser = new IfFeatureExprParser();

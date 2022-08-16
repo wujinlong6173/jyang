@@ -13,6 +13,9 @@ import java.util.Set;
 
 /**
  * 将augment的子句复制到目标位置。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
  */
 class AugmentCopier extends ConditionCopier {
     private static final Set<String> TOP_IGNORE_KEYS;

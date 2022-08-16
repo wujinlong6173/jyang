@@ -3,6 +3,12 @@ package wjl.yang.grammar;
 import wjl.yang.model.YangToken;
 import wjl.yang.utils.YangKeyword;
 
+/**
+ * Yang文件的语法规则
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class YangGrammar {
     static final StmtGrammar MODULE;
     static final StmtGrammar SUB_MODULE;
@@ -66,7 +72,7 @@ class YangGrammar {
         StmtGrammar unique = GrammarConst.UNIQUE;
 
         // key
-        StmtGrammar key = new StmtGrammar("key", YangToken.IDENTITY, YangToken.STRING);
+        StmtGrammar key = new StmtGrammar(YangKeyword.KEY, YangToken.IDENTITY, YangToken.STRING);
 
         // min-elements
         StmtGrammar minElements = GrammarConst.MIN_ELEMENTS;
@@ -200,7 +206,7 @@ class YangGrammar {
         // useAugment和augment的格式是一样的，只是使用位置不同
         StmtGrammar usesAugment = augment;
         StmtGrammar uses = new StmtGrammar(YangKeyword.USES, YangToken.IDENTITY, YangToken.PREFIX_ID);
-        StmtGrammar notification = new StmtGrammar("notification", YangToken.IDENTITY);
+        StmtGrammar notification = new StmtGrammar(YangKeyword.NOTIFICATION, YangToken.IDENTITY);
         StmtGrammar action = new StmtGrammar("action", YangToken.IDENTITY);
 
         // leaf

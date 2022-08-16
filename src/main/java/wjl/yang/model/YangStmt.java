@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * 对应Yang文件中的每一条语句。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangStmt {
     private int line; // 在源文件中的行号
     private String key;

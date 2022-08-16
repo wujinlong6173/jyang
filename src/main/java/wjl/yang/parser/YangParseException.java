@@ -1,5 +1,11 @@
 package wjl.yang.parser;
 
+/**
+ * 解析Yang文件是产生的异常。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 public class YangParseException extends Exception {
     public YangParseException(String msg) {
         super(msg);

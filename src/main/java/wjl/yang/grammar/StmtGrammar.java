@@ -8,6 +8,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * 定义语句的语法规则。
+ *
+ * @author wujinlong
+ * @since 2022-8-16
+ */
 class StmtGrammar {
     // 语句的关键字
     private String key;
