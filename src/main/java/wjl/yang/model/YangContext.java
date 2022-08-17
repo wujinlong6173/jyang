@@ -1,7 +1,9 @@
 package wjl.yang.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ import java.util.Objects;
  * @since 2022-8-16
  */
 public class YangContext {
-    private final Map<ModuleNameVersion, YangMainModule> mainModules = new HashMap<>();
+    private final Map<ModuleNameVersion, YangMainModule> mainModules = new LinkedHashMap<>();
     private final Map<ModuleNameVersion, YangSubModule> subModules = new HashMap<>();
 
     /**
@@ -78,7 +80,7 @@ public class YangContext {
      *
      * @return 所有的主模块
      */
-    public Collection<YangMainModule> getMainModules() {
-        return mainModules.values();
+    public List<YangMainModule> getMainModules() {
+        return new ArrayList<>(mainModules.values());
     }
 }

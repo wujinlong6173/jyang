@@ -1,5 +1,6 @@
 package wjl.yang.compile;
 
+import wjl.yang.model.YangContext;
 import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
 import wjl.yang.parser.YangLex;
@@ -50,7 +51,10 @@ public class MultiModulesComparator {
             return;
         }
 
-        List<YangModule> inputModules = compiler.compileStmtList(inputs);
+        for (YangStmt inputStmt : inputs) {
+            compiler.addModule(inputStmt);
+        }
+        List<YangModule> inputModules = compiler.compile();
         if (outputs != null) {
             resultStr = moduleToString(inputModules);
             outputStr = stmtToString(outputs, true);

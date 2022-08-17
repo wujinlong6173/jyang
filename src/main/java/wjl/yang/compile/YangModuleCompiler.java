@@ -10,7 +10,6 @@ import wjl.yang.utils.YangKeyword;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -36,35 +35,21 @@ public class YangModuleCompiler {
             YangMainModule module = mainModule(stmt);
             context.addMainModule(module);
             checker.check(module);
+            setOriModule(module);
             return module;
         } else if (YangKeyword.SUBMODULE.equals(stmt.getKey())) {
             YangSubModule module = subModule(stmt);
             context.addSubModule(module);
             checker.check(module);
+            setOriModule(module);
             return module;
         } else {
             return null;
         }
     }
 
-    public List<YangModule> compileStmtList(List<YangStmt> stmtList) {
-        List<YangMainModule> mainModules = new ArrayList<>();
-
-        for (YangStmt stmt : stmtList) {
-            if (Objects.equals(YangKeyword.MODULE, stmt.getKey())) {
-                YangMainModule module = mainModule(stmt);
-                mainModules.add(module);
-                context.addMainModule(module);
-                checker.check(module);
-                setOriModule(module);
-            } else if (Objects.equals(YangKeyword.SUBMODULE, stmt.getKey())) {
-                YangSubModule module = subModule(stmt);
-                context.addSubModule(module);
-                checker.check(module);
-                setOriModule(module);
-            }
-        }
-
+    public List<YangModule> compile() {
+        List<YangMainModule> mainModules = context.getMainModules();
         LinkageBuilder.build(context, mainModules);
         List<YangModule> allModules = allUsedModules(mainModules);
         new FeatureCompiler().collectFeatures(allModules);
@@ -74,6 +59,10 @@ public class YangModuleCompiler {
         new IdentityCompiler().compile(allModules);
         new DataNodeCompiler().compile(mainModules);
         return allModules;
+    }
+
+    public YangContext getContext() {
+        return context;
     }
 
     private YangMainModule mainModule(YangStmt stmt) {
