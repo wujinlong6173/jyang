@@ -1,14 +1,12 @@
 package wjl.yang.grammar;
 
+import wjl.yang.model.YangMainModule;
+import wjl.yang.model.YangModule;
 import wjl.yang.model.YangStmt;
-import wjl.yang.utils.YangError;
-import wjl.yang.utils.YangKeyword;
+import wjl.yang.model.YangSubModule;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 校验单个YANG文件是否满足格式要求。
@@ -17,51 +15,41 @@ import java.util.Objects;
  * @since 2022-8-16
  */
 public class YangGrammarChecker {
-    private static final String MUST_DEFINE_MODULE = "must define module or submodule.";
     private static final String NOT_SUPPORTED_STMT = "not supported statement.";
-    private final List<YangError> errors = new ArrayList<>();
 
-    public boolean check(YangStmt root) {
-        errors.clear();
-        if (Objects.equals(YangKeyword.MODULE, root.getKey())) {
-            check(root, YangGrammar.MODULE);
-        } else if (Objects.equals(YangKeyword.SUBMODULE, root.getKey())) {
-            check(root, YangGrammar.SUB_MODULE);
-        } else {
-            addError(root, MUST_DEFINE_MODULE);
-        }
-        return errors.isEmpty();
+    public void check(YangMainModule module) {
+        check(module, module.getStmt(), YangGrammar.MODULE);
     }
 
-    public List<YangError> getErrors() {
-        return errors;
+    public void check(YangSubModule module) {
+        check(module, module.getStmt(), YangGrammar.SUB_MODULE);
     }
 
-    private void check(YangStmt stmt, StmtGrammar gram) {
+    private void check(YangModule module, YangStmt stmt, StmtGrammar gram) {
         // 调用者保证键值匹配
         String err = gram.checkToken(stmt.getValueToken());
         if (err != null) {
-            addError(stmt, err);
+            module.addError(stmt, err);
             return;
         }
 
         err = gram.checkValue(stmt.getValue());
         if (err != null) {
-            addError(stmt, err);
+            module.addError(stmt, err);
             return;
         }
 
-        checkSubStatements(stmt, gram);
+        checkSubStatements(module, stmt, gram);
     }
 
-    private void checkSubStatements(YangStmt stmt, StmtGrammar gram) {
+    private void checkSubStatements(YangModule module, YangStmt stmt, StmtGrammar gram) {
         Map<String, SubStmtGrammar> subGramMap = gram.getSubStatements(stmt.getValue());
         if (subGramMap.isEmpty()) {
             if (stmt.getSubStatements() != null) {
                 // 关键字不需要子句，却写了字句
                 for (YangStmt sub : stmt.getSubStatements()) {
                     if (sub.getExtensionPrefix() == null) {
-                        addError(sub, NOT_SUPPORTED_STMT);
+                        module.addError(sub, NOT_SUPPORTED_STMT);
                     }
                 }
             }
@@ -69,7 +57,7 @@ public class YangGrammarChecker {
             // 没有写字句，检查必须写的字句
             for (Map.Entry<String, SubStmtGrammar> entry : subGramMap.entrySet()) {
                 if (entry.getValue().getMin() > 0) {
-                    addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
+                    module.addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
                 }
             }
         } else {
@@ -81,9 +69,9 @@ public class YangGrammarChecker {
                 }
                 SubStmtGrammar subGram = subGramMap.get(sub.getKey());
                 if (subGram == null) {
-                    addError(sub, NOT_SUPPORTED_STMT);
+                    module.addError(sub, NOT_SUPPORTED_STMT);
                 } else {
-                    check(sub, subGram.getStmt());
+                    check(module, sub, subGram.getStmt());
                     count[subGram.getIndex()] ++;
                 }
             }
@@ -92,16 +80,12 @@ public class YangGrammarChecker {
             for (Map.Entry<String, SubStmtGrammar> entry : subGramMap.entrySet()) {
                 SubStmtGrammar subGram = entry.getValue();
                 if (count[subGram.getIndex()] < subGram.getMin()) {
-                    addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
+                    module.addError(stmt, String.format(Locale.ENGLISH, "require sub statement %s.", entry.getKey()));
                 }
                 if (subGram.getMax() > 0 && subGram.getMax() < count[subGram.getIndex()]) {
-                    addError(stmt, String.format(Locale.ENGLISH, "too many sub statement %s.", entry.getKey()));
+                    module.addError(stmt, String.format(Locale.ENGLISH, "too many sub statement %s.", entry.getKey()));
                 }
             }
         }
-    }
-
-    private void addError(YangStmt stmt, String err) {
-        errors.add(new YangError(stmt, err));
     }
 }

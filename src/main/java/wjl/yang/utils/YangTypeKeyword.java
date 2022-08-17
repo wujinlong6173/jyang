@@ -10,6 +10,7 @@ public interface YangTypeKeyword {
     String BINARY = "binary";
     String BIT = "bit";
     String BITS = "bits";
+    String BOOLEAN = "boolean";
     String DECIMAL64 = "decimal64";
     String ENUM = "enum";
     String ENUMERATION = "enumeration";
