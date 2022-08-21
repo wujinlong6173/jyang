@@ -42,7 +42,7 @@ YangParseException
 %state if_feature_expr
 %state schema_node_id
 
-ALPHA = [A-Za-z]
+ALPHA = [_A-Za-z.]
 CRLF = [\r]?\n
 SP = \x20|\x09
 WSP = \x20|\x09|{CRLF}
