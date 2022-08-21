@@ -79,8 +79,11 @@ class TypedefCompiler extends DefineAndUseCompiler {
         // 如果parentDefine为空，parentStmt必定是leaf或leaf-list语句，
         // 否则，parentStmt必定是typedef语句。
         YangStmt targetDefine = findTargetDefine(stmt, scopeDefines);
-        if (targetDefine != null && parentDefine != null) {
-            typedefDepends.addEdge(parentDefine, targetDefine, null);
+        if (targetDefine != null) {
+            stmt.getOriModule().addTypeToTypedef(stmt, targetDefine);
+            if (parentDefine != null) {
+                typedefDepends.addEdge(parentDefine, targetDefine, null);
+            }
         }
     }
 }

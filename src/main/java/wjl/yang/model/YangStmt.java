@@ -171,6 +171,10 @@ public class YangStmt {
         return oriModule;
     }
 
+    public YangStmt getOriStmt() {
+        return this;
+    }
+
     public void setSchemaModule(YangMainModule schemaModule) {
         this.schemaModule = schemaModule;
     }

@@ -27,6 +27,11 @@ public class YangStmtClone extends YangStmt {
     }
 
     @Override
+    public YangStmt getOriStmt() {
+        return source;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (uses != null) {

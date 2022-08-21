@@ -23,6 +23,7 @@ public abstract class YangModule {
     private final List<YangSubModule> subModules = new ArrayList<>();
     private final List<YangError> errors = new ArrayList<>();
     private YangStmt stmt;
+    private final Map<YangStmt, YangStmt> typeToTypedef = new HashMap<>();
 
     /**
      * 模块
@@ -101,5 +102,26 @@ public abstract class YangModule {
 
     public void setMainModule(YangMainModule mainModule) {
         this.mainModule = mainModule;
+    }
+
+    /**
+     * 保存type语句和目标typedef语句的对应关系
+     *
+     * @param type type语句
+     * @param typedef 引用的typedef语句
+     */
+    public void addTypeToTypedef(YangStmt type, YangStmt typedef) {
+        typeToTypedef.put(type, typedef);
+    }
+
+    /**
+     * 查找type语句的目标typedef语句
+     *
+     * @param type type语句
+     * @return 引用的typedef语句
+     */
+    public YangStmt findTypedef(YangStmt type) {
+        // 对于复制的type语句，必须找到原始的type语句
+        return typeToTypedef.get(type.getOriStmt());
     }
 }
