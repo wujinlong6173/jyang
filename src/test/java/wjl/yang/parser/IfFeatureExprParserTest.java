@@ -17,7 +17,7 @@ public class IfFeatureExprParserTest {
         String [] exp = new String[] {"a", "b", "c", "!", "v", "^", "d", "!", "v", "e", "f", "^", "v"};
         Assert.assertArrayEquals(exp, parser.getStack().toArray());
 
-        assertError("a:b:c", "unmatched Input line 1:4");
+        assertError("a:b:c", "unmatched input line 1");
     }
 
     private void assertError(String expr, String msg) {

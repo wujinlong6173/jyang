@@ -46,7 +46,7 @@ class GrammarConst {
     static final StmtGrammar CONFIG = new StmtGrammar(YangKeyword.CONFIG, YangToken.IDENTITY, YangToken.IDENTITY);
 
     // mandatory
-    static final StmtGrammar MANDATORY = new StmtGrammar(YangKeyword.MANDATORY, YangToken.STRING);
+    static final StmtGrammar MANDATORY = new StmtGrammar(YangKeyword.MANDATORY, YangToken.IDENTITY, YangToken.STRING);
 
     // min-elements
     static final StmtGrammar MIN_ELEMENTS = new StmtGrammar("min-elements", YangToken.INTEGER, YangToken.STRING);

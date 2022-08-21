@@ -16,6 +16,6 @@ public class YangParseException extends Exception {
     }
 
     public YangParseException(int line, int col, char value) {
-        super(String.format("unmatched Input line %d:%d, input is %d.", line, col, (int)value));
+        super(String.format("unmatched input line %d, input is %d.", line, (int)value));
     }
 }

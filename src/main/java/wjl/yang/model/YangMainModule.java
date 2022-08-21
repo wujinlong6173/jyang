@@ -1,7 +1,7 @@
 package wjl.yang.model;
 
 /**
- *对 应 feature 语句。
+ * 主模块。
  *
  * @author wujinlong
  * @since 2022-8-16

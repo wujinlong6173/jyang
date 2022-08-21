@@ -8,6 +8,8 @@ module ta {
             length "1..64";
         }
     }
+
+    container root {}
 }
 
 module tb {
@@ -19,12 +21,23 @@ module tb {
     typedef adr {
         type ta:address;
     }
+
+    typedef ipv6 {
+        type string;
+    }
+
+    grouping rule {
+        leaf label {
+            type ipv6;
+        }
+    }
 }
 
 module tc {
     yang-version 1.1;
     namespace "wjl:typedef";
     prefix tc;
+    import ta { prefix ta; }
     import tb { prefix tb; }
 
     container root {
@@ -39,5 +52,9 @@ module tc {
         typedef adr {
             type tb:adr;
         }
+    }
+
+    augment "/ta:root" {
+        uses tb:rule;
     }
 }

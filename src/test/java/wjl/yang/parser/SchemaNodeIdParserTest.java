@@ -16,7 +16,7 @@ public class SchemaNodeIdParserTest {
         assertError("", "require node identifier");
         assertError("order/items/", "require node identifier");
         assertError("order//items", "require node identifier");
-        assertError("a:b:c", "unmatched Input line 1:4");
+        assertError("a:b:c", "unmatched input line 1");
         assertError("/a/b", "require descendant schema id");
     }
 

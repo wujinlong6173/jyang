@@ -22,7 +22,7 @@ module ma {
             list mc:route {
                 key 'id';
                 leaf mc:id {type int32;}
-                leaf mc:hop {type string;}
+                leaf mc:hop {type ipv6;}
                 if-feature trace;
             }
         }
@@ -56,6 +56,9 @@ module mc {
     }
 
     feature trace;
+    typedef ipv6 {
+        type string;
+    }
     augment "/ma:a/ma:orders";
     augment "/ma:a/ma:orders/mb:address";
 }

@@ -12,6 +12,7 @@ public interface YangTypeKeyword {
     String BITS = "bits";
     String BOOLEAN = "boolean";
     String DECIMAL64 = "decimal64";
+    String EMPTY = "empty";
     String ENUM = "enum";
     String ENUMERATION = "enumeration";
     String FRACTION_DIGITS = "fraction-digits";

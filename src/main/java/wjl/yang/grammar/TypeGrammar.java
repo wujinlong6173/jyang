@@ -24,6 +24,7 @@ class TypeGrammar extends StmtGrammar {
     private final Map<String, SubStmtGrammar> identityref;
     private final Map<String, SubStmtGrammar> instanceIdentifier;
     private final Map<String, SubStmtGrammar> union;
+    private final Map<String, SubStmtGrammar> typeref;
 
     TypeGrammar(String key, int... validTokens) {
         super(key, validTokens);
@@ -37,7 +38,7 @@ class TypeGrammar extends StmtGrammar {
         StmtGrammar errorAppTag = GrammarConst.ERROR_APP_TAG;
 
         // value
-        StmtGrammar value = new StmtGrammar(YangTypeKeyword.VALUE, YangToken.STRING);
+        StmtGrammar value = new StmtGrammar(YangTypeKeyword.VALUE, YangToken.INTEGER, YangToken.STRING);
 
         // length
         StmtGrammar length = new StmtGrammar(YangTypeKeyword.LENGTH, YangToken.INTEGER, YangToken.STRING);
@@ -127,6 +128,11 @@ class TypeGrammar extends StmtGrammar {
 
         binary = new HashMap<>();
         sub(binary, length, 0, 1);
+
+        // 引用其它自定义类型时，可以重新指定取值约束
+        typeref = new HashMap<>();
+        sub(typeref, length, 0, 1);
+        sub(typeref, pattern, 0, -1);
     }
 
     @Override
@@ -159,8 +165,11 @@ class TypeGrammar extends StmtGrammar {
                 return instanceIdentifier;
             case YangTypeKeyword.UNION:
                 return union;
-            default: // boolean empty and typedef
+            case YangTypeKeyword.BOOLEAN:
+            case YangTypeKeyword.EMPTY:
                 return Collections.emptyMap();
+            default: // boolean empty and typedef
+                return typeref;
         }
     }
 

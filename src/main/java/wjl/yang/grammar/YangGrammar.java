@@ -23,17 +23,17 @@ class YangGrammar {
         /*----------- module header -----------*/
 
         // yang-version
-        StmtGrammar yangVersion = new StmtGrammar(YangKeyword.YANG_VERSION, YangToken.DECIMAL);
-        yangVersion.setValidValues("1.1");
+        StmtGrammar yangVersion = new StmtGrammar(YangKeyword.YANG_VERSION, YangToken.STRING, YangToken.DECIMAL);
+        yangVersion.setValidValues("1", "1.1");
 
         // namespace
         StmtGrammar namespace = new StmtGrammar(YangKeyword.NAMESPACE, YangToken.STRING);
 
         // prefix
-        StmtGrammar prefix = new StmtGrammar(YangKeyword.PREFIX, YangToken.IDENTITY);
+        StmtGrammar prefix = new StmtGrammar(YangKeyword.PREFIX, YangToken.IDENTITY, YangToken.STRING);
 
         // revision-date
-        StmtGrammar revisionDate = new StmtGrammar(YangKeyword.REVISION_DATE, YangToken.DATE);
+        StmtGrammar revisionDate = new StmtGrammar(YangKeyword.REVISION_DATE, YangToken.DATE, YangToken.STRING);
 
         // import
         StmtGrammar imports = new StmtGrammar(YangKeyword.IMPORT, YangToken.IDENTITY);
@@ -49,7 +49,7 @@ class YangGrammar {
         include.addSub(reference, 0, 1);
 
         // revision
-        StmtGrammar revision = new StmtGrammar(YangKeyword.REVISION, YangToken.DATE);
+        StmtGrammar revision = new StmtGrammar(YangKeyword.REVISION, YangToken.DATE, YangToken.STRING);
         revision.addSub(description, 0, 1);
         revision.addSub(reference, 0, 1);
 
@@ -120,7 +120,7 @@ class YangGrammar {
         identity.addSub(reference, 0, 1);
 
         // extension > argument > yin-element
-        StmtGrammar yinElement = new StmtGrammar("yin-element", YangToken.IDENTITY);
+        StmtGrammar yinElement = new StmtGrammar("yin-element", YangToken.IDENTITY, YangToken.STRING);
         yinElement.setBooleanValues();
 
         // extension > argument

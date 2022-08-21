@@ -53,10 +53,10 @@ public class YangModuleCompiler {
         LinkageBuilder.build(context, mainModules);
         List<YangModule> allModules = allUsedModules(mainModules);
         new FeatureCompiler().collectFeatures(allModules);
+        new IdentityCompiler().compile(allModules);
+        new TypedefCompiler().compile(allModules);
         new GroupingCompiler().expandGrouping(allModules);
         new AugmentCompiler().expandAugment(allModules);
-        new TypedefCompiler().compile(allModules);
-        new IdentityCompiler().compile(allModules);
         new DataNodeCompiler().compile(mainModules);
         return allModules;
     }
