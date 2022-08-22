@@ -46,7 +46,7 @@ ALPHA = [_A-Za-z\.]
 CRLF = [\r]?\n
 SP = \x20|\x09
 WSP = \x20|\x09|{CRLF}
-ID = {ALPHA}[A-Za-z0-9-]*
+ID = {ALPHA}[A-Za-z0-9\-_.]*
 
 %%
 

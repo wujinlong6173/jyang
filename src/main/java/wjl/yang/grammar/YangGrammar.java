@@ -124,7 +124,7 @@ class YangGrammar {
         yinElement.setBooleanValues();
 
         // extension > argument
-        StmtGrammar argument = new StmtGrammar("argument", YangToken.IDENTITY);
+        StmtGrammar argument = new StmtGrammar("argument", YangToken.IDENTITY, YangToken.STRING);
         argument.addSub(yinElement, 0, 1);
 
         // extension

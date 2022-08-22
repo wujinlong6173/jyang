@@ -22,13 +22,13 @@ module tb {
         type ta:address;
     }
 
-    typedef ipv6 {
+    typedef ip_v.6 {
         type string;
     }
 
     grouping rule {
         leaf label {
-            type ipv6;
+            type ip_v.6;
         }
     }
 }
