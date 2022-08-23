@@ -63,8 +63,9 @@ ID = {ALPHA}[A-Za-z0-9\-_.]*
 <YYINITIAL>    "/*"                       { yybegin(COMMENT); }
 
 
-<COMMENT>     ([^*]|[*][^/]|{CRLF})*  {}
 <COMMENT>     "*/"                        { yybegin(YYINITIAL); }
+<COMMENT>     .                      {}
+<COMMENT>     {CRLF}                 {}
 
 
 <if_feature_expr>   [()]                      { return getChar(); }
