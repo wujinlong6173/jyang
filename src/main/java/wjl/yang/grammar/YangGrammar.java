@@ -23,7 +23,8 @@ class YangGrammar {
         /*----------- module header -----------*/
 
         // yang-version
-        StmtGrammar yangVersion = new StmtGrammar(YangKeyword.YANG_VERSION, YangToken.STRING, YangToken.DECIMAL);
+        StmtGrammar yangVersion = new StmtGrammar(YangKeyword.YANG_VERSION,
+            YangToken.STRING, YangToken.DECIMAL, YangToken.INTEGER);
         yangVersion.setValidValues("1", "1.1");
 
         // namespace

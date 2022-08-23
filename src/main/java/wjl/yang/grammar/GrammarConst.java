@@ -60,7 +60,8 @@ class GrammarConst {
     // unique
     static final StmtGrammar UNIQUE = new StmtGrammar("unique", YangToken.STRING);
 
-    static final StmtGrammar TYPE = new TypeGrammar(YangKeyword.TYPE, YangToken.IDENTITY, YangToken.PREFIX_ID);
+    static final StmtGrammar TYPE = new TypeGrammar(YangKeyword.TYPE,
+        YangToken.IDENTITY, YangToken.PREFIX_ID, YangToken.STRING);
 
     static {
         STATUS.setValidValues("current", "obsolete", "deprecated");

@@ -28,7 +28,7 @@ public class YangStmtClone extends YangStmt {
 
     @Override
     public YangStmt getOriStmt() {
-        return source;
+        return source.getOriStmt();
     }
 
     @Override
