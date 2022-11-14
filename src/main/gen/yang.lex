@@ -33,6 +33,10 @@ YangParseException
         yybegin(schema_node_id);
     }
 
+    public void require_string() {
+        yybegin(require_string);
+    }
+
     private void skipComment() throws java.io.IOException {
         boolean hasStar = false;
         int ch;
@@ -44,6 +48,22 @@ YangParseException
             hasStar = ch == '*';
         }
     }
+
+    private void stringWithoutQuote() throws java.io.IOException {
+        int ch;
+        while (true) {
+            ch = yy_advance();
+            if (ch == ';' || ch == '\n') {
+                yy_buffer_index--;
+                yy_mark_end();
+                return;
+            }
+            if (ch == YY_EOF) {
+                yy_mark_end();
+                return;
+            }
+        }
+    }
 %}
 
 %eofval{
@@ -53,6 +73,7 @@ YangParseException
 %state COMMENT
 %state if_feature_expr
 %state schema_node_id
+%state require_string
 
 ALPHA = [_A-Za-z\.]
 CRLF = [\r]?\n
@@ -73,6 +94,11 @@ ID = {ALPHA}[A-Za-z0-9\-_.]*
 <YYINITIAL>    {WSP}                      {}
 <YYINITIAL>    //.*                       {}
 <YYINITIAL>    "/*"                       { skipComment(); }
+
+<require_string>    \"(\\.|[^\"\\])*\"        { yybegin(YYINITIAL); return YangToken.STRING; }
+<require_string>    \'(\\.|[^\'\\])*\'        { yybegin(YYINITIAL); return YangToken.STRING; }
+<require_string>    {SP}                      {}
+<require_string>    .                         { stringWithoutQuote(); yybegin(YYINITIAL); return YangToken.STRING; }
 
 <if_feature_expr>   [()]                      { return getChar(); }
 <if_feature_expr>   "and"                     { return YangToken.AND; }

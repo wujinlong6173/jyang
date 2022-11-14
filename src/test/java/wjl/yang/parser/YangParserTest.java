@@ -62,6 +62,18 @@ public class YangParserTest {
     }
 
     @Test
+    public void testRequiredString() throws IOException, YangParseException {
+        YangStmt stmt = parseString("when \"this is condition\";");
+        Assert.assertEquals("this is condition", stmt.getValue());
+        stmt = parseString("when  'this is condition' ;");
+        Assert.assertEquals("this is condition", stmt.getValue());
+        stmt = parseString("when  this is condition ;");
+        Assert.assertEquals("this is condition", stmt.getValue());
+        stmt = parseString("when   this is condition  \n  ;");
+        Assert.assertEquals("this is condition", stmt.getValue());
+    }
+
+    @Test
     public void testError() {
         assertError("description", "require semicolon or left brace");
         assertError("leaf x {", "require right brace");

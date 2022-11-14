@@ -3,10 +3,13 @@ package wjl.yang.parser;
 import wjl.yang.model.YangStmt;
 import wjl.yang.model.YangStmtExt;
 import wjl.yang.model.YangToken;
+import wjl.yang.utils.YangKeyword;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Yang语法解析器。
@@ -17,6 +20,13 @@ import java.util.List;
 public class YangParser {
     private YangLex lex;
     private int nextToken = 0;
+
+    // 有些语句需要字符串，但经常会省略引号。
+    private static final Set<String> STMT_REQUIRE_STRING;
+    static {
+        STMT_REQUIRE_STRING = new HashSet<>();
+        STMT_REQUIRE_STRING.add(YangKeyword.WHEN);
+    }
 
     public YangStmt parse(YangLex lex) throws IOException, YangParseException {
         List<YangStmt> topStmtList = parseFragment(lex);
@@ -56,6 +66,9 @@ public class YangParser {
             curr = new YangStmt();
             curr.setKey(lex.getString());
             curr.setLine(lex.getLine());
+            if (STMT_REQUIRE_STRING.contains(curr.getKey())) {
+                lex.require_string();
+            }
         } else if (nextToken == YangToken.PREFIX_ID) {
             // 带前缀的关键字，是自定义的扩展关键字
             YangStmtExt ext = new YangStmtExt();
@@ -113,7 +126,11 @@ public class YangParser {
     private String readStringValue() throws IOException, YangParseException {
         StringBuilder sb = new StringBuilder();
         String str = lex.getString();
-        sb.append(str, 1, str.length() - 1);
+        if (str.startsWith("\"") || str.startsWith("'")) {
+            sb.append(str, 1, str.length() - 1);
+        } else {
+            sb.append(str.trim());
+        }
         while ((nextToken = lex.yylex()) == YangToken.PLUS) {
             nextToken = lex.yylex();
             if (nextToken != YangToken.STRING) {
