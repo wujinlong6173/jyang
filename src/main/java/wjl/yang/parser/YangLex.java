@@ -29,6 +29,17 @@ public class YangLex {
     public void schema_node_id() {
         yybegin(schema_node_id);
     }
+    private void skipComment() throws java.io.IOException {
+        boolean hasStar = false;
+        int ch;
+        while (true) {
+            ch = yy_advance();
+            if (hasStar && ch == '/') return;
+            if (ch == YY_EOF) return;
+            if (ch == '\n') yy_mark_start();
+            hasStar = ch == '*';
+        }
+    }
 	private java.io.BufferedReader yy_reader;
 	private int yy_buffer_index;
 	private int yy_buffer_read;
@@ -73,9 +84,9 @@ public class YangLex {
 	private final int schema_node_id = 3;
 	private final int yy_state_dtrans[] = {
 		0,
-		46,
-		48,
-		50
+		42,
+		43,
+		45
 	};
 	private void yybegin (int state) {
 		yy_lexical_state = state;
@@ -248,11 +259,11 @@ public class YangLex {
 		/* 19 */ YY_NO_ANCHOR,
 		/* 20 */ YY_NO_ANCHOR,
 		/* 21 */ YY_NO_ANCHOR,
-		/* 22 */ YY_NO_ANCHOR,
+		/* 22 */ YY_NOT_ACCEPT,
 		/* 23 */ YY_NO_ANCHOR,
 		/* 24 */ YY_NO_ANCHOR,
-		/* 25 */ YY_NOT_ACCEPT,
-		/* 26 */ YY_NO_ANCHOR,
+		/* 25 */ YY_NO_ANCHOR,
+		/* 26 */ YY_NOT_ACCEPT,
 		/* 27 */ YY_NO_ANCHOR,
 		/* 28 */ YY_NO_ANCHOR,
 		/* 29 */ YY_NO_ANCHOR,
@@ -262,55 +273,49 @@ public class YangLex {
 		/* 33 */ YY_NO_ANCHOR,
 		/* 34 */ YY_NOT_ACCEPT,
 		/* 35 */ YY_NO_ANCHOR,
-		/* 36 */ YY_NO_ANCHOR,
-		/* 37 */ YY_NO_ANCHOR,
+		/* 36 */ YY_NOT_ACCEPT,
+		/* 37 */ YY_NOT_ACCEPT,
 		/* 38 */ YY_NOT_ACCEPT,
-		/* 39 */ YY_NO_ANCHOR,
+		/* 39 */ YY_NOT_ACCEPT,
 		/* 40 */ YY_NOT_ACCEPT,
 		/* 41 */ YY_NOT_ACCEPT,
 		/* 42 */ YY_NOT_ACCEPT,
 		/* 43 */ YY_NOT_ACCEPT,
 		/* 44 */ YY_NOT_ACCEPT,
 		/* 45 */ YY_NOT_ACCEPT,
-		/* 46 */ YY_NOT_ACCEPT,
-		/* 47 */ YY_NOT_ACCEPT,
+		/* 46 */ YY_NO_ANCHOR,
+		/* 47 */ YY_NO_ANCHOR,
 		/* 48 */ YY_NOT_ACCEPT,
-		/* 49 */ YY_NOT_ACCEPT,
+		/* 49 */ YY_NO_ANCHOR,
 		/* 50 */ YY_NOT_ACCEPT,
-		/* 51 */ YY_NO_ANCHOR,
+		/* 51 */ YY_NOT_ACCEPT,
 		/* 52 */ YY_NO_ANCHOR,
 		/* 53 */ YY_NOT_ACCEPT,
-		/* 54 */ YY_NO_ANCHOR,
-		/* 55 */ YY_NOT_ACCEPT,
-		/* 56 */ YY_NOT_ACCEPT,
-		/* 57 */ YY_NO_ANCHOR,
-		/* 58 */ YY_NOT_ACCEPT,
-		/* 59 */ YY_NOT_ACCEPT,
-		/* 60 */ YY_NO_ANCHOR
+		/* 54 */ YY_NOT_ACCEPT,
+		/* 55 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
 "7:9,13,8,7:2,14,7:18,13,7,5,7:4,9,17:2,16,1,7,10,12,15,11,3:9,4,1,7:5,2:26," +
 "7,6,7:2,2,7,18,2:2,20,2:9,19,21,2:2,22,2,23,2:6,1,7,1,7:2,0:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,61,
-"0,1:2,2,3,1:4,4,1,5,6,1:4,7,1:2,7,8,7:2,1,9,10,11,12,13,14,15,16,17,6,18,19" +
-",20,11,21,22,16,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41")[0];
+	private int yy_rmap[] = unpackFromString(1,56,
+"0,1:2,2,3,1:4,4,1,5,6,1,7,1:2,7,8,7:2,1,9,10,11,12,13,14,15,16,6,17,18,19,1" +
+"1,20,21,15,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39")[0];
 
-	private int yy_nxt[][] = unpackFromString(42,24,
-"1,2,3,4,5,27,5:2,6,32,36,26,3,6,25,39,5:2,3:6,-1:26,3:2,30,-1:5,3:3,-1:5,3:" +
-"6,-1:3,57,-1:7,57,34,-1:12,9:7,-1,9:5,-1,9:9,-1:2,11:2,-1:6,11:3,-1:5,11:6," +
-"-1:3,12,-1:7,12,-1:14,17:2,49,-1:5,17:3,-1:5,17:6,-1:2,21:2,-1:6,21:3,-1:5," +
-"21:6,-1:8,6,-1:18,43,-1:7,43,34,-1:12,38:4,7,40,38:17,-1:15,16,-1:10,17:2,4" +
-"9,-1:5,17:3,-1:5,17:4,20,17,-1:2,11,-1:9,11,-1:5,11:6,-1:12,34,-1:12,41:5,4" +
-"2,41:2,8,41:14,-1:2,17:2,49,-1:5,17:3,-1:5,17:2,22,17:3,-1:3,60,-1:6,55,60," +
-"34,-1:14,60,-1:7,31,-1:14,17:2,49,-1:5,17:3,-1:5,17:5,23,-1:15,9,10,-1:8,38" +
-":7,-1,38:5,-1,38:9,-1,41:7,-1,41:5,-1,41:9,-1:3,53,-1:7,53,-1:22,55,-1:16,1" +
-"3,-1:7,13,-1:12,1,14:7,15,14:5,47,14,28,14:7,-1:8,15,-1:15,1,5,17,5:5,-1,5:" +
-"3,17,18,-1,5:2,19,52,54,17,29,17:2,-1:2,21,-1:9,21,-1:5,21:6,1,5,17,5:5,-1," +
-"5:3,17,5,-1,24,5:2,17:6,-1:3,35,-1:7,35,34,-1:13,17:2,49,-1:5,17:3,-1:5,17," +
-"33,17:4,-1:3,44,-1:7,44,-1:14,17:2,49,-1:5,17:3,-1:5,17:3,37,17:2,-1:3,59,-" +
-"1:7,59,-1:15,45,-1:7,45,-1:15,51,-1:7,51,34,-1:21,56,-1:16,58,-1:7,58,-1:15" +
-",60,-1:7,60,34,-1:11");
+	private int yy_nxt[][] = unpackFromString(40,24,
+"1,2,3,4,5,24,5:2,6,28,32,23,3,6,22,35,5:2,3:6,-1:26,3:2,26,-1:5,3:3,-1:5,3:" +
+"6,-1:3,52,-1:7,52,30,-1:12,9:7,-1,9:5,-1,9:9,-1:2,11:2,-1:6,11:3,-1:5,11:6," +
+"-1:3,12,-1:7,12,-1:14,14:2,44,-1:5,14:3,-1:5,14:6,-1:2,18:2,-1:6,18:3,-1:5," +
+"18:6,-1:8,6,-1:18,39,-1:7,39,30,-1:12,34:4,7,36,34:17,-1:2,14:2,44,-1:5,14:" +
+"3,-1:5,14:4,17,14,-1:2,11,-1:9,11,-1:5,11:6,-1:12,30,-1:12,37:5,38,37:2,8,3" +
+"7:14,-1:2,14:2,44,-1:5,14:3,-1:5,14:2,19,14:3,-1:3,55,-1:6,50,55,30,-1:14,5" +
+"5,-1:7,27,-1:14,14:2,44,-1:5,14:3,-1:5,14:5,20,-1:15,9,10,-1:8,34:7,-1,34:5" +
+",-1,34:9,-1,37:7,-1,37:5,-1,37:9,-1:3,48,-1:7,48,-1:22,50,-1:16,13,-1:7,13," +
+"-1:12,1,-1:23,1,5,14,5:5,-1,5:3,14,15,-1,5:2,16,47,49,14,25,14:2,-1:2,18,-1" +
+":9,18,-1:5,18:6,1,5,14,5:5,-1,5:3,14,5,-1,21,5:2,14:6,-1:3,31,-1:7,31,30,-1" +
+":13,14:2,44,-1:5,14:3,-1:5,14,29,14:4,-1:3,40,-1:7,40,-1:14,14:2,44,-1:5,14" +
+":3,-1:5,14:3,33,14:2,-1:3,54,-1:7,54,-1:15,41,-1:7,41,-1:15,46,-1:7,46,30,-" +
+"1:21,51,-1:16,53,-1:7,53,-1:15,55,-1:7,55,30,-1:11");
 
 	public int yylex ()
 		throws java.io.IOException, 
@@ -397,7 +402,7 @@ YangParseException
 					case -10:
 						break;
 					case 10:
-						{ yybegin(COMMENT); }
+						{ skipComment(); }
 					case -11:
 						break;
 					case 11:
@@ -413,7 +418,7 @@ YangParseException
 					case -14:
 						break;
 					case 14:
-						{}
+						{ return YangToken.PREFIX_ID; }
 					case -15:
 						break;
 					case 15:
@@ -421,108 +426,92 @@ YangParseException
 					case -16:
 						break;
 					case 16:
-						{ yybegin(YYINITIAL); }
+						{ return getChar(); }
 					case -17:
 						break;
 					case 17:
-						{ return YangToken.PREFIX_ID; }
+						{ return YangToken.OR; }
 					case -18:
 						break;
 					case 18:
-						{}
+						{ return YangToken.PREFIX_ID; }
 					case -19:
 						break;
 					case 19:
-						{ return getChar(); }
+						{ return YangToken.AND; }
 					case -20:
 						break;
 					case 20:
-						{ return YangToken.OR; }
+						{ return YangToken.NOT; }
 					case -21:
 						break;
 					case 21:
-						{ return YangToken.PREFIX_ID; }
+						{ return getChar(); }
 					case -22:
 						break;
-					case 22:
-						{ return YangToken.AND; }
+					case 23:
+						{ return YangToken.INTEGER; }
 					case -23:
 						break;
-					case 23:
-						{ return YangToken.NOT; }
+					case 24:
+						{
+            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
 					case -24:
 						break;
-					case 24:
-						{ return getChar(); }
+					case 25:
+						{ return YangToken.PREFIX_ID; }
 					case -25:
 						break;
-					case 26:
+					case 27:
 						{ return YangToken.INTEGER; }
 					case -26:
 						break;
-					case 27:
+					case 28:
 						{
             throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
 					case -27:
 						break;
-					case 28:
-						{}
-					case -28:
-						break;
 					case 29:
 						{ return YangToken.PREFIX_ID; }
-					case -29:
+					case -28:
 						break;
 					case 31:
 						{ return YangToken.INTEGER; }
-					case -30:
+					case -29:
 						break;
 					case 32:
 						{
             throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
-					case -31:
+					case -30:
 						break;
 					case 33:
 						{ return YangToken.PREFIX_ID; }
-					case -32:
+					case -31:
 						break;
 					case 35:
+						{
+            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
+					case -32:
+						break;
+					case 46:
 						{ return YangToken.INTEGER; }
 					case -33:
 						break;
-					case 36:
-						{
-            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
+					case 47:
+						{ return YangToken.PREFIX_ID; }
 					case -34:
 						break;
-					case 37:
+					case 49:
 						{ return YangToken.PREFIX_ID; }
 					case -35:
 						break;
-					case 39:
-						{
-            throw new YangParseException(yyline+1, yy_buffer_start+1, getChar()); }
+					case 52:
+						{ return YangToken.INTEGER; }
 					case -36:
 						break;
-					case 51:
+					case 55:
 						{ return YangToken.INTEGER; }
 					case -37:
-						break;
-					case 52:
-						{ return YangToken.PREFIX_ID; }
-					case -38:
-						break;
-					case 54:
-						{ return YangToken.PREFIX_ID; }
-					case -39:
-						break;
-					case 57:
-						{ return YangToken.INTEGER; }
-					case -40:
-						break;
-					case 60:
-						{ return YangToken.INTEGER; }
-					case -41:
 						break;
 					default:
 						yy_error(YY_E_INTERNAL,false);

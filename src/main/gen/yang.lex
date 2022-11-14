@@ -32,6 +32,18 @@ YangParseException
     public void schema_node_id() {
         yybegin(schema_node_id);
     }
+
+    private void skipComment() throws java.io.IOException {
+        boolean hasStar = false;
+        int ch;
+        while (true) {
+            ch = yy_advance();
+            if (hasStar && ch == '/') return;
+            if (ch == YY_EOF) return;
+            if (ch == '\n') yy_mark_start();
+            hasStar = ch == '*';
+        }
+    }
 %}
 
 %eofval{
@@ -60,13 +72,7 @@ ID = {ALPHA}[A-Za-z0-9\-_.]*
 <YYINITIAL>    [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]  { return YangToken.DATE; }
 <YYINITIAL>    {WSP}                      {}
 <YYINITIAL>    //.*                       {}
-<YYINITIAL>    "/*"                       { yybegin(COMMENT); }
-
-
-<COMMENT>     "*/"                        { yybegin(YYINITIAL); }
-<COMMENT>     .                      {}
-<COMMENT>     {CRLF}                 {}
-
+<YYINITIAL>    "/*"                       { skipComment(); }
 
 <if_feature_expr>   [()]                      { return getChar(); }
 <if_feature_expr>   "and"                     { return YangToken.AND; }
